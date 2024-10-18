@@ -16,34 +16,25 @@ namespace MyDrawing
         private Model model;
         public Form1(Model model)
         {
-            this.model = model;
             InitializeComponent();
+            this.model = model;
             InitComboBox();
         }
 
         private void InitComboBox()
         {
-            // 從 enum 抓所有圖形元素名稱
-            comboBox_shape_type.Items.AddRange(Enum.GetNames(typeof(ShapeFactory.ShapeType)));
+            // 所有圖形元素名稱
+            comboBox_shape_type.Items.AddRange(model.GetShapeTypesName());
         }
 
         private void btn_add_Click(object sender, EventArgs e)
         {
-            // 檢查資料是否都有填寫
-            try
+            bool isSuccessfullyCreate =  model.TryCreateShape(comboBox_shape_type.Text, textBox_shape_content.Text, textBox_shape_x.Text, textBox_shape_y.Text, textBox_shape_h.Text, textBox_shape_w.Text);
+            if (isSuccessfullyCreate)
             {
-                ShapeFactory.ShapeType shapeType = (ShapeFactory.ShapeType)Enum.Parse(typeof(ShapeFactory.ShapeType), comboBox_shape_type.Text);
-                // 內容為空也不被認可
-                if (textBox_shape_content.Text == string.Empty)
-                    throw new ArgumentNullException("textBox_shape_content.Text is empty");
-                int x = int.Parse(textBox_shape_x.Text);
-                int y = int.Parse(textBox_shape_y.Text);
-                int height = int.Parse(textBox_shape_h.Text);
-                int width = int.Parse(textBox_shape_w.Text);
-                model.CreateShape(shapeType, textBox_shape_content.Text, x, y, height, width);
                 UpdateDataGridView();
             }
-            catch
+            else
             {
                 MessageBox.Show("欄位未輸入或有錯誤");
             }
