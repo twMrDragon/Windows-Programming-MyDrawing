@@ -24,12 +24,12 @@ namespace MyDrawing
         private void InitComboBox()
         {
             // 所有圖形元素名稱
-            comboBox_shape_type.Items.AddRange(model.GetShapeTypesName());
+            comboBoxShapeType.Items.AddRange(model.GetShapeTypesName());
         }
 
-        private void btn_add_Click(object sender, EventArgs e)
+        private void btnAddShape_Click(object sender, EventArgs e)
         {
-            bool isSuccessfullyCreate =  model.TryCreateShape(comboBox_shape_type.Text, textBox_shape_content.Text, textBox_shape_x.Text, textBox_shape_y.Text, textBox_shape_h.Text, textBox_shape_w.Text);
+            bool isSuccessfullyCreate = model.TryCreateShape(comboBoxShapeType.Text, textBoxShapeContent.Text, textBoxShapeX.Text, textBoxShapeY.Text, textBoxShapeHeight.Text, textBoxShapeWidth.Text);
             if (isSuccessfullyCreate)
             {
                 UpdateDataGridView();
@@ -40,20 +40,20 @@ namespace MyDrawing
             }
         }
 
-        // 重新刷新 dataGridView
+        // 重    新刷新 dataGridView
         private void UpdateDataGridView()
         {
-            dataGridView_shapes.Rows.Clear();
+            dataGridViewShapes.Rows.Clear();
             List<Shape> shapes = model.GetShapes();
             for (int i = 0; i < shapes.Count; i++)
             {
                 Shape shape = shapes[i];
-                dataGridView_shapes.Rows.Add("刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width);
+                dataGridViewShapes.Rows.Add("刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width);
             }
         }
 
         // dataGridView 內容被點擊
-        private void dataGridView_shapes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void dataGridViewShapes_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // 當刪除按鈕欄被點擊時
             if (e.ColumnIndex == 0)
