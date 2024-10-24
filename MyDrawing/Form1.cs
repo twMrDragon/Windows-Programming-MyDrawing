@@ -29,12 +29,11 @@ namespace MyDrawing
 
         private void btnAddShape_Click(object sender, EventArgs e)
         {
-            bool isSuccessfullyCreate = model.TryCreateShape(comboBoxShapeType.Text, textBoxShapeContent.Text, textBoxShapeX.Text, textBoxShapeY.Text, textBoxShapeHeight.Text, textBoxShapeWidth.Text);
-            if (isSuccessfullyCreate)
+            try
             {
-                UpdateDataGridView();
+                model.TryCreateShape(comboBoxShapeType.Text, textBoxShapeContent.Text, textBoxShapeX.Text, textBoxShapeY.Text, textBoxShapeHeight.Text, textBoxShapeWidth.Text);
             }
-            else
+            catch
             {
                 MessageBox.Show("欄位未輸入或有錯誤");
             }

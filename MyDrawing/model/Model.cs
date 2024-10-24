@@ -26,24 +26,16 @@ namespace MyDrawing
 
         public bool TryCreateShape(string strShapeType, string strContent, string strX, string strY, string strHeight, string strWidth)
         {
-            // 檢查資料是否都有填寫
-            try
-            {
-                ShapeFactory.ShapeType shapeType = (ShapeFactory.ShapeType)Enum.Parse(typeof(ShapeFactory.ShapeType), strShapeType);
-                // 內容為空也不被認可
-                if (strContent == string.Empty)
-                    throw new ArgumentNullException("strContent is empty");
-                int x = int.Parse(strX);
-                int y = int.Parse(strY);
-                int height = int.Parse(strHeight);
-                int width = int.Parse(strWidth);
-                this.CreateShape(shapeType, strContent, x, y, height, width);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            ShapeFactory.ShapeType shapeType = (ShapeFactory.ShapeType)Enum.Parse(typeof(ShapeFactory.ShapeType), strShapeType);
+            // 內容為空也不被認可
+            if (strContent == string.Empty)
+                throw new ArgumentNullException("strContent is empty");
+            int x = int.Parse(strX);
+            int y = int.Parse(strY);
+            int height = int.Parse(strHeight);
+            int width = int.Parse(strWidth);
+            this.CreateShape(shapeType, strContent, x, y, height, width);
+            return true;
         }
 
         public void CreateShape(ShapeFactory.ShapeType shapeType, string content, int x, int y, int height, int width)
