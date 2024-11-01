@@ -26,13 +26,17 @@ namespace MyDrawing.shape
             shape.Y = y;
             shape.Width = width;
             shape.Height = height;
-            shape.ShapeName = Enum.GetName(typeof(ShapeFactory.ShapeType), shapeType);
             shapes.Add(shape);
         }
 
         public void RemoveShapeByIndex(int index)
         {
             shapes.RemoveAt(index);
+        }
+
+        public void AddShapes(Shape shape)
+        {
+            this.shapes.Add(shape);
         }
     }
 }

@@ -1,13 +1,15 @@
-﻿using System;
+﻿using MyDrawing.graphics;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MyDrawing.shape
 {
-    public class Shape
+    public abstract class Shape
     {
         public string ShapeName { get; set; }
 
@@ -18,6 +20,14 @@ namespace MyDrawing.shape
         public int Width { get; set; }
         public int Height { get; set; }
 
-        //public abstract void OnDraw(Graphics graphics);
+        public abstract void Draw(IGraphics graphics);
+
+        public void DrawContent(IGraphics graphics)
+        {
+            Size size = TextRenderer.MeasureText(this.Content, new Font("Arial", 7));
+            double offsetX = (Width - size.Width) / 2.0;
+            double offsetY = (Height - size.Height) / 2.0;
+            graphics.DrawString(this.Content, X + offsetX, Y + offsetY);
+        }
     }
 }

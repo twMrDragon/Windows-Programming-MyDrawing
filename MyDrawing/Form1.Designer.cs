@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.說明ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.關於ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,13 +59,18 @@
             this.comboBoxShapeType = new System.Windows.Forms.ComboBox();
             this.labelShapeContent = new System.Windows.Forms.Label();
             this.btnAddShape = new System.Windows.Forms.Button();
-            this.panelPaint = new System.Windows.Forms.Panel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonStart = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonTerminator = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonProcess = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonDecision = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxDataDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewShapes)).BeginInit();
             this.panel2.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -73,7 +79,7 @@
             this.說明ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1123, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1316, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -88,7 +94,7 @@
             // 關於ToolStripMenuItem
             // 
             this.關於ToolStripMenuItem.Name = "關於ToolStripMenuItem";
-            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.關於ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.關於ToolStripMenuItem.Text = "關於";
             // 
             // panel1
@@ -97,10 +103,10 @@
             this.panel1.Controls.Add(this.btnPage2);
             this.panel1.Controls.Add(this.btnPage1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 24);
+            this.panel1.Location = new System.Drawing.Point(0, 49);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(113, 562);
-            this.panel1.TabIndex = 1;
+            this.panel1.Size = new System.Drawing.Size(113, 599);
+            this.panel1.TabIndex = 2;
             // 
             // btnPage2
             // 
@@ -125,9 +131,9 @@
             this.groupBoxDataDisplay.Controls.Add(this.dataGridViewShapes);
             this.groupBoxDataDisplay.Controls.Add(this.panel2);
             this.groupBoxDataDisplay.Dock = System.Windows.Forms.DockStyle.Right;
-            this.groupBoxDataDisplay.Location = new System.Drawing.Point(702, 24);
+            this.groupBoxDataDisplay.Location = new System.Drawing.Point(895, 49);
             this.groupBoxDataDisplay.Name = "groupBoxDataDisplay";
-            this.groupBoxDataDisplay.Size = new System.Drawing.Size(421, 562);
+            this.groupBoxDataDisplay.Size = new System.Drawing.Size(421, 599);
             this.groupBoxDataDisplay.TabIndex = 2;
             this.groupBoxDataDisplay.TabStop = false;
             this.groupBoxDataDisplay.Text = "資料顯示";
@@ -152,7 +158,7 @@
             this.dataGridViewShapes.ReadOnly = true;
             this.dataGridViewShapes.RowHeadersVisible = false;
             this.dataGridViewShapes.RowTemplate.Height = 24;
-            this.dataGridViewShapes.Size = new System.Drawing.Size(415, 490);
+            this.dataGridViewShapes.Size = new System.Drawing.Size(415, 527);
             this.dataGridViewShapes.TabIndex = 1;
             this.dataGridViewShapes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewShapes_CellContentClick);
             // 
@@ -360,22 +366,63 @@
             this.btnAddShape.UseVisualStyleBackColor = true;
             this.btnAddShape.Click += new System.EventHandler(this.btnAddShape_Click);
             // 
-            // panelPaint
+            // toolStrip1
             // 
-            this.panelPaint.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelPaint.Location = new System.Drawing.Point(113, 24);
-            this.panelPaint.Name = "panelPaint";
-            this.panelPaint.Size = new System.Drawing.Size(589, 562);
-            this.panelPaint.TabIndex = 3;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonStart,
+            this.toolStripButtonTerminator,
+            this.toolStripButtonProcess,
+            this.toolStripButtonDecision});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1316, 25);
+            this.toolStrip1.TabIndex = 0;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonStart
+            // 
+            this.toolStripButtonStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonStart.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonStart.Image")));
+            this.toolStripButtonStart.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonStart.Name = "toolStripButtonStart";
+            this.toolStripButtonStart.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonStart.Text = "toolStripButton1";
+            // 
+            // toolStripButtonTerminator
+            // 
+            this.toolStripButtonTerminator.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonTerminator.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonTerminator.Image")));
+            this.toolStripButtonTerminator.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonTerminator.Name = "toolStripButtonTerminator";
+            this.toolStripButtonTerminator.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonTerminator.Text = "toolStripButton2";
+            // 
+            // toolStripButtonProcess
+            // 
+            this.toolStripButtonProcess.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonProcess.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonProcess.Image")));
+            this.toolStripButtonProcess.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonProcess.Name = "toolStripButtonProcess";
+            this.toolStripButtonProcess.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonProcess.Text = "toolStripButton3";
+            // 
+            // toolStripButtonDecision
+            // 
+            this.toolStripButtonDecision.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDecision.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDecision.Image")));
+            this.toolStripButtonDecision.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDecision.Name = "toolStripButtonDecision";
+            this.toolStripButtonDecision.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDecision.Text = "toolStripButton4";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1123, 586);
-            this.Controls.Add(this.panelPaint);
+            this.ClientSize = new System.Drawing.Size(1316, 648);
             this.Controls.Add(this.groupBoxDataDisplay);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
@@ -388,6 +435,8 @@
             this.panel2.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -425,7 +474,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
-        private System.Windows.Forms.Panel panelPaint;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonStart;
+        private System.Windows.Forms.ToolStripButton toolStripButtonTerminator;
+        private System.Windows.Forms.ToolStripButton toolStripButtonProcess;
+        private System.Windows.Forms.ToolStripButton toolStripButtonDecision;
     }
 }
 
