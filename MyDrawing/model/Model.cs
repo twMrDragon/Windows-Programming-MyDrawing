@@ -19,7 +19,7 @@ namespace MyDrawing
 
         bool isPressed = false;
         ShapeFactory shapeFactory = new ShapeFactory();
-        ShapeFactory.ShapeType notCompleteShapeType = ShapeFactory.ShapeType.Start;
+        ShapeFactory.ShapeType notCompleteShapeType;
         Shape notCompleteShape;
         double firstX = 0;
         double firstY = 0;
@@ -39,22 +39,9 @@ namespace MyDrawing
             return shapes.GetShapes();
         }
 
-        public void TryCreateShape(string strShapeType, string strContent, string strX, string strY, string strHeight, string strWidth)
+        public void CreateShape(ShapeFactory.ShapeType shapeType, string content, int x, int y, int width, int height)
         {
-            ShapeFactory.ShapeType shapeType = (ShapeFactory.ShapeType)Enum.Parse(typeof(ShapeFactory.ShapeType), strShapeType);
-            // 內容為空也不被認可
-            if (strContent == string.Empty)
-                throw new ArgumentNullException("strContent is empty");
-            int x = int.Parse(strX);
-            int y = int.Parse(strY);
-            int height = int.Parse(strHeight);
-            int width = int.Parse(strWidth);
-            this.CreateShape(shapeType, strContent, x, y, height, width);
-        }
-
-        public void CreateShape(ShapeFactory.ShapeType shapeType, string content, int x, int y, int height, int width)
-        {
-            shapes.CreateShape(shapeType, content, x, y, height, width);
+            shapes.CreateShape(shapeType, content, x, y, width, height);
             NotifiModelChange();
         }
 
@@ -68,9 +55,7 @@ namespace MyDrawing
         {
             graphics.ClearAll();
             foreach (Shape item in shapes.GetShapes())
-            {
                 item.Draw(graphics);
-            }
             if (isPressed)
                 DrawNotCompletedShape(graphics);
         }
@@ -135,9 +120,7 @@ namespace MyDrawing
 
             StringBuilder result = new StringBuilder(length);
             for (int i = 0; i < length; i++)
-            {
                 result.Append(chars[random.Next(chars.Length)]);
-            }
 
             return result.ToString();
         }

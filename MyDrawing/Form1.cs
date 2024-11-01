@@ -16,8 +16,9 @@ namespace MyDrawing
     {
         private Model model;
         DoubleBufferedPanel canvas = new DoubleBufferedPanel();
-        private bool isDrawing = false;
         List<ToolStripButton> toolStripButtons = new List<ToolStripButton>();
+        private bool isDrawing = false;
+
         public Form1(Model model)
         {
             InitializeComponent();
@@ -26,14 +27,14 @@ namespace MyDrawing
             InitToolScriptButtons();
             InitCanvas();
             this.model.modelChanged += HandleModelChange;
-            Test();
+            //Test();
         }
 
         private void Test()
         {
             this.model.CreateShape(ShapeFactory.ShapeType.Start, "Start text", 40, 50, 50, 50);
-            this.model.CreateShape(ShapeFactory.ShapeType.Terminator, "Terminator text", 400, 400, 90, 180);
-            this.model.CreateShape(ShapeFactory.ShapeType.Process, "Process text", 500, 150, 50, 100);
+            this.model.CreateShape(ShapeFactory.ShapeType.Terminator, "Terminator text", 400, 400, 180, 90);
+            this.model.CreateShape(ShapeFactory.ShapeType.Process, "Process text", 500, 150, 100, 50);
             this.model.CreateShape(ShapeFactory.ShapeType.Descision, "Descision text", 90, 200, 100, 100);
         }
 
@@ -52,8 +53,6 @@ namespace MyDrawing
 
             ShapeFactory.ShapeType[] shapeTypes = { ShapeFactory.ShapeType.Start, ShapeFactory.ShapeType.Terminator, ShapeFactory.ShapeType.Process, ShapeFactory.ShapeType.Descision };
 
-
-
             for (int i = 0; i < this.toolStripButtons.Count; i++)
             {
                 ShapeFactory.ShapeType shapeType = shapeTypes[i];
@@ -65,32 +64,41 @@ namespace MyDrawing
                 };
             }
         }
-
         private void ToolStripButtontClick(ToolStripButton toolStripButton)
         {
+            // 如果點選的是已經選過的項目
             if (toolStripButton.Checked)
             {
+                this.canvas.Cursor = Cursors.Default;
                 toolStripButton.Checked = false;
-                isDrawing = false;
                 return;
             }
-            foreach (ToolStripButton item in toolStripButtons)
-            {
-                item.Checked = false;
-            }
+            SetAllToolScriptButtonCheckedFalse();
+            this.canvas.Cursor = Cursors.Cross;
             toolStripButton.Checked = true;
-            isDrawing = true;
+        }
+
+        private void SetAllToolScriptButtonCheckedFalse()
+        {
+            foreach (ToolStripButton item in toolStripButtons)
+                item.Checked = false;
+        }
+
+        private bool IsAnyToolStripButtonChecked()
+        {
+            foreach (ToolStripButton item in toolStripButtons)
+                if (item.Checked)
+                    return true;
+            return false;
         }
 
         private void InitCanvas()
         {
-
             this.Controls.Add(canvas);
             canvas.BringToFront();
             canvas.Dock = DockStyle.Fill;
 
             this.canvas.Paint += PanelCanvasPaint;
-            this.canvas.Cursor = Cursors.Cross;
             this.canvas.MouseDown += PanelCanvasMouseDown;
             this.canvas.MouseUp += PanelCanvasMouseUp;
             this.canvas.MouseMove += PanelCanvasMouseMove;
@@ -101,16 +109,24 @@ namespace MyDrawing
             model.MouseMoved(e.X, e.Y);
         }
 
-        private void PanelCanvasMouseUp(object sender, MouseEventArgs e)
-        {
-            model.MouseReleases(e.X, e.Y);
-        }
-
         private void PanelCanvasMouseDown(object sender, MouseEventArgs e)
         {
-            if (!isDrawing)
+            if (!IsAnyToolStripButtonChecked())
                 return;
+            // 開始繪製
+            isDrawing = true;
             model.MousePressed(e.X, e.Y);
+        }
+
+        private void PanelCanvasMouseUp(object sender, MouseEventArgs e)
+        {
+            if (!IsAnyToolStripButtonChecked())
+                return;
+            // 完成繪製
+            isDrawing = false;
+            model.MouseReleases(e.X, e.Y);
+            SetAllToolScriptButtonCheckedFalse();
+            this.canvas.Cursor = Cursors.Default;
         }
 
         private void PanelCanvasPaint(object sender, PaintEventArgs e)
@@ -118,12 +134,20 @@ namespace MyDrawing
             model.Draw(new WindowsFormsGraphicsAdaptor(e.Graphics));
         }
 
-
-        private void btnAddShape_Click(object sender, EventArgs e)
+        private void BtnAddShapeClick(object sender, EventArgs e)
         {
+            // 檢查合法輸入
             try
             {
-                model.TryCreateShape(comboBoxShapeType.Text, textBoxShapeContent.Text, textBoxShapeX.Text, textBoxShapeY.Text, textBoxShapeHeight.Text, textBoxShapeWidth.Text);
+                ShapeFactory.ShapeType shapeType = (ShapeFactory.ShapeType)Enum.Parse(typeof(ShapeFactory.ShapeType), comboBoxShapeType.Text);
+                // 內容為空也不被認可
+                if (textBoxShapeContent.Text == string.Empty)
+                    throw new ArgumentNullException("textBoxShapeContent.text is empty");
+                int x = int.Parse(textBoxShapeX.Text);
+                int y = int.Parse(textBoxShapeY.Text);
+                int width = int.Parse(textBoxShapeWidth.Text);
+                int height = int.Parse(textBoxShapeHeight.Text);
+                model.CreateShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
             }
             catch
             {
@@ -143,21 +167,21 @@ namespace MyDrawing
             }
         }
 
-
         // dataGridView 內容被點擊
-        private void dataGridViewShapes_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridViewShapesCellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             // 當刪除按鈕欄被點擊時
             if (e.ColumnIndex == 0)
-            {
                 model.RemoveShape(e.RowIndex);
-            }
         }
 
+        // 更新畫布和 dataGridView
         private void HandleModelChange()
         {
             this.canvas.Invalidate(true);
-            UpdateDataGridView();
+            // 如過正在畫圖就不更新 dataGridView，因為資料沒變而且一直更新 dataGridView 很吃資源
+            if (!isDrawing)
+                UpdateDataGridView();
         }
     }
 }

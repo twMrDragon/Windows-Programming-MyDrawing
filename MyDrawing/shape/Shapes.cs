@@ -18,7 +18,7 @@ namespace MyDrawing.shape
             return shapes;
         }
 
-        public void CreateShape(ShapeFactory.ShapeType shapeType, string content, int x, int y, int height, int width)
+        public void CreateShape(ShapeFactory.ShapeType shapeType, string content, int x, int y, int width, int height)
         {
             Shape shape = factory.CreateShape(shapeType);
             shape.Content = content;

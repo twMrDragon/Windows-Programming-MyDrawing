@@ -17,10 +17,12 @@ namespace MyDrawing.shape
         {
             try
             {
-                graphics.DrawArc(X, Y, Height, Height, 90, 180);
-                graphics.DrawArc(X + Width - Height, Y, Height, Height, 270, 180);
-                graphics.DrawLine(X + Height / 2, Y, X + Width - Height / 2, Y);
-                graphics.DrawLine(X + Height / 2, Y + Height, X + Width - Height / 2, Y + Height);
+                // 參考 visio 修正
+                double arcWidth = Math.Min(Height, Width / 2.0);
+                graphics.DrawArc(X, Y, arcWidth, Height, 90, 180);
+                graphics.DrawArc(X + Width - arcWidth, Y, arcWidth, Height, 270, 180);
+                graphics.DrawLine(X + arcWidth / 2, Y, X + Width - arcWidth / 2, Y);
+                graphics.DrawLine(X + arcWidth / 2, Y + Height, X + Width - arcWidth / 2, Y + Height);
                 this.DrawContent(graphics);
             }
             catch

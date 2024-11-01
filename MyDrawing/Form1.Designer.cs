@@ -160,7 +160,7 @@
             this.dataGridViewShapes.RowTemplate.Height = 24;
             this.dataGridViewShapes.Size = new System.Drawing.Size(415, 527);
             this.dataGridViewShapes.TabIndex = 1;
-            this.dataGridViewShapes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewShapes_CellContentClick);
+            this.dataGridViewShapes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewShapesCellContentClick);
             // 
             // Column1
             // 
@@ -364,7 +364,7 @@
             this.btnAddShape.TabIndex = 0;
             this.btnAddShape.Text = "新增";
             this.btnAddShape.UseVisualStyleBackColor = true;
-            this.btnAddShape.Click += new System.EventHandler(this.btnAddShape_Click);
+            this.btnAddShape.Click += new System.EventHandler(this.BtnAddShapeClick);
             // 
             // toolStrip1
             // 
@@ -387,6 +387,7 @@
             this.toolStripButtonStart.Name = "toolStripButtonStart";
             this.toolStripButtonStart.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonStart.Text = "toolStripButton1";
+            this.toolStripButtonStart.ToolTipText = "Start";
             // 
             // toolStripButtonTerminator
             // 
@@ -396,6 +397,7 @@
             this.toolStripButtonTerminator.Name = "toolStripButtonTerminator";
             this.toolStripButtonTerminator.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonTerminator.Text = "toolStripButton2";
+            this.toolStripButtonTerminator.ToolTipText = "Terminator";
             // 
             // toolStripButtonProcess
             // 
@@ -405,6 +407,7 @@
             this.toolStripButtonProcess.Name = "toolStripButtonProcess";
             this.toolStripButtonProcess.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonProcess.Text = "toolStripButton3";
+            this.toolStripButtonProcess.ToolTipText = "Process";
             // 
             // toolStripButtonDecision
             // 
@@ -414,6 +417,7 @@
             this.toolStripButtonDecision.Name = "toolStripButtonDecision";
             this.toolStripButtonDecision.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonDecision.Text = "toolStripButton4";
+            this.toolStripButtonDecision.ToolTipText = "Decision";
             // 
             // Form1
             // 
