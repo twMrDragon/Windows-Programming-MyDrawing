@@ -34,7 +34,7 @@ namespace MyDrawing.shape
             shapes.RemoveAt(index);
         }
 
-        public void AddShapes(Shape shape)
+        public void AddShape(Shape shape)
         {
             this.shapes.Add(shape);
         }

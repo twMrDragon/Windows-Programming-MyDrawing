@@ -100,7 +100,7 @@ namespace MyDrawing
             {
                 isPressed = false;
                 this.notCompleteShape.Content = GenerateRandomContent();
-                this.shapes.AddShapes(this.notCompleteShape);
+                this.shapes.AddShape(this.notCompleteShape);
                 NotifiyModelChange();
             }
         }
