@@ -42,13 +42,13 @@ namespace MyDrawing
         public void CreateShape(ShapeFactory.ShapeType shapeType, string content, int x, int y, int width, int height)
         {
             shapes.CreateShape(shapeType, content, x, y, width, height);
-            NotifiModelChange();
+            NotifiyModelChange();
         }
 
         public void RemoveShape(int index)
         {
             shapes.RemoveShapeByIndex(index);
-            NotifiModelChange();
+            NotifiyModelChange();
         }
 
         public void Draw(IGraphics graphics)
@@ -72,18 +72,18 @@ namespace MyDrawing
             notCompleteShape.Draw(graphics);
         }
 
-        private void NotifiModelChange()
+        private void NotifiyModelChange()
         {
             if (modelChanged != null)
                 modelChanged();
         }
 
-        public void DrawingShapeTypeSelect(ShapeFactory.ShapeType shapeType)
+        public void SelectNotCompleteShapeType(ShapeFactory.ShapeType shapeType)
         {
             this.notCompleteShapeType = shapeType;
         }
 
-        public void MousePressed(double x, double y)
+        public void HandleMousePressed(double x, double y)
         {
             if (x > 0 && y > 0)
             {
@@ -94,25 +94,28 @@ namespace MyDrawing
             }
         }
 
-        public void MouseReleases(double x, double y)
+        public void HandleMouseReleases(double x, double y)
         {
             if (isPressed)
             {
                 isPressed = false;
-                this.notCompleteShape.Content = RandomContent();
+                this.notCompleteShape.Content = GenerateRandomContent();
                 this.shapes.AddShapes(this.notCompleteShape);
-                NotifiModelChange();
+                NotifiyModelChange();
             }
         }
 
-        public void MouseMoved(double x, double y)
+        public void HandleMouseMoved(double x, double y)
         {
-            this.secondX = x;
-            this.secondY = y;
-            NotifiModelChange();
+            if (isPressed)
+            {
+                this.secondX = x;
+                this.secondY = y;
+                NotifiyModelChange();
+            }
         }
 
-        private string RandomContent()
+        private string GenerateRandomContent()
         {
             Random random = new Random();
             int length = random.Next(3, 11);

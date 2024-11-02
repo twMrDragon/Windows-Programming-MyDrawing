@@ -17,17 +17,17 @@ namespace MyDrawing
         private Model model;
         DoubleBufferedPanel canvas = new DoubleBufferedPanel();
         List<ToolStripButton> toolStripButtons = new List<ToolStripButton>();
-        private bool isDrawing = false;
+        private bool isUpdateDataGridView = true;
 
         public Form1(Model model)
         {
-            InitializeComponent();
             this.model = model;
+            this.model.modelChanged += HandleModelChange;
+            InitializeComponent();
             InitComboBox();
             InitToolScriptButtons();
             InitCanvas();
-            this.model.modelChanged += HandleModelChange;
-            //Test();
+            Test();
         }
 
         private void Test()
@@ -58,7 +58,7 @@ namespace MyDrawing
                 ShapeFactory.ShapeType shapeType = shapeTypes[i];
                 this.toolStripButtons[i].Click += (s, e) =>
                 {
-                    model.DrawingShapeTypeSelect(shapeType);
+                    model.SelectNotCompleteShapeType(shapeType);
                     ToolStripButton toolStripButton = (ToolStripButton)s;
                     ToolStripButtontClick(toolStripButton);
                 };
@@ -98,38 +98,38 @@ namespace MyDrawing
             canvas.BringToFront();
             canvas.Dock = DockStyle.Fill;
 
-            this.canvas.Paint += PanelCanvasPaint;
-            this.canvas.MouseDown += PanelCanvasMouseDown;
-            this.canvas.MouseUp += PanelCanvasMouseUp;
-            this.canvas.MouseMove += PanelCanvasMouseMove;
+            this.canvas.Paint += CanvasPaint;
+            this.canvas.MouseDown += CanvasMouseDown;
+            this.canvas.MouseUp += CanvasMouseUp;
+            this.canvas.MouseMove += CanvasMouseMove;
         }
 
-        private void PanelCanvasMouseMove(object sender, MouseEventArgs e)
+        private void CanvasMouseMove(object sender, MouseEventArgs e)
         {
-            model.MouseMoved(e.X, e.Y);
+            model.HandleMouseMoved(e.X, e.Y);
         }
 
-        private void PanelCanvasMouseDown(object sender, MouseEventArgs e)
+        private void CanvasMouseDown(object sender, MouseEventArgs e)
         {
             if (!IsAnyToolStripButtonChecked())
                 return;
             // 開始繪製
-            isDrawing = true;
-            model.MousePressed(e.X, e.Y);
+            isUpdateDataGridView = false;
+            model.HandleMousePressed(e.X, e.Y);
         }
 
-        private void PanelCanvasMouseUp(object sender, MouseEventArgs e)
+        private void CanvasMouseUp(object sender, MouseEventArgs e)
         {
             if (!IsAnyToolStripButtonChecked())
                 return;
             // 完成繪製
-            isDrawing = false;
-            model.MouseReleases(e.X, e.Y);
+            isUpdateDataGridView = true;
+            model.HandleMouseReleases(e.X, e.Y);
             SetAllToolScriptButtonCheckedFalse();
             this.canvas.Cursor = Cursors.Default;
         }
 
-        private void PanelCanvasPaint(object sender, PaintEventArgs e)
+        private void CanvasPaint(object sender, PaintEventArgs e)
         {
             model.Draw(new WindowsFormsGraphicsAdaptor(e.Graphics));
         }
@@ -180,7 +180,7 @@ namespace MyDrawing
         {
             this.canvas.Invalidate(true);
             // 如過正在畫圖就不更新 dataGridView，因為資料沒變而且一直更新 dataGridView 很吃資源
-            if (!isDrawing)
+            if (isUpdateDataGridView)
                 UpdateDataGridView();
         }
     }
