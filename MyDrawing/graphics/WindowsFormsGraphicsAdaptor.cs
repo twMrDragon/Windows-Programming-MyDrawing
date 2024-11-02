@@ -20,7 +20,7 @@ namespace MyDrawing.graphics
 
         public void ClearAll()
         {
-
+            // windows form 的 paint 在被呼叫時自動清理，所以這裡不用寫
         }
 
         public void DrawArc(double x, double y, double width, double height, double startAngle, double sweepAngle)
@@ -37,7 +37,6 @@ namespace MyDrawing.graphics
         {
             this.graphics.DrawLine(Pens.Black, (float)x1, (float)y1, (float)x2, (float)y2);
         }
-
 
         public void DrawPolygon(PointF[] points)
         {
