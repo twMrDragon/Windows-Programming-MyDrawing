@@ -9,11 +9,11 @@ using System.Reflection;
 
 namespace MyDrawing.graphics
 {
-    internal class WindowsFormsGraphicsAdaptor : IGraphics
+    public class FormGraphicAdapter : IGraphics
     {
         Graphics graphics;
 
-        public WindowsFormsGraphicsAdaptor(Graphics graphics)
+        public FormGraphicAdapter(Graphics graphics)
         {
             this.graphics = graphics;
         }

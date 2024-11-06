@@ -131,7 +131,7 @@ namespace MyDrawing
 
         private void CanvasPaint(object sender, PaintEventArgs e)
         {
-            model.Draw(new WindowsFormsGraphicsAdaptor(e.Graphics));
+            model.Draw(new FormGraphicAdapter(e.Graphics));
         }
 
         private void BtnAddShapeClick(object sender, EventArgs e)

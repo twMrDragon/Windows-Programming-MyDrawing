@@ -56,7 +56,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="graphics\IGraphics.cs" />
-    <Compile Include="graphics\WindowsFormsGraphicsAdaptor.cs" />
+    <Compile Include="graphics\FormGraphicAdapter.cs" />
     <Compile Include="model\Model.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
