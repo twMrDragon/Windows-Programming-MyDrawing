@@ -11,6 +11,14 @@ namespace MyDrawing.shape
 {
     public abstract class Shape
     {
+        public enum Type
+        {
+            Start,
+            Terminator,
+            Process,
+            Descision
+        }
+
         public string ShapeName { get; set; }
 
         public string Content { get; set; }

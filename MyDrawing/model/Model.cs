@@ -19,7 +19,7 @@ namespace MyDrawing
 
         bool isPressed = false;
         ShapeFactory shapeFactory = new ShapeFactory();
-        ShapeFactory.ShapeType notCompleteShapeType;
+        Shape.Type notCompleteShapeType;
         Shape notCompleteShape;
         double firstX = 0;
         double firstY = 0;
@@ -31,7 +31,7 @@ namespace MyDrawing
 
         public string[] GetShapeTypesName()
         {
-            return Enum.GetNames(typeof(ShapeFactory.ShapeType));
+            return Enum.GetNames(typeof(Shape.Type));
         }
 
         public List<Shape> GetShapes()
@@ -39,7 +39,7 @@ namespace MyDrawing
             return shapes.GetShapes();
         }
 
-        public void CreateShape(ShapeFactory.ShapeType shapeType, string content, int x, int y, int width, int height)
+        public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
         {
             shapes.CreateShape(shapeType, content, x, y, width, height);
             NotifiyModelChange();
@@ -78,7 +78,7 @@ namespace MyDrawing
                 modelChanged();
         }
 
-        public void SelectNotCompleteShapeType(ShapeFactory.ShapeType shapeType)
+        public void SelectNotCompleteShapeType(Shape.Type shapeType)
         {
             this.notCompleteShapeType = shapeType;
         }

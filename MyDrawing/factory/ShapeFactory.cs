@@ -9,26 +9,18 @@ namespace MyDrawing
 {
     public class ShapeFactory
     {
-        public enum ShapeType
-        {
-            Start,
-            Terminator,
-            Process,
-            Descision
-        }
-
         // 建立哪個圖形的條件判斷寫在這
-        public Shape CreateShape(ShapeType shapeType)
+        public Shape CreateShape(Shape.Type shapeType)
         {
             switch (shapeType)
             {
-                case ShapeType.Start:
+                case Shape.Type.Start:
                     return new Start();
-                case ShapeType.Terminator:
+                case Shape.Type.Terminator:
                     return new Terminator();
-                case ShapeType.Process:
-                    return new Process();
-                case ShapeType.Descision:
+                case Shape.Type.Process:
+                    return new Process();   
+                case Shape.Type.Descision:
                     return new Descision();
                 default:
                     return new Start();

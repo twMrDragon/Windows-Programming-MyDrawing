@@ -32,10 +32,10 @@ namespace MyDrawing
 
         private void Test()
         {
-            this.model.CreateShape(ShapeFactory.ShapeType.Start, "Start text", 40, 50, 50, 50);
-            this.model.CreateShape(ShapeFactory.ShapeType.Terminator, "Terminator text", 400, 400, 180, 90);
-            this.model.CreateShape(ShapeFactory.ShapeType.Process, "Process text", 500, 150, 100, 50);
-            this.model.CreateShape(ShapeFactory.ShapeType.Descision, "Descision text", 90, 200, 100, 100);
+            this.model.CreateShape(Shape.Type.Start, "Start text", 40, 50, 50, 50);
+            this.model.CreateShape(Shape.Type.Terminator, "Terminator text", 400, 400, 180, 90);
+            this.model.CreateShape(Shape.Type.Process, "Process text", 500, 150, 100, 50);
+            this.model.CreateShape(Shape.Type.Descision, "Descision text", 90, 200, 100, 100);
         }
 
         private void InitComboBox()
@@ -51,11 +51,11 @@ namespace MyDrawing
             this.toolStripButtons.Add(this.toolStripButtonProcess);
             this.toolStripButtons.Add(this.toolStripButtonDecision);
 
-            ShapeFactory.ShapeType[] shapeTypes = { ShapeFactory.ShapeType.Start, ShapeFactory.ShapeType.Terminator, ShapeFactory.ShapeType.Process, ShapeFactory.ShapeType.Descision };
+            Shape.Type[] shapeTypes = { Shape.Type.Start, Shape.Type.Terminator, Shape.Type.Process, Shape.Type.Descision };
 
             for (int i = 0; i < this.toolStripButtons.Count; i++)
             {
-                ShapeFactory.ShapeType shapeType = shapeTypes[i];
+                Shape.Type shapeType = shapeTypes[i];
                 this.toolStripButtons[i].Click += (s, e) =>
                 {
                     model.SelectNotCompleteShapeType(shapeType);
@@ -139,7 +139,7 @@ namespace MyDrawing
             // 檢查合法輸入
             try
             {
-                ShapeFactory.ShapeType shapeType = (ShapeFactory.ShapeType)Enum.Parse(typeof(ShapeFactory.ShapeType), comboBoxShapeType.Text);
+                Shape.Type shapeType = (Shape.Type)Enum.Parse(typeof(Shape.Type), comboBoxShapeType.Text);
                 // 內容為空也不被認可
                 if (textBoxShapeContent.Text == string.Empty)
                     throw new ArgumentNullException("textBoxShapeContent.text is empty");
