@@ -16,12 +16,17 @@ namespace MyDrawing.shape
         }
         public override void Draw(IGraphics graphics)
         {
-            PointF[] pointFs = new PointF[4];
-            pointFs[0] = new PointF(X + Width / 2, Y);
-            pointFs[1] = new PointF(X + Width, Y + Height / 2);
-            pointFs[2] = new PointF(X + Width / 2, Y + Height);
-            pointFs[3] = new PointF(X, Y + Height / 2);
-            graphics.DrawPolygon(pointFs);
+            double[] x = new double[4];
+            double[] y = new double[4];
+            x[0] = X + Width / 2;
+            y[0] = Y;
+            x[1] = X + Width;
+            y[1] = Y + Height / 2;
+            x[2] = X + Width / 2;
+            y[2] = Y + Height;
+            x[3] = X;
+            y[3] = Y + Height / 2;
+            graphics.DrawPolygon(x,y);
             this.DrawContent(graphics);
         }
     }

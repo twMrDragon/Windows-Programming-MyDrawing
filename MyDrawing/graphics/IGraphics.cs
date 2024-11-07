@@ -15,6 +15,6 @@ namespace MyDrawing.graphics
         void DrawEllipse(double x, double y, double width, double height);
         void DrawArc(double x, double y, double width, double height, double startAngle, double sweepAngle);
         void DrawString(string s, double x, double y);
-        void DrawPolygon(PointF[] points);
+        void DrawPolygon(double[] x, double[] y);
     }
 }

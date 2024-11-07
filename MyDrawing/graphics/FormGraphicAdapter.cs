@@ -38,9 +38,17 @@ namespace MyDrawing.graphics
             this.graphics.DrawLine(Pens.Black, (float)x1, (float)y1, (float)x2, (float)y2);
         }
 
-        public void DrawPolygon(PointF[] points)
+        public void DrawPolygon(double[] x, double[] y)
         {
-            this.graphics.DrawPolygon(Pens.Black, points);
+            if (x.Length != y.Length)
+                throw new ArgumentException("x and y quantity is different");
+            PointF[] pointFs = new PointF[x.Length];
+            for (int i = 0; i < x.Length; i++)
+            {
+                pointFs[i].X = (float)x[i];
+                pointFs[i].Y = (float)y[i];
+            }
+            this.graphics.DrawPolygon(Pens.Black, pointFs);
         }
 
         public void DrawRectangle(double x, double y, double width, double height)
