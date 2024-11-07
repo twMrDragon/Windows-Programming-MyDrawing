@@ -16,6 +16,7 @@ namespace MyDrawing.graphics
         public FormGraphicAdapter(Graphics graphics)
         {
             this.graphics = graphics;
+            this.graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
         }
 
         public void ClearAll()
@@ -41,7 +42,7 @@ namespace MyDrawing.graphics
         public void DrawPolygon(double[] x, double[] y)
         {
             if (x.Length != y.Length)
-                throw new ArgumentException("x and y quantity is different");
+                throw new ArgumentException("x and y length is different");
             PointF[] pointFs = new PointF[x.Length];
             for (int i = 0; i < x.Length; i++)
             {
