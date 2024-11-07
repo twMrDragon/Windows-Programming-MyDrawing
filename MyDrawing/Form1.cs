@@ -8,15 +8,15 @@ namespace MyDrawing
 {
     public partial class Form1 : Form
     {
-        private Model model;
-        DoubleBufferedPanel canvas = new DoubleBufferedPanel();
-        List<ToolStripButton> toolStripButtons = new List<ToolStripButton>();
+        readonly private Model model;
+        readonly DoubleBufferedPanel canvas = new DoubleBufferedPanel();
+        readonly List<ToolStripButton> toolStripButtons = new List<ToolStripButton>();
         private bool isUpdateDataGridView = true;
 
         public Form1(Model model)
         {
             this.model = model;
-            this.model.modelChanged += HandleModelChange;
+            this.model.ModelChanged += HandleModelChange;
             InitializeComponent();
             InitComboBox();
             InitToolScriptButtons();
@@ -35,7 +35,7 @@ namespace MyDrawing
         private void InitComboBox()
         {
             // 所有圖形元素名稱
-            comboBoxShapeType.Items.AddRange(model.GetShapeTypesName());
+            comboBoxShapeType.Items.AddRange(Model.GetShapeTypesName());
         }
 
         private void InitToolScriptButtons()
@@ -136,7 +136,7 @@ namespace MyDrawing
                 Shape.Type shapeType = (Shape.Type)Enum.Parse(typeof(Shape.Type), comboBoxShapeType.Text);
                 // 內容為空也不被認可
                 if (textBoxShapeContent.Text == string.Empty)
-                    throw new ArgumentNullException("textBoxShapeContent.text is empty");
+                    throw new ArgumentException($"{nameof(textBoxShapeContent)}.text is empty");
                 int x = int.Parse(textBoxShapeX.Text);
                 int y = int.Parse(textBoxShapeY.Text);
                 int width = int.Parse(textBoxShapeWidth.Text);

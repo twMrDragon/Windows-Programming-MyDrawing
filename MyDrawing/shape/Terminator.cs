@@ -23,6 +23,7 @@ namespace MyDrawing.shape
             }
             catch
             {
+                // DrawArc 如果 width 或 height 為 0 會報錯
             }
         }
     }

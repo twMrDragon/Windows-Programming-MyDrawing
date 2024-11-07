@@ -5,7 +5,7 @@ namespace MyDrawing.graphics
 {
     public class FormGraphicAdapter : IGraphics
     {
-        Graphics graphics;
+        readonly Graphics graphics;
 
         public FormGraphicAdapter(Graphics graphics)
         {

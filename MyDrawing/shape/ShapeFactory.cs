@@ -4,8 +4,13 @@ namespace MyDrawing
 {
     public class ShapeFactory
     {
+        protected ShapeFactory()
+        {
+
+        }
+
         // 建立哪個圖形的條件判斷寫在這
-        public Shape CreateShape(Shape.Type shapeType)
+        static public Shape CreateShape(Shape.Type shapeType)
         {
             switch (shapeType)
             {

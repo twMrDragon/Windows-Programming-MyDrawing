@@ -9,10 +9,12 @@ namespace MyDrawing
     public class Model
     {
         public delegate void ModelChangedEventHandler();
-        public event ModelChangedEventHandler modelChanged;
+        public event ModelChangedEventHandler ModelChanged;
+
+        // 維護圖形清單的增刪查
+        readonly private Shapes shapes = new Shapes();
 
         bool isPressed = false;
-        ShapeFactory shapeFactory = new ShapeFactory();
         Shape.Type notCompleteShapeType;
         Shape notCompleteShape;
         double firstX = 0;
@@ -20,10 +22,7 @@ namespace MyDrawing
         double secondX = 0;
         double secondY = 0;
 
-        // 維護圖形清單的增刪查
-        private Shapes shapes = new Shapes();
-
-        public string[] GetShapeTypesName()
+        static public string[] GetShapeTypesName()
         {
             return Enum.GetNames(typeof(Shape.Type));
         }
@@ -51,9 +50,13 @@ namespace MyDrawing
             foreach (Shape item in shapes.GetShapes())
                 item.Draw(graphics);
             if (isPressed)
-                DrawNotCompletedShape(graphics);
+            {
+                FixNotCompletedShape();
+                notCompleteShape.Draw(graphics);
+            }
         }
-        private void DrawNotCompletedShape(IGraphics graphics)
+
+        private void FixNotCompletedShape()
         {
             double smallerX = firstX < secondX ? firstX : secondX;
             double largerX = firstX < secondX ? secondX : firstX;
@@ -63,13 +66,11 @@ namespace MyDrawing
             this.notCompleteShape.Y = (int)smallerY;
             this.notCompleteShape.Width = (int)(largerX - smallerX);
             this.notCompleteShape.Height = (int)(largerY - smallerY);
-            notCompleteShape.Draw(graphics);
         }
 
         private void NotifiyModelChange()
         {
-            if (modelChanged != null)
-                modelChanged();
+            ModelChanged?.Invoke();
         }
 
         public void SelectNotCompleteShapeType(Shape.Type shapeType)
@@ -81,8 +82,8 @@ namespace MyDrawing
         {
             if (x > 0 && y > 0)
             {
-                this.notCompleteShape = shapeFactory.CreateShape(this.notCompleteShapeType);
                 isPressed = true;
+                this.notCompleteShape = ShapeFactory.CreateShape(this.notCompleteShapeType);
                 firstX = x;
                 firstY = y;
             }
@@ -93,7 +94,10 @@ namespace MyDrawing
             if (isPressed)
             {
                 isPressed = false;
+                this.secondX = x;
+                this.secondY = y;
                 this.notCompleteShape.Content = GenerateRandomContent();
+                FixNotCompletedShape();
                 this.shapes.AddShape(this.notCompleteShape);
                 NotifiyModelChange();
             }
@@ -109,7 +113,7 @@ namespace MyDrawing
             }
         }
 
-        private string GenerateRandomContent()
+        static private string GenerateRandomContent()
         {
             Random random = new Random();
             int length = random.Next(3, 11);
