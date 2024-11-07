@@ -159,7 +159,7 @@ namespace MyDrawing
         private void UpdateDataGridView()
         {
             dataGridViewShapes.Rows.Clear();
-            List<Shape> shapes = model.GetShapes();
+            IList<Shape> shapes = model.GetShapes();
             for (int i = 0; i < shapes.Count; i++)
             {
                 Shape shape = shapes[i];

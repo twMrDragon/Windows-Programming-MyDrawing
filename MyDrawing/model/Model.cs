@@ -34,7 +34,7 @@ namespace MyDrawing
             return Enum.GetNames(typeof(Shape.Type));
         }
 
-        public List<Shape> GetShapes()
+        public IList<Shape> GetShapes()
         {
             return shapes.GetShapes();
         }

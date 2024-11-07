@@ -13,9 +13,9 @@ namespace MyDrawing.shape
         // 創建圖形寫在 ShapeFactory
         private ShapeFactory factory = new ShapeFactory();
 
-        public List<Shape> GetShapes()
+        public IList<Shape> GetShapes()
         {
-            return shapes;
+            return shapes.AsReadOnly();
         }
 
         public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
