@@ -1,9 +1,4 @@
 ﻿using MyDrawing.shape;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyDrawing
 {
@@ -19,7 +14,7 @@ namespace MyDrawing
                 case Shape.Type.Terminator:
                     return new Terminator();
                 case Shape.Type.Process:
-                    return new Process();   
+                    return new Process();
                 case Shape.Type.Descision:
                     return new Descision();
                 default:

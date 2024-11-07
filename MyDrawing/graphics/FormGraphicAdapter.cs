@@ -1,11 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
 
 namespace MyDrawing.graphics
 {
@@ -42,7 +36,7 @@ namespace MyDrawing.graphics
         public void DrawPolygon(double[] x, double[] y)
         {
             if (x.Length != y.Length)
-                throw new ArgumentException("x and y length is different");
+                throw new ArgumentException("The lengths of x and Y are different.");
             PointF[] pointFs = new PointF[x.Length];
             for (int i = 0; i < x.Length; i++)
             {
@@ -59,6 +53,7 @@ namespace MyDrawing.graphics
 
         public void DrawString(string s, double x, double y)
         {
+
             // graphics.DrawString 會把 x y 當成左上角繪製文字
             this.graphics.DrawString(s, new Font("Arial", 7), Brushes.Black, (float)x, (float)y);
         }
