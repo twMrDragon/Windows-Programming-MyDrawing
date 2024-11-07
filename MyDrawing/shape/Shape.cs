@@ -1,6 +1,4 @@
 ﻿using MyDrawing.graphics;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace MyDrawing.shape
 {
@@ -27,10 +25,9 @@ namespace MyDrawing.shape
 
         public void DrawContent(IGraphics graphics)
         {
-            Size size = TextRenderer.MeasureText(this.Content, new Font("Arial", 7));
-            double offsetX = (Width - size.Width) / 2.0;
-            double offsetY = (Height - size.Height) / 2.0;
-            graphics.DrawString(this.Content, X + offsetX, Y + offsetY);
+            double centerX = X + Width / 2;
+            double centerY = Y + Height / 2;
+            graphics.DrawString(this.Content, centerX, centerY);
         }
     }
 }

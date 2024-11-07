@@ -53,9 +53,11 @@ namespace MyDrawing.graphics
 
         public void DrawString(string s, double x, double y)
         {
-
-            // graphics.DrawString 會把 x y 當成左上角繪製文字
-            this.graphics.DrawString(s, new Font("Arial", 7), Brushes.Black, (float)x, (float)y);
+            // 使用 StringFormat 讓字繪製在中間
+            StringFormat stringFormat = StringFormat.GenericTypographic;
+            stringFormat.LineAlignment = StringAlignment.Center;
+            stringFormat.Alignment = StringAlignment.Center;
+            this.graphics.DrawString(s, new Font("Arial", 7), Brushes.Black, (float)x, (float)y, stringFormat);
         }
     }
 }
