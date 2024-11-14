@@ -12,18 +12,7 @@ namespace MyDrawing.shape
             return shapes.AsReadOnly();
         }
 
-        public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
-        {
-            Shape shape = ShapeFactory.CreateShape(shapeType);
-            shape.Content = content;
-            shape.X = x;
-            shape.Y = y;
-            shape.Width = width;
-            shape.Height = height;
-            shapes.Add(shape);
-        }
-
-        public void RemoveShapeByIndex(int index)
+        public void RemoveShapeAt(int index)
         {
             shapes.RemoveAt(index);
         }

@@ -166,7 +166,7 @@ namespace MyDrawing
         {
             // 當刪除按鈕欄被點擊時
             if (e.ColumnIndex == 0)
-                model.RemoveShape(e.RowIndex);
+                model.RemoveShapeAt(e.RowIndex);
         }
 
         // 更新畫布和 dataGridView
