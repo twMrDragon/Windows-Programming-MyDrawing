@@ -133,7 +133,11 @@ namespace MyDrawing
             // 檢查合法輸入
             try
             {
+                if (comboBoxShapeType.Text == string.Empty)
+                    throw new ArgumentException("請使用下拉選單選擇圖形");
+
                 Shape.Type shapeType = (Shape.Type)Enum.Parse(typeof(Shape.Type), comboBoxShapeType.Text);
+
                 // 內容為空也不被認可
                 if (textBoxShapeContent.Text == string.Empty)
                     throw new ArgumentException($"{nameof(textBoxShapeContent)}.text is empty");
@@ -142,6 +146,10 @@ namespace MyDrawing
                 int width = int.Parse(textBoxShapeWidth.Text);
                 int height = int.Parse(textBoxShapeHeight.Text);
                 model.CreateShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
+            }
+            catch (ArgumentException error)
+            {
+                MessageBox.Show($"警告: {error.Message}");
             }
             catch
             {
