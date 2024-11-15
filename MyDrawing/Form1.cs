@@ -142,6 +142,12 @@ namespace MyDrawing
                 if (textBoxShapeContent.Text == string.Empty)
                     throw new ArgumentException("圖形的文字描述框不能為空");
 
+                if (textBoxShapeX.Text == string.Empty ||
+                    textBoxShapeY.Text == string.Empty ||
+                    textBoxShapeWidth.Text == string.Empty ||
+                    textBoxShapeHeight.Text == string.Empty)
+                    throw new ArgumentException("圖形的座標或者寬度高度不能為空");
+
                 int x = int.Parse(textBoxShapeX.Text);
                 int y = int.Parse(textBoxShapeY.Text);
                 int width = int.Parse(textBoxShapeWidth.Text);
@@ -154,7 +160,7 @@ namespace MyDrawing
             }
             catch
             {
-                MessageBox.Show("欄位未輸入或有錯誤");
+                MessageBox.Show("圖形的欄位出現非法輸入");
             }
         }
 
