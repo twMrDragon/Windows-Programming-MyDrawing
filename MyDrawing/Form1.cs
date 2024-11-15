@@ -140,7 +140,8 @@ namespace MyDrawing
 
                 // 內容為空也不被認可
                 if (textBoxShapeContent.Text == string.Empty)
-                    throw new ArgumentException($"{nameof(textBoxShapeContent)}.text is empty");
+                    throw new ArgumentException($"圖形的文字描述框不能為空");
+
                 int x = int.Parse(textBoxShapeX.Text);
                 int y = int.Parse(textBoxShapeY.Text);
                 int width = int.Parse(textBoxShapeWidth.Text);
