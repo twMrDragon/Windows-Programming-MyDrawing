@@ -3,6 +3,7 @@ using MyDrawing.presentationModel;
 using MyDrawing.shape;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace MyDrawing
@@ -12,6 +13,7 @@ namespace MyDrawing
         readonly private Model model;
         private PresentationModel presentationModel;
         readonly DoubleBufferedPanel canvas = new DoubleBufferedPanel();
+        private CursorConverter cursorConverter = new CursorConverter();
 
         public Form1(Model model)
         {
@@ -41,13 +43,25 @@ namespace MyDrawing
         {
             // user input
             this.btnAddShape.DataBindings.Add("Enabled", presentationModel, "isBtnAddEnabled");
-            this.labelShapeContent.DataBindings.Add("ForeColor", presentationModel, "labelShapeContentColor");
-            this.labelShapeX.DataBindings.Add("ForeColor", presentationModel, "labelShapeXColor");
-            this.labelShapeY.DataBindings.Add("ForeColor", presentationModel, "labelShapeYColor");
-            this.labelShapeWidth.DataBindings.Add("ForeColor", presentationModel, "labelShapeWidthColor");
-            this.labelShapeHeight.DataBindings.Add("ForeColor", presentationModel, "labelShapeHeightColor");
+            CreateBindingHexToColor(labelShapeContent.DataBindings, "ForeColor", presentationModel, "labelShapeContentColor");
+            CreateBindingHexToColor(labelShapeX.DataBindings, "ForeColor", presentationModel, "labelShapeXColor");
+            CreateBindingHexToColor(labelShapeY.DataBindings, "ForeColor", presentationModel, "labelShapeYColor");
+            CreateBindingHexToColor(labelShapeWidth.DataBindings, "ForeColor", presentationModel, "labelShapeWidthColor");
+            CreateBindingHexToColor(labelShapeHeight.DataBindings, "ForeColor", presentationModel, "labelShapeHeightColor");
 
             // toolScript
+        }
+
+        private void CreateBindingHexToColor(ControlBindingsCollection dataBindings, string propertyName, object dataSource, string dataMember)
+        {
+            Binding binding = new Binding(propertyName, dataSource, dataMember);
+            binding.Format += BindingFormat;
+            dataBindings.Add(binding);
+        }
+
+        private void BindingFormat(object sender, ConvertEventArgs e)
+        {
+            e.Value = ColorTranslator.FromHtml(e.Value.ToString());
         }
 
         private void InitTextBoox()
@@ -217,7 +231,7 @@ namespace MyDrawing
             this.toolStripButtonPoint.Checked = presentationModel.IsPointButtonnChecked;
 
             // canvas cursor
-            this.canvas.Cursor = presentationModel.CanvasCousor;
+            this.canvas.Cursor = (Cursor)cursorConverter.ConvertFromString(presentationModel.CanvasCousor);
         }
     }
 }

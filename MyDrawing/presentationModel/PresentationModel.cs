@@ -1,8 +1,6 @@
 ﻿using MyDrawing.shape;
 using System;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace MyDrawing.presentationModel
 {
@@ -21,11 +19,11 @@ namespace MyDrawing.presentationModel
         private bool isBtnAddEnabled = false;
 
         // label color
-        private Color labelShapeContentColor = Color.Red;
-        private Color labelShapeXColor = Color.Red;
-        private Color labelShapeYColor = Color.Red;
-        private Color labelShapeWidthColor = Color.Red;
-        private Color labelShapeHeightColor = Color.Red;
+        private string labelShapeContentColor = "#FF0000";
+        private string labelShapeXColor = "#FF0000";
+        private string labelShapeYColor = "#FF0000";
+        private string labelShapeWidthColor = "#FF0000";
+        private string labelShapeHeightColor = "#FF0000";
 
 
         public PresentationModel(Model model)
@@ -36,9 +34,9 @@ namespace MyDrawing.presentationModel
         public void LabelShapeContentChange(string content)
         {
             if (string.Empty == content)
-                this.labelShapeContentColor = Color.Red;
+                this.labelShapeContentColor = "#FF0000";
             else
-                this.labelShapeContentColor = Color.Black;
+                this.labelShapeContentColor = "#000000";
             notify("labelShapeContentColor");
             UpdateBtnAddEnable();
         }
@@ -50,11 +48,11 @@ namespace MyDrawing.presentationModel
                 int x = int.Parse(num);
                 if (x < 1)
                     throw new ArgumentOutOfRangeException(num);
-                this.labelShapeXColor = Color.Black;
+                this.labelShapeXColor = "#000000";
             }
             catch
             {
-                this.labelShapeXColor = Color.Red;
+                this.labelShapeXColor = "#FF0000";
             }
             notify("labelShapeXColor");
             UpdateBtnAddEnable();
@@ -67,11 +65,11 @@ namespace MyDrawing.presentationModel
                 int Y = int.Parse(num);
                 if (Y < 1)
                     throw new ArgumentOutOfRangeException(num);
-                this.labelShapeYColor = Color.Black;
+                this.labelShapeYColor = "#000000";
             }
             catch
             {
-                this.labelShapeYColor = Color.Red;
+                this.labelShapeYColor = "#FF0000";
             }
             notify("labelShapeYColor");
             UpdateBtnAddEnable();
@@ -84,11 +82,11 @@ namespace MyDrawing.presentationModel
                 int width = int.Parse(num);
                 if (width < 1)
                     throw new ArgumentOutOfRangeException(num);
-                this.labelShapeWidthColor = Color.Black;
+                this.labelShapeWidthColor = "#000000";
             }
             catch
             {
-                this.labelShapeWidthColor = Color.Red;
+                this.labelShapeWidthColor = "#FF0000";
             }
             notify("labelShapeWdithColor");
             UpdateBtnAddEnable();
@@ -100,11 +98,11 @@ namespace MyDrawing.presentationModel
                 int height = int.Parse(num);
                 if (height < 1)
                     throw new ArgumentOutOfRangeException(num);
-                this.labelShapeHeightColor = Color.Black;
+                this.labelShapeHeightColor = "#000000";
             }
             catch
             {
-                this.labelShapeHeightColor = Color.Red;
+                this.labelShapeHeightColor = "#FF0000";
             }
             notify("labelShapeHeightColor");
             UpdateBtnAddEnable();
@@ -113,11 +111,11 @@ namespace MyDrawing.presentationModel
         private void UpdateBtnAddEnable()
         {
             this.isBtnAddEnabled = true;
-            this.isBtnAddEnabled &= (labelShapeContentColor == Color.Black);
-            this.isBtnAddEnabled &= (labelShapeXColor == Color.Black);
-            this.isBtnAddEnabled &= (labelShapeYColor == Color.Black);
-            this.isBtnAddEnabled &= (labelShapeWidthColor == Color.Black);
-            this.isBtnAddEnabled &= (labelShapeHeightColor == Color.Black);
+            this.isBtnAddEnabled &= (labelShapeContentColor == "#000000");
+            this.isBtnAddEnabled &= (labelShapeXColor == "#000000");
+            this.isBtnAddEnabled &= (labelShapeYColor == "#000000");
+            this.isBtnAddEnabled &= (labelShapeWidthColor == "#000000");
+            this.isBtnAddEnabled &= (labelShapeHeightColor == "#000000");
             notify("isBtnAddEnabled");
         }
 
@@ -132,9 +130,9 @@ namespace MyDrawing.presentationModel
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Cursor CanvasCousor
+        public string CanvasCousor
         {
-            get { return this.model.currnetState == this.model.drawState ? Cursors.Cross : Cursors.Default; }
+            get { return this.model.currnetState == this.model.drawState ? "Cross" : "Default"; }
         }
 
         // state
@@ -170,23 +168,23 @@ namespace MyDrawing.presentationModel
         {
             get { return this.isBtnAddEnabled; }
         }
-        public Color LabelShapeContentColor
+        public string LabelShapeContentColor
         {
             get { return this.labelShapeContentColor; }
         }
-        public Color LabelShapeXColor
+        public string LabelShapeXColor
         {
             get { return this.labelShapeXColor; }
         }
-        public Color LabelShapeYColor
+        public string LabelShapeYColor
         {
             get { return this.labelShapeYColor; }
         }
-        public Color LabelShapeHeightColor
+        public string LabelShapeHeightColor
         {
             get { return this.labelShapeHeightColor; }
         }
-        public Color LabelShapeWidthColor
+        public string LabelShapeWidthColor
         {
             get { return this.labelShapeWidthColor; }
         }
