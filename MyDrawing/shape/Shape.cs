@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MyDrawing.graphics;
 
 namespace MyDrawing.shape
 {
-    public class Shape
+    public abstract class Shape
     {
+        public enum Type
+        {
+            Start,
+            Terminator,
+            Process,
+            Descision
+        }
+
         public string ShapeName { get; set; }
 
         public string Content { get; set; }
@@ -18,6 +21,13 @@ namespace MyDrawing.shape
         public int Width { get; set; }
         public int Height { get; set; }
 
-        //public abstract void OnDraw(Graphics graphics);
+        public abstract void Draw(IGraphics graphics);
+
+        public void DrawContent(IGraphics graphics)
+        {
+            double centerX = X + Width / 2;
+            double centerY = Y + Height / 2;
+            graphics.DrawString(this.Content, centerX, centerY);
+        }
     }
 }
