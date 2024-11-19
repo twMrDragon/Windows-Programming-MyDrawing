@@ -37,14 +37,6 @@
             this.btnPage1 = new System.Windows.Forms.Button();
             this.groupBoxDataDisplay = new System.Windows.Forms.GroupBox();
             this.dataGridViewShapes = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxShapeWidth = new System.Windows.Forms.TextBox();
@@ -63,7 +55,16 @@
             this.toolStripButtonStart = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonTerminator = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonProcess = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonDecision = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonDescision = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonPoint = new System.Windows.Forms.ToolStripButton();
+            this.Column1 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxDataDisplay.SuspendLayout();
@@ -161,56 +162,6 @@
             this.dataGridViewShapes.Size = new System.Drawing.Size(415, 527);
             this.dataGridViewShapes.TabIndex = 1;
             this.dataGridViewShapes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewShapesCellContentClick);
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "刪除";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "ID";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "形狀";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "文字";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "X";
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            // 
-            // Column6
-            // 
-            this.Column6.HeaderText = "Y";
-            this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
-            // 
-            // Column7
-            // 
-            this.Column7.HeaderText = "H";
-            this.Column7.Name = "Column7";
-            this.Column7.ReadOnly = true;
-            // 
-            // Column8
-            // 
-            this.Column8.HeaderText = "W";
-            this.Column8.Name = "Column8";
-            this.Column8.ReadOnly = true;
             // 
             // panel2
             // 
@@ -338,6 +289,7 @@
             // comboBoxShapeType
             // 
             this.comboBoxShapeType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxShapeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxShapeType.FormattingEnabled = true;
             this.comboBoxShapeType.Location = new System.Drawing.Point(3, 28);
             this.comboBoxShapeType.Name = "comboBoxShapeType";
@@ -372,7 +324,8 @@
             this.toolStripButtonStart,
             this.toolStripButtonTerminator,
             this.toolStripButtonProcess,
-            this.toolStripButtonDecision});
+            this.toolStripButtonDescision,
+            this.toolStripButtonPoint});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1316, 25);
@@ -409,15 +362,77 @@
             this.toolStripButtonProcess.Text = "toolStripButton3";
             this.toolStripButtonProcess.ToolTipText = "Process";
             // 
-            // toolStripButtonDecision
+            // toolStripButtonDescision
             // 
-            this.toolStripButtonDecision.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonDecision.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDecision.Image")));
-            this.toolStripButtonDecision.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonDecision.Name = "toolStripButtonDecision";
-            this.toolStripButtonDecision.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonDecision.Text = "toolStripButton4";
-            this.toolStripButtonDecision.ToolTipText = "Decision";
+            this.toolStripButtonDescision.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDescision.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDescision.Image")));
+            this.toolStripButtonDescision.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDescision.Name = "toolStripButtonDescision";
+            this.toolStripButtonDescision.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDescision.Text = "toolStripButton4";
+            this.toolStripButtonDescision.ToolTipText = "Decision";
+            // 
+            // toolStripButtonPoint
+            // 
+            this.toolStripButtonPoint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPoint.Image = global::MyDrawing.Properties.Resources.cursor;
+            this.toolStripButtonPoint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPoint.Name = "toolStripButtonPoint";
+            this.toolStripButtonPoint.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonPoint.Text = "toolStripButtonPoint";
+            this.toolStripButtonPoint.ToolTipText = "Point";
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "刪除";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Column1.Text = "刪除";
+            this.Column1.UseColumnTextForButtonValue = true;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "ID";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "形狀";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "文字";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "X";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            // 
+            // Column6
+            // 
+            this.Column6.HeaderText = "Y";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            // 
+            // Column7
+            // 
+            this.Column7.HeaderText = "H";
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
+            // 
+            // Column8
+            // 
+            this.Column8.HeaderText = "W";
+            this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
             // 
             // Form1
             // 
@@ -470,6 +485,12 @@
         private System.Windows.Forms.Label labelShapeHeight;
         private System.Windows.Forms.Label labelShapeY;
         private System.Windows.Forms.Label labelShapeX;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonStart;
+        private System.Windows.Forms.ToolStripButton toolStripButtonTerminator;
+        private System.Windows.Forms.ToolStripButton toolStripButtonProcess;
+        private System.Windows.Forms.ToolStripButton toolStripButtonDescision;
+        private System.Windows.Forms.ToolStripButton toolStripButtonPoint;
         private System.Windows.Forms.DataGridViewButtonColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
@@ -478,11 +499,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonStart;
-        private System.Windows.Forms.ToolStripButton toolStripButtonTerminator;
-        private System.Windows.Forms.ToolStripButton toolStripButtonProcess;
-        private System.Windows.Forms.ToolStripButton toolStripButtonDecision;
     }
 }
 

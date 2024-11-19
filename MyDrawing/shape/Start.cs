@@ -1,4 +1,5 @@
 ﻿using MyDrawing.graphics;
+using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
@@ -13,6 +14,13 @@ namespace MyDrawing.shape
         {
             graphics.DrawEllipse(X, Y, Width, Height);
             this.DrawContent(graphics);
+        }
+
+        public override bool IsPointIn(double x, double y)
+        {
+            GraphicsPath graphicsPath = new GraphicsPath();
+            graphicsPath.AddEllipse(X, Y, Width, Height);
+            return graphicsPath.IsVisible((float)x, (float)y);
         }
     }
 }
