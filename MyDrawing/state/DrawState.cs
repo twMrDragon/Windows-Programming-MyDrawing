@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyDrawing.presentationModel;
+using System;
 using System.Text;
 
 namespace MyDrawing.state
@@ -6,6 +7,7 @@ namespace MyDrawing.state
     class DrawState : IState
     {
         readonly Model model;
+        readonly PresentationModel presentationModel;
 
         bool isPressed = false;
         double firstX = 0;
@@ -13,9 +15,10 @@ namespace MyDrawing.state
         double secondX = 0;
         double secondY = 0;
 
-        public DrawState(Model model)
+        public DrawState(Model model, PresentationModel presentationModel)
         {
             this.model = model;
+            this.presentationModel = presentationModel;
         }
 
         public void MouseDown(double x, double y)
@@ -23,9 +26,9 @@ namespace MyDrawing.state
             if (!(x > 0 && y > 0))
                 return;
             isPressed = true;
-            this.model.notCompleteShape = ShapeFactory.CreateShape(this.model.notCompleteShapeType);
             firstX = x;
             firstY = y;
+            this.model.notCompleteShape = ShapeFactory.CreateShape(this.model.notCompleteShapeType);
             this.model.NotifiyModelChange();
         }
 
@@ -49,7 +52,9 @@ namespace MyDrawing.state
             this.model.notCompleteShape.Content = GenerateRandomContent();
             FixNotCompletedShape();
             this.model.AddShapeFromNotComplete();
-            this.model.SetToPointState();
+            this.model.selectedShape = this.model.notCompleteShape;
+            this.model.notCompleteShape = null;
+            this.presentationModel.SetToPointState();
             this.model.NotifiyModelChange();
         }
 

@@ -1,4 +1,5 @@
-﻿using MyDrawing.graphics;
+﻿using MyDrawing.controls;
+using MyDrawing.graphics;
 using MyDrawing.presentationModel;
 using MyDrawing.shape;
 using System;
@@ -20,7 +21,6 @@ namespace MyDrawing
             this.model = model;
             this.model.ModelChanged += HandleModelChange;
             this.presentationModel = new PresentationModel(this.model);
-            this.presentationModel.ModelChanged += HandlePresentationModelChange;
 
             // origin init controls
             InitializeComponent();
@@ -34,7 +34,7 @@ namespace MyDrawing
             // databinding
             InitDataBinding();
 
-            this.presentationModel.NotifiyModelChange();
+            presentationModel.SetToPointState();
 
             Test();
         }
@@ -42,14 +42,27 @@ namespace MyDrawing
         private void InitDataBinding()
         {
             // user input
-            this.btnAddShape.DataBindings.Add("Enabled", presentationModel, "isBtnAddEnabled");
-            CreateBindingHexToColor(labelShapeContent.DataBindings, "ForeColor", presentationModel, "labelShapeContentColor");
-            CreateBindingHexToColor(labelShapeX.DataBindings, "ForeColor", presentationModel, "labelShapeXColor");
-            CreateBindingHexToColor(labelShapeY.DataBindings, "ForeColor", presentationModel, "labelShapeYColor");
-            CreateBindingHexToColor(labelShapeWidth.DataBindings, "ForeColor", presentationModel, "labelShapeWidthColor");
-            CreateBindingHexToColor(labelShapeHeight.DataBindings, "ForeColor", presentationModel, "labelShapeHeightColor");
+            this.btnAddShape.DataBindings.Add("Enabled", presentationModel, "IsBtnAddEnabled");
+            CreateBindingHexToColor(labelShapeContent.DataBindings, "ForeColor", presentationModel, "LabelShapeContentColor");
+            CreateBindingHexToColor(labelShapeX.DataBindings, "ForeColor", presentationModel, "LabelShapeXColor");
+            CreateBindingHexToColor(labelShapeY.DataBindings, "ForeColor", presentationModel, "LabelShapeYColor");
+            CreateBindingHexToColor(labelShapeWidth.DataBindings, "ForeColor", presentationModel, "LabelShapeWidthColor");
+            CreateBindingHexToColor(labelShapeHeight.DataBindings, "ForeColor", presentationModel, "LabelShapeHeightColor");
 
             // toolScript
+            this.toolStripButtonStart.DataBindings.Add("Checked", presentationModel, "IsDrawStartButtonChecked");
+            this.toolStripButtonTerminator.DataBindings.Add("Checked", presentationModel, "IsDrawTerminatorButtonChecked");
+            this.toolStripButtonDescision.DataBindings.Add("Checked", presentationModel, "IsDrawDescisionButtonChecked");
+            this.toolStripButtonProcess.DataBindings.Add("Checked", presentationModel, "IsDrawProcessButtonChecked");
+            this.toolStripButtonPoint.DataBindings.Add("Checked", presentationModel, "IsPointButtonnChecked");
+
+            // canvas
+            Binding binding = new Binding("Cursor", presentationModel, "CanvasCousor");
+            binding.Format += (s, e) =>
+            {
+                e.Value = (Cursor)cursorConverter.ConvertFromString(e.Value.ToString());
+            };
+            this.canvas.DataBindings.Add(binding);
         }
 
         private void CreateBindingHexToColor(ControlBindingsCollection dataBindings, string propertyName, object dataSource, string dataMember)
@@ -90,10 +103,10 @@ namespace MyDrawing
 
         private void Test()
         {
-            this.model.CreateShape(Shape.Type.Start, "Start text", 40, 50, 50, 50);
-            this.model.CreateShape(Shape.Type.Terminator, "Terminator text", 400, 400, 180, 90);
-            this.model.CreateShape(Shape.Type.Process, "Process text", 500, 150, 100, 50);
-            this.model.CreateShape(Shape.Type.Descision, "Descision text", 90, 200, 100, 100);
+            this.presentationModel.GenerateShape(Shape.Type.Start, "Start text", 40, 50, 50, 50);
+            this.presentationModel.GenerateShape(Shape.Type.Terminator, "Terminator text", 400, 400, 180, 90);
+            this.presentationModel.GenerateShape(Shape.Type.Process, "Process text", 500, 150, 100, 50);
+            this.presentationModel.GenerateShape(Shape.Type.Descision, "Descision text", 90, 200, 100, 100);
         }
 
         private void InitComboBox()
@@ -107,28 +120,23 @@ namespace MyDrawing
         {
             this.toolStripButtonStart.Click += (s, e) =>
             {
-                this.model.SetToDrawState(Shape.Type.Start);
-                this.presentationModel.NotifiyModelChange();
+                this.presentationModel.SetToDrawState(Shape.Type.Start);
             };
             this.toolStripButtonTerminator.Click += (s, e) =>
             {
-                this.model.SetToDrawState(Shape.Type.Terminator);
-                this.presentationModel.NotifiyModelChange();
+                this.presentationModel.SetToDrawState(Shape.Type.Terminator);
             };
             this.toolStripButtonProcess.Click += (s, e) =>
             {
-                this.model.SetToDrawState(Shape.Type.Process);
-                this.presentationModel.NotifiyModelChange();
+                this.presentationModel.SetToDrawState(Shape.Type.Process);
             };
             this.toolStripButtonDescision.Click += (s, e) =>
             {
-                this.model.SetToDrawState(Shape.Type.Descision);
-                this.presentationModel.NotifiyModelChange();
+                this.presentationModel.SetToDrawState(Shape.Type.Descision);
             };
             this.toolStripButtonPoint.Click += (s, e) =>
             {
-                this.model.SetToPointState();
-                this.presentationModel.NotifiyModelChange();
+                this.presentationModel.SetToPointState();
             };
         }
 
@@ -146,18 +154,17 @@ namespace MyDrawing
 
         private void CanvasMouseMove(object sender, MouseEventArgs e)
         {
-            model.HandleMouseMoved(e.X, e.Y);
+            this.presentationModel.HandleMouseMoved(e.X, e.Y);
         }
 
         private void CanvasMouseDown(object sender, MouseEventArgs e)
         {
-            model.HandleMousePressed(e.X, e.Y);
+            this.presentationModel.HandleMousePressed(e.X, e.Y);
         }
 
         private void CanvasMouseUp(object sender, MouseEventArgs e)
         {
-            model.HandleMouseReleases(e.X, e.Y);
-            this.presentationModel.NotifiyModelChange();
+            this.presentationModel.HandleMouseReleases(e.X, e.Y);
         }
 
         private void CanvasPaint(object sender, PaintEventArgs e)
@@ -172,7 +179,7 @@ namespace MyDrawing
             int y = int.Parse(textBoxShapeY.Text);
             int width = int.Parse(textBoxShapeWidth.Text);
             int height = int.Parse(textBoxShapeHeight.Text);
-            model.CreateShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
+            this.presentationModel.GenerateShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
         }
 
         // 重新刷新 dataGridView
@@ -209,7 +216,7 @@ namespace MyDrawing
                 model.RemoveShapeAt(e.RowIndex);
         }
 
-        // 更新畫布和 dataGridView
+        // 被告知要更新畫布和 dataGridView
         private void HandleModelChange()
         {
             // canvas
@@ -219,19 +226,6 @@ namespace MyDrawing
             if (presentationModel.IsDrawButtonChecked)
                 return;
             UpdateDataGridView();
-        }
-
-        private void HandlePresentationModelChange()
-        {
-            // toolStript button
-            this.toolStripButtonStart.Checked = presentationModel.IsDrawStartButtonChecked;
-            this.toolStripButtonTerminator.Checked = presentationModel.IsDrawTerminatorButtonChecked;
-            this.toolStripButtonDescision.Checked = presentationModel.IsDrawDescisionButtonChecked;
-            this.toolStripButtonProcess.Checked = presentationModel.IsDrawProcessButtonChecked;
-            this.toolStripButtonPoint.Checked = presentationModel.IsPointButtonnChecked;
-
-            // canvas cursor
-            this.canvas.Cursor = (Cursor)cursorConverter.ConvertFromString(presentationModel.CanvasCousor);
         }
     }
 }

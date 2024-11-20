@@ -29,7 +29,7 @@ namespace MyDrawing.state
                 }
             }
             this.model.NotifiyModelChange();
-            if (!(x > 0 && y > 0))
+            if (this.model.selectedShape == null)
                 return;
             isPressed = true;
             firstX = x;
@@ -53,7 +53,14 @@ namespace MyDrawing.state
 
         public void MouseUp(double x, double y)
         {
+            if (!isPressed)
+                return;
+            if (this.model.selectedShape == null)
+                return;
             isPressed = false;
+            this.model.selectedShape.X += (int)(x - firstX);
+            this.model.selectedShape.Y += (int)(y - firstY);
+            this.model.NotifiyModelChange();
         }
     }
 }

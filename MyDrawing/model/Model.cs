@@ -1,6 +1,5 @@
 ﻿using MyDrawing.graphics;
 using MyDrawing.shape;
-using MyDrawing.state;
 using System;
 using System.Collections.Generic;
 
@@ -12,25 +11,12 @@ namespace MyDrawing
         public delegate void ModelChangedEventHandler();
         public event ModelChangedEventHandler ModelChanged;
 
-        // 維護圖形清單的增刪查
-        readonly private Shapes shapes = new Shapes();
-
-        // state
-        public IState currnetState;
-        readonly public IState pointState;
-        readonly public IState drawState;
+        // 圖形s
+        readonly private List<Shape> shapes = new List<Shape>();
 
         public Shape.Type notCompleteShapeType;
         public Shape notCompleteShape = null;
-
         public Shape selectedShape = null;
-
-        public Model()
-        {
-            this.pointState = new PointState(this);
-            this.drawState = new DrawState(this);
-            SetToPointState();
-        }
 
         static public string[] GetShapeTypesName()
         {
@@ -39,24 +25,17 @@ namespace MyDrawing
 
         public IList<Shape> GetShapes()
         {
-            return shapes.GetShapes();
+            return shapes.AsReadOnly();
         }
 
-        public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
+        public void AddShape(Shape shape)
         {
-            Shape shape = ShapeFactory.CreateShape(shapeType);
-            shape.Content = content;
-            shape.X = x;
-            shape.Y = y;
-            shape.Width = width;
-            shape.Height = height;
-            shapes.AddShape(shape);
+            this.shapes.Add(shape);
             NotifiyModelChange();
         }
-
         public void RemoveShapeAt(int index)
         {
-            shapes.RemoveShapeAt(index);
+            shapes.RemoveAt(index);
             selectedShape = null;
             NotifiyModelChange();
         }
@@ -64,49 +43,21 @@ namespace MyDrawing
         public void Draw(IGraphics graphics)
         {
             graphics.ClearAll();
-            foreach (Shape item in shapes.GetShapes())
+            foreach (Shape item in shapes)
                 item.Draw(graphics);
             notCompleteShape?.Draw(graphics);
             selectedShape?.DrawBorder(graphics);
         }
+
         public void AddShapeFromNotComplete()
         {
-            this.shapes.AddShape(notCompleteShape);
-            this.selectedShape = notCompleteShape;
-            this.notCompleteShape = null;
+            this.shapes.Add(notCompleteShape);
+            NotifiyModelChange();
         }
 
         public void NotifiyModelChange()
         {
             ModelChanged?.Invoke();
-        }
-
-        public void SetToDrawState(Shape.Type shapeType)
-        {
-            this.currnetState = this.drawState;
-            this.notCompleteShapeType = shapeType;
-            this.selectedShape = null;
-            NotifiyModelChange();
-        }
-
-        public void SetToPointState()
-        {
-            this.currnetState = this.pointState;
-        }
-
-        public void HandleMousePressed(double x, double y)
-        {
-            currnetState.MouseDown(x, y);
-        }
-
-        public void HandleMouseReleases(double x, double y)
-        {
-            currnetState.MouseUp(x, y);
-        }
-
-        public void HandleMouseMoved(double x, double y)
-        {
-            currnetState.MouseMove(x, y);
         }
     }
 }

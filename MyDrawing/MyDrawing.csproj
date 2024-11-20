@@ -46,7 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoubleBufferedPanel.cs">
+    <Compile Include="controls\DoubleBufferedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="controls\ToolStripBindableButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Form1.cs">
@@ -70,7 +73,6 @@
     <Compile Include="shape\Descision.cs" />
     <Compile Include="shape\Process.cs" />
     <Compile Include="shape\Shape.cs" />
-    <Compile Include="shape\Shapes.cs" />
     <Compile Include="shape\Start.cs" />
     <Compile Include="shape\Terminator.cs" />
     <Compile Include="state\DrawState.cs" />

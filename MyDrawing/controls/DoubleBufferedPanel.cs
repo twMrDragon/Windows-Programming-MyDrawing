@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace MyDrawing
+namespace MyDrawing.controls
 {
     class DoubleBufferedPanel : Panel
     {

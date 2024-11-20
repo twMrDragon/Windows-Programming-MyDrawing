@@ -1,4 +1,5 @@
 ﻿using MyDrawing.shape;
+using MyDrawing.state;
 using System;
 using System.ComponentModel;
 
@@ -8,16 +9,16 @@ namespace MyDrawing.presentationModel
     {
         readonly private Model model;
 
-        // Observer pattern
+        // Observer
         public delegate void ModelChangedEventHandler();
         public event ModelChangedEventHandler ModelChanged;
 
         // DataBinding
         public event PropertyChangedEventHandler PropertyChanged;
 
+        // memeber for control
         // btnAdd
         private bool isBtnAddEnabled = false;
-
         // label color
         private string labelShapeContentColor = "#FF0000";
         private string labelShapeXColor = "#FF0000";
@@ -25,10 +26,75 @@ namespace MyDrawing.presentationModel
         private string labelShapeWidthColor = "#FF0000";
         private string labelShapeHeightColor = "#FF0000";
 
+        // state
+        private IState currnetState;
+        readonly public IState pointState;
+        readonly public IState drawState;
+
 
         public PresentationModel(Model model)
         {
             this.model = model;
+            this.pointState = new PointState(this.model);
+            this.drawState = new DrawState(this.model, this);
+        }
+
+        public void GenerateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
+        {
+            Shape shape = ShapeFactory.CreateShape(shapeType);
+            shape.Content = content;
+            shape.Content = content;
+            shape.X = x;
+            shape.Y = y;
+            shape.Width = width;
+            shape.Height = height;
+            this.model.AddShape(shape);
+        }
+
+        public void SetToDrawState(Shape.Type shapeType)
+        {
+            this.currnetState = this.drawState;
+            this.model.notCompleteShapeType = shapeType;
+            this.model.selectedShape = null;
+            this.model.NotifiyModelChange();
+            NotifyToolStripButton();
+            NotifyCanvasCursor();
+        }
+
+        public void SetToPointState()
+        {
+            this.currnetState = this.pointState;
+            NotifyToolStripButton();
+            NotifyCanvasCursor();
+        }
+
+        private void NotifyCanvasCursor()
+        {
+            Notify("CanvasCousor");
+        }
+
+        private void NotifyToolStripButton()
+        {
+            Notify("IsDrawStartButtonChecked");
+            Notify("IsDrawTerminatorButtonChecked");
+            Notify("IsDrawDescisionButtonChecked");
+            Notify("IsDrawProcessButtonChecked");
+            Notify("IsPointButtonnChecked");
+        }
+
+        public void HandleMousePressed(double x, double y)
+        {
+            currnetState.MouseDown(x, y);
+        }
+
+        public void HandleMouseReleases(double x, double y)
+        {
+            currnetState.MouseUp(x, y);
+        }
+
+        public void HandleMouseMoved(double x, double y)
+        {
+            currnetState.MouseMove(x, y);
         }
 
         public void LabelShapeContentChange(string content)
@@ -37,7 +103,7 @@ namespace MyDrawing.presentationModel
                 this.labelShapeContentColor = "#FF0000";
             else
                 this.labelShapeContentColor = "#000000";
-            notify("labelShapeContentColor");
+            Notify("LabelShapeContentColor");
             UpdateBtnAddEnable();
         }
 
@@ -54,7 +120,7 @@ namespace MyDrawing.presentationModel
             {
                 this.labelShapeXColor = "#FF0000";
             }
-            notify("labelShapeXColor");
+            Notify("LabelShapeXColor");
             UpdateBtnAddEnable();
         }
 
@@ -71,7 +137,7 @@ namespace MyDrawing.presentationModel
             {
                 this.labelShapeYColor = "#FF0000";
             }
-            notify("labelShapeYColor");
+            Notify("LabelShapeYColor");
             UpdateBtnAddEnable();
         }
 
@@ -88,7 +154,7 @@ namespace MyDrawing.presentationModel
             {
                 this.labelShapeWidthColor = "#FF0000";
             }
-            notify("labelShapeWdithColor");
+            Notify("LabelShapeWdithColor");
             UpdateBtnAddEnable();
         }
         public void LabelShapeHeightChange(string num)
@@ -104,7 +170,7 @@ namespace MyDrawing.presentationModel
             {
                 this.labelShapeHeightColor = "#FF0000";
             }
-            notify("labelShapeHeightColor");
+            Notify("LabelShapeHeightColor");
             UpdateBtnAddEnable();
         }
 
@@ -116,7 +182,7 @@ namespace MyDrawing.presentationModel
             this.isBtnAddEnabled &= (labelShapeYColor == "#000000");
             this.isBtnAddEnabled &= (labelShapeWidthColor == "#000000");
             this.isBtnAddEnabled &= (labelShapeHeightColor == "#000000");
-            notify("isBtnAddEnabled");
+            Notify("IsBtnAddEnabled");
         }
 
         public void NotifiyModelChange()
@@ -124,7 +190,7 @@ namespace MyDrawing.presentationModel
             ModelChanged?.Invoke();
         }
 
-        private void notify(string propertyName)
+        private void Notify(string propertyName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
@@ -132,35 +198,35 @@ namespace MyDrawing.presentationModel
 
         public string CanvasCousor
         {
-            get { return this.model.currnetState == this.model.drawState ? "Cross" : "Default"; }
+            get { return this.currnetState == this.drawState ? "Cross" : "Default"; }
         }
 
         // state
         public bool IsPointButtonnChecked
         {
-            get { return this.model.currnetState == this.model.pointState; }
+            get { return this.currnetState == this.pointState; }
         }
         public bool IsDrawButtonChecked
         {
-            get { return this.model.currnetState == this.model.drawState; }
+            get { return this.currnetState == this.drawState; }
         }
 
         // draw shape
         public bool IsDrawStartButtonChecked
         {
-            get { return this.model.currnetState == this.model.drawState && this.model.notCompleteShapeType == Shape.Type.Start; }
+            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Start; }
         }
         public bool IsDrawTerminatorButtonChecked
         {
-            get { return this.model.currnetState == this.model.drawState && this.model.notCompleteShapeType == Shape.Type.Terminator; }
+            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Terminator; }
         }
         public bool IsDrawDescisionButtonChecked
         {
-            get { return this.model.currnetState == this.model.drawState && this.model.notCompleteShapeType == Shape.Type.Descision; }
+            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Descision; }
         }
         public bool IsDrawProcessButtonChecked
         {
-            get { return this.model.currnetState == this.model.drawState && this.model.notCompleteShapeType == Shape.Type.Process; }
+            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Process; }
         }
 
         // data input
