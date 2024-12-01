@@ -60,10 +60,11 @@
             this.labelShapeContent = new System.Windows.Forms.Label();
             this.btnAddShape = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonStart = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonTerminator = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonProcess = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonDecision = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonStart = new controls.ToolStripBindableButton();
+            this.toolStripButtonTerminator = new controls.ToolStripBindableButton();
+            this.toolStripButtonProcess = new controls.ToolStripBindableButton();   
+            this.toolStripButtonDescision = new controls.ToolStripBindableButton();
+            this.toolStripButtonPoint = new controls.ToolStripBindableButton();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxDataDisplay.SuspendLayout();
@@ -169,6 +170,8 @@
             this.Column1.ReadOnly = true;
             this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Column1.Text = "刪除";
+            this.Column1.UseColumnTextForButtonValue = true;
             // 
             // Column2
             // 
@@ -338,6 +341,7 @@
             // comboBoxShapeType
             // 
             this.comboBoxShapeType.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxShapeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxShapeType.FormattingEnabled = true;
             this.comboBoxShapeType.Location = new System.Drawing.Point(3, 28);
             this.comboBoxShapeType.Name = "comboBoxShapeType";
@@ -372,7 +376,8 @@
             this.toolStripButtonStart,
             this.toolStripButtonTerminator,
             this.toolStripButtonProcess,
-            this.toolStripButtonDecision});
+            this.toolStripButtonDescision,
+            this.toolStripButtonPoint});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1316, 25);
@@ -409,15 +414,25 @@
             this.toolStripButtonProcess.Text = "toolStripButton3";
             this.toolStripButtonProcess.ToolTipText = "Process";
             // 
-            // toolStripButtonDecision
+            // toolStripButtonDescision
             // 
-            this.toolStripButtonDecision.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonDecision.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDecision.Image")));
-            this.toolStripButtonDecision.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonDecision.Name = "toolStripButtonDecision";
-            this.toolStripButtonDecision.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonDecision.Text = "toolStripButton4";
-            this.toolStripButtonDecision.ToolTipText = "Decision";
+            this.toolStripButtonDescision.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonDescision.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDescision.Image")));
+            this.toolStripButtonDescision.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonDescision.Name = "toolStripButtonDescision";
+            this.toolStripButtonDescision.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonDescision.Text = "toolStripButton4";
+            this.toolStripButtonDescision.ToolTipText = "Decision";
+            // 
+            // toolStripButtonPoint
+            // 
+            this.toolStripButtonPoint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPoint.Image = global::MyDrawing.Properties.Resources.cursor;
+            this.toolStripButtonPoint.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPoint.Name = "toolStripButtonPoint";
+            this.toolStripButtonPoint.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonPoint.Text = "toolStripButtonPoint";
+            this.toolStripButtonPoint.ToolTipText = "Point";
             // 
             // Form1
             // 
@@ -470,6 +485,12 @@
         private System.Windows.Forms.Label labelShapeHeight;
         private System.Windows.Forms.Label labelShapeY;
         private System.Windows.Forms.Label labelShapeX;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private controls.ToolStripBindableButton toolStripButtonStart;
+        private controls.ToolStripBindableButton toolStripButtonTerminator;
+        private controls.ToolStripBindableButton toolStripButtonProcess;
+        private controls.ToolStripBindableButton toolStripButtonDescision;
+        private controls.ToolStripBindableButton toolStripButtonPoint;
         private System.Windows.Forms.DataGridViewButtonColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
@@ -478,11 +499,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonStart;
-        private System.Windows.Forms.ToolStripButton toolStripButtonTerminator;
-        private System.Windows.Forms.ToolStripButton toolStripButtonProcess;
-        private System.Windows.Forms.ToolStripButton toolStripButtonDecision;
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using MyDrawing.graphics;
+using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
@@ -22,6 +23,17 @@ namespace MyDrawing.shape
             y[3] = Y + Height / 2;
             graphics.DrawPolygon(x, y);
             this.DrawContent(graphics);
+        }
+
+        public override bool IsPointIn(double x, double y)
+        {
+            GraphicsPath graphicsPath = new GraphicsPath();
+            graphicsPath.AddLine(X + Width / 2, Y, X + Width, Y + Height / 2);
+            graphicsPath.AddLine(X + Width, Y + Height / 2, X + Width / 2, Y + Height);
+            graphicsPath.AddLine(X + Width / 2, Y + Height, X, Y + Height / 2);
+            graphicsPath.AddLine(X, Y + Height / 2, X + Width / 2, Y);
+            graphicsPath.CloseAllFigures();
+            return graphicsPath.IsVisible((float)x, (float)y);
         }
     }
 }

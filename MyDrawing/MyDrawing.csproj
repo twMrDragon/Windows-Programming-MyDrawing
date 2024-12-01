@@ -46,7 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DoubleBufferedPanel.cs">
+    <Compile Include="controls\DoubleBufferedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="controls\ToolStripBindableButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Form1.cs">
@@ -58,6 +61,7 @@
     <Compile Include="graphics\IGraphics.cs" />
     <Compile Include="graphics\FormGraphicAdapter.cs" />
     <Compile Include="model\Model.cs" />
+    <Compile Include="presentationModel\PresentationModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="shape\ShapeFactory.cs" />
@@ -69,9 +73,11 @@
     <Compile Include="shape\Descision.cs" />
     <Compile Include="shape\Process.cs" />
     <Compile Include="shape\Shape.cs" />
-    <Compile Include="shape\Shapes.cs" />
     <Compile Include="shape\Start.cs" />
     <Compile Include="shape\Terminator.cs" />
+    <Compile Include="state\DrawState.cs" />
+    <Compile Include="state\IState.cs" />
+    <Compile Include="state\PointState.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -104,6 +110,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\start.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cursor.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
