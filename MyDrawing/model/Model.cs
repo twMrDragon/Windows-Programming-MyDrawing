@@ -44,13 +44,18 @@ namespace MyDrawing
         {
             graphics.ClearAll();
             foreach (Shape item in shapes)
-                item.Draw(graphics);
-            notCompleteShape?.Draw(graphics);
+            {
+                item.DrawShape(graphics);
+                item.DrawContent(graphics);
+            }
+            notCompleteShape?.DrawShape(graphics);
             selectedShape?.DrawBorder(graphics);
         }
 
         public void AddShapeFromNotComplete()
         {
+            if (this.notCompleteShape == null)
+                return;
             this.shapes.Add(notCompleteShape);
             NotifiyModelChange();
         }

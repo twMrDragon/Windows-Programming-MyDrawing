@@ -9,7 +9,7 @@ namespace MyDrawing.shape
         {
             this.ShapeName = "Descision";
         }
-        public override void Draw(IGraphics graphics)
+        public override void DrawShape(IGraphics graphics)
         {
             double[] x = new double[4];
             double[] y = new double[4];
@@ -21,8 +21,8 @@ namespace MyDrawing.shape
             y[2] = Y + Height;
             x[3] = X;
             y[3] = Y + Height / 2;
+            graphics.SetColor("#000000");
             graphics.DrawPolygon(x, y);
-            this.DrawContent(graphics);
         }
 
         public override bool IsPointIn(double x, double y)

@@ -23,7 +23,14 @@ namespace MyDrawing.graphics
 
         public void DrawArc(double x, double y, double width, double height, double startAngle, double sweepAngle)
         {
-            this.graphics.DrawArc(this.pen, (float)x, (float)y, (float)width, (float)height, (float)startAngle, (float)sweepAngle);
+            try
+            {
+                this.graphics.DrawArc(this.pen, (float)x, (float)y, (float)width, (float)height, (float)startAngle, (float)sweepAngle);
+            }
+            catch
+            {
+                // DrawArc 如果 width 或 height 為 0 會報錯
+            }
         }
 
         public void DrawEllipse(double x, double y, double width, double height)

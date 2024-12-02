@@ -10,10 +10,10 @@ namespace MyDrawing.shape
         {
             this.ShapeName = "Start";
         }
-        public override void Draw(IGraphics graphics)
+        public override void DrawShape(IGraphics graphics)
         {
+            graphics.SetColor("#000000");
             graphics.DrawEllipse(X, Y, Width, Height);
-            this.DrawContent(graphics);
         }
 
         public override bool IsPointIn(double x, double y)

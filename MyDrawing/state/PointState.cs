@@ -29,8 +29,6 @@ namespace MyDrawing.state
                 }
             }
             this.model.NotifiyModelChange();
-            if (this.model.selectedShape == null)
-                return;
             isPressed = true;
             firstX = x;
             firstY = y;

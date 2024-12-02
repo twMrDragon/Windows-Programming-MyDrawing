@@ -21,13 +21,14 @@ namespace MyDrawing.shape
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public abstract void Draw(IGraphics graphics);
+        public abstract void DrawShape(IGraphics graphics);
         public abstract bool IsPointIn(double x, double y);
 
         public void DrawContent(IGraphics graphics)
         {
             double centerX = X + Width / 2;
             double centerY = Y + Height / 2;
+            graphics.SetColor("#000000");
             graphics.DrawString(this.Content, centerX, centerY);
         }
 
@@ -48,8 +49,6 @@ namespace MyDrawing.shape
             graphics.DrawEllipse(X + Width / 2 - radius, Y + Height - radius, diameter, diameter);
             graphics.DrawEllipse(X - radius, Y + Height - radius, diameter, diameter);
             graphics.DrawEllipse(X - radius, Y + Height / 2 - radius, diameter, diameter);
-
-            graphics.SetColor("#000000");
         }
     }
 }
