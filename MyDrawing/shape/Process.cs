@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
-    internal class Process : Shape
+    public class Process : Shape
     {
         public Process()
         {

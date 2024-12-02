@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
-    internal class Start : Shape
+    public class Start : Shape
     {
 
         public Start()

@@ -3,7 +3,7 @@ using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
-    internal class Descision : Shape
+    public class Descision : Shape
     {
         public Descision()
         {

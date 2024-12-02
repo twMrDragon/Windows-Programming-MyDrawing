@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
-    internal class Terminator : Shape
+    public class Terminator : Shape
     {
         public Terminator()
         {
