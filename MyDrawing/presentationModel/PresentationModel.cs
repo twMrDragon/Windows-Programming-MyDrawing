@@ -43,7 +43,8 @@ namespace MyDrawing.presentationModel
         {
             Shape shape = ShapeFactory.CreateShape(shapeType);
             shape.Content = content;
-            shape.Content = content;
+            shape.ContentRelativelyX = width / 2;
+            shape.ContentRelativelyY = height / 2;
             shape.X = x;
             shape.Y = y;
             shape.Width = width;

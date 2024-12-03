@@ -17,5 +17,18 @@ namespace MyDrawing.utils
 
             return result.ToString();
         }
+
+        static public double CalculateStringWidth(string content)
+        {
+            if (string.IsNullOrEmpty(content))
+                return 0;
+            double eachSize = 7.5;
+            return content.Length * eachSize;
+        }
+
+        static public double CalculateStringHeight(string content)
+        {
+            return 15;
+        }
     }
 }

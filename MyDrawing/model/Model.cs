@@ -49,6 +49,7 @@ namespace MyDrawing
                 item.DrawContent(graphics);
             }
             notCompleteShape?.DrawShape(graphics);
+            selectedShape?.DrawContentBorder(graphics);
             selectedShape?.DrawBorder(graphics);
         }
 

@@ -67,6 +67,8 @@ namespace MyDrawing.state
             this.model.notCompleteShape.Y = (int)smallerY;
             this.model.notCompleteShape.Width = (int)(largerX - smallerX);
             this.model.notCompleteShape.Height = (int)(largerY - smallerY);
+            this.model.notCompleteShape.ContentRelativelyX = this.model.notCompleteShape.Width / 2;
+            this.model.notCompleteShape.ContentRelativelyY = this.model.notCompleteShape.Height / 2;
         }
     }
 }

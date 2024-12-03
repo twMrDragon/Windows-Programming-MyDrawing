@@ -47,9 +47,30 @@ namespace MyDrawing.state.Tests
             pointState.MouseMove(100, 200);
             Assert.AreEqual(50, model.selectedShape.X);
             Assert.AreEqual(150, model.selectedShape.Y);
+
+            Assert.AreEqual(50, model.selectedShape.ContentRelativelyX);
+            Assert.AreEqual(50, model.selectedShape.ContentRelativelyY);
+
             pointState.MouseUp(150, 300);
             Assert.AreEqual(100, model.selectedShape.X);
             Assert.AreEqual(250, model.selectedShape.Y);
+
+            Assert.AreEqual(50, model.selectedShape.ContentRelativelyX);
+            Assert.AreEqual(50, model.selectedShape.ContentRelativelyY);
+        }
+
+        [TestMethod]
+        public void PointStateSelectedAndMoveContent()
+        {
+            pointState.MouseDown(50, 50);
+            pointState.MouseDown(50, 42);
+            pointState.MouseMove(100, 200);
+            Assert.AreEqual(100, model.selectedShape.ContentRelativelyX);
+            Assert.AreEqual(208, model.selectedShape.ContentRelativelyY);
+            pointState.MouseUp(150, 300);
+            Assert.AreEqual(150, model.selectedShape.ContentRelativelyX);
+            Assert.AreEqual(308, model.selectedShape.ContentRelativelyY);
+
         }
 
         [TestMethod]

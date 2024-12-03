@@ -7,7 +7,7 @@ namespace MyDrawing.graphics
     {
         readonly Graphics graphics;
         private Pen pen;
-        private Brush Brush;
+        private Brush brush;
 
         public FormGraphicAdapter(Graphics graphics)
         {
@@ -36,6 +36,11 @@ namespace MyDrawing.graphics
         public void DrawEllipse(double x, double y, double width, double height)
         {
             this.graphics.DrawEllipse(this.pen, (float)x, (float)y, (float)width, (float)height);
+        }
+
+        public void FillEllipse(double x, double y, double width, double height)
+        {
+            this.graphics.FillEllipse(this.brush, (float)x, (float)y, (float)width, (float)height);
         }
 
         public void DrawLine(double x1, double y1, double x2, double y2)
@@ -67,14 +72,14 @@ namespace MyDrawing.graphics
             StringFormat stringFormat = StringFormat.GenericTypographic;
             stringFormat.LineAlignment = StringAlignment.Center;
             stringFormat.Alignment = StringAlignment.Center;
-            this.graphics.DrawString(s, new Font("Arial", 7), this.Brush, (float)x, (float)y, stringFormat);
+            this.graphics.DrawString(s, new Font("Consolas", 9), this.brush, (float)x, (float)y, stringFormat);
         }
 
         public void SetColor(string hex)
         {
             Color color = ColorTranslator.FromHtml(hex);
             this.pen = new Pen(color, 2);
-            this.Brush = new SolidBrush(color);
+            this.brush = new SolidBrush(color);
         }
     }
 }

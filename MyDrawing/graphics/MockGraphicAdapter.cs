@@ -26,6 +26,11 @@ namespace MyDrawing.graphics
             this.command.Add("DrawEllipse");
         }
 
+        public void FillEllipse(double x, double y, double width, double height)
+        {
+            this.command.Add("FillEllipse");
+        }
+
         public void DrawLine(double x1, double y1, double x2, double y2)
         {
             this.command.Add("DrawLine");
@@ -50,5 +55,7 @@ namespace MyDrawing.graphics
         {
             this.command.Add("SetColor");
         }
+
+
     }
 }
