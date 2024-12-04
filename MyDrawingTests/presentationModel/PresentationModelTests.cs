@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MyDrawing.controls;
 using MyDrawing.shape;
 using System.Linq;
 
@@ -285,6 +286,16 @@ namespace MyDrawing.presentationModel.Tests
             };
             presentationModel.NotifiyModelChange();
             Assert.IsTrue(flag);
+        }
+
+        [TestMethod()]
+        public void DataBindingNotifyTest()
+        {
+            ToolStripBindableButton button = new ToolStripBindableButton();
+            button.DataBindings.Add("Checked", presentationModel, "IsDrawStartButtonChecked");
+            Assert.IsFalse(button.Checked);
+            presentationModel.SetToDrawState(Shape.Type.Start);
+            Assert.IsTrue(button.Checked);
         }
     }
 }
