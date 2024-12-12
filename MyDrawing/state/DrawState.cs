@@ -1,10 +1,9 @@
 ﻿using MyDrawing.presentationModel;
-using System;
-using System.Text;
+using MyDrawing.utils;
 
 namespace MyDrawing.state
 {
-    class DrawState : IState
+    public class DrawState : IState
     {
         readonly Model model;
         readonly PresentationModel presentationModel;
@@ -49,7 +48,7 @@ namespace MyDrawing.state
             isPressed = false;
             this.secondX = x;
             this.secondY = y;
-            this.model.notCompleteShape.Content = GenerateRandomContent();
+            this.model.notCompleteShape.Content = Utils.GenerateRandomString();
             FixNotCompletedShape();
             this.model.AddShapeFromNotComplete();
             this.model.selectedShape = this.model.notCompleteShape;
@@ -68,19 +67,8 @@ namespace MyDrawing.state
             this.model.notCompleteShape.Y = (int)smallerY;
             this.model.notCompleteShape.Width = (int)(largerX - smallerX);
             this.model.notCompleteShape.Height = (int)(largerY - smallerY);
-        }
-
-        static private string GenerateRandomContent()
-        {
-            Random random = new Random();
-            int length = random.Next(3, 11);
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-            StringBuilder result = new StringBuilder(length);
-            for (int i = 0; i < length; i++)
-                result.Append(chars[random.Next(chars.Length)]);
-
-            return result.ToString();
+            this.model.notCompleteShape.ContentRelativelyX = this.model.notCompleteShape.Width / 2;
+            this.model.notCompleteShape.ContentRelativelyY = this.model.notCompleteShape.Height / 2;
         }
     }
 }

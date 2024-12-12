@@ -39,11 +39,12 @@ namespace MyDrawing.presentationModel
             this.drawState = new DrawState(this.model, this);
         }
 
-        public void GenerateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
+        public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
         {
             Shape shape = ShapeFactory.CreateShape(shapeType);
             shape.Content = content;
-            shape.Content = content;
+            shape.ContentRelativelyX = width / 2;
+            shape.ContentRelativelyY = height / 2;
             shape.X = x;
             shape.Y = y;
             shape.Width = width;
@@ -194,6 +195,11 @@ namespace MyDrawing.presentationModel
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public IState CurrentState
+        {
+            get { return this.currnetState; }
         }
 
         public string CanvasCousor

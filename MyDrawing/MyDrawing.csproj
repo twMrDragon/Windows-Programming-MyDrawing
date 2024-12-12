@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="graphics\IGraphics.cs" />
     <Compile Include="graphics\FormGraphicAdapter.cs" />
+    <Compile Include="graphics\MockGraphicAdapter.cs" />
     <Compile Include="model\Model.cs" />
     <Compile Include="presentationModel\PresentationModel.cs" />
     <Compile Include="Program.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="state\DrawState.cs" />
     <Compile Include="state\IState.cs" />
     <Compile Include="state\PointState.cs" />
+    <Compile Include="utils\Utils.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

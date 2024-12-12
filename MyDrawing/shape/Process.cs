@@ -3,17 +3,17 @@ using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
-    internal class Process : Shape
+    public class Process : Shape
     {
         public Process()
         {
             this.ShapeName = "Process";
         }
 
-        public override void Draw(IGraphics graphics)
+        public override void DrawShape(IGraphics graphics)
         {
+            graphics.SetColor("#000000");
             graphics.DrawRectangle(X, Y, Width, Height);
-            this.DrawContent(graphics);
         }
 
         public override bool IsPointIn(double x, double y)

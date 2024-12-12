@@ -103,10 +103,10 @@ namespace MyDrawing
 
         private void Test()
         {
-            this.presentationModel.GenerateShape(Shape.Type.Start, "Start text", 40, 50, 50, 50);
-            this.presentationModel.GenerateShape(Shape.Type.Terminator, "Terminator text", 400, 400, 180, 90);
-            this.presentationModel.GenerateShape(Shape.Type.Process, "Process text", 500, 150, 100, 50);
-            this.presentationModel.GenerateShape(Shape.Type.Descision, "Descision text", 90, 200, 100, 100);
+            this.presentationModel.CreateShape(Shape.Type.Start, "Start text", 40, 50, 50, 50);
+            this.presentationModel.CreateShape(Shape.Type.Terminator, "Terminator text", 400, 400, 180, 90);
+            this.presentationModel.CreateShape(Shape.Type.Process, "Process text", 500, 150, 100, 50);
+            this.presentationModel.CreateShape(Shape.Type.Descision, "Descision text", 90, 200, 100, 100);
         }
 
         private void InitComboBox()
@@ -179,7 +179,7 @@ namespace MyDrawing
             int y = int.Parse(textBoxShapeY.Text);
             int width = int.Parse(textBoxShapeWidth.Text);
             int height = int.Parse(textBoxShapeHeight.Text);
-            this.presentationModel.GenerateShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
+            this.presentationModel.CreateShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
         }
 
         // 重新刷新 dataGridView

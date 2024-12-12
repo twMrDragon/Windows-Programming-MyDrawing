@@ -10,6 +10,8 @@ namespace MyDrawing.state
         bool isPressed = false;
         double firstX = 0;
         double firstY = 0;
+        bool isPressContent = false;
+        Shape lastSelectShape = null;
 
         public PointState(Model model)
         {
@@ -22,15 +24,23 @@ namespace MyDrawing.state
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
+                // 點擊已選形狀的文字的控制點
+                isPressContent = (this.lastSelectShape == shapes[i]) && (shapes[i].IsPointInContentControlPoint(x, y));
+                if (isPressContent)
+                {
+                    this.model.selectedShape = lastSelectShape;
+                    break;
+                }
+
+                // 點選形狀
                 if (shapes[i].IsPointIn(x, y))
                 {
                     this.model.selectedShape = shapes[i];
                     break;
                 }
             }
+            lastSelectShape = this.model.selectedShape;
             this.model.NotifiyModelChange();
-            if (this.model.selectedShape == null)
-                return;
             isPressed = true;
             firstX = x;
             firstY = y;
@@ -44,8 +54,16 @@ namespace MyDrawing.state
                 return;
             double dX = x - firstX;
             double dY = y - firstY;
-            this.model.selectedShape.X += (int)dX;
-            this.model.selectedShape.Y += (int)dY;
+            if (this.isPressContent)
+            {
+                this.model.selectedShape.ContentRelativelyX += (int)dX;
+                this.model.selectedShape.ContentRelativelyY += (int)dY;
+            }
+            else
+            {
+                this.model.selectedShape.X += (int)dX;
+                this.model.selectedShape.Y += (int)dY;
+            }
             firstX = x;
             firstY = y;
             this.model.NotifiyModelChange();
@@ -58,8 +76,16 @@ namespace MyDrawing.state
             if (this.model.selectedShape == null)
                 return;
             isPressed = false;
-            this.model.selectedShape.X += (int)(x - firstX);
-            this.model.selectedShape.Y += (int)(y - firstY);
+            if (this.isPressContent)
+            {
+                this.model.selectedShape.ContentRelativelyX += (int)(x - firstX);
+                this.model.selectedShape.ContentRelativelyY += (int)(y - firstY);
+            }
+            else
+            {
+                this.model.selectedShape.X += (int)(x - firstX);
+                this.model.selectedShape.Y += (int)(y - firstY);
+            }
             this.model.NotifiyModelChange();
         }
     }
