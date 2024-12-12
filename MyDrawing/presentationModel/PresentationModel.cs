@@ -30,13 +30,23 @@ namespace MyDrawing.presentationModel
         private IState currnetState;
         readonly public IState pointState;
         readonly public IState drawState;
+        readonly public IState drawLineState;
 
+        public bool IsContentDoubleClick(double x, double y)
+        {
+            if (this.currnetState != pointState)
+                return false;
+            if (model.selectedShape == null)
+                return false;
+            return model.selectedShape.IsPointInContentControlPoint(x, y);
+        }
 
         public PresentationModel(Model model)
         {
             this.model = model;
             this.pointState = new PointState(this.model);
             this.drawState = new DrawState(this.model, this);
+            this.drawLineState = new DrawLineState(this.model);
         }
 
         public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
@@ -62,6 +72,14 @@ namespace MyDrawing.presentationModel
             NotifyCanvasCursor();
         }
 
+        public void SetToDrawLineState()
+        {
+            this.currnetState = this.drawLineState;
+            this.model.selectedShape = null;
+            NotifyToolStripButton();
+            NotifyCanvasCursor();
+        }
+
         public void SetToPointState()
         {
             this.currnetState = this.pointState;
@@ -80,6 +98,7 @@ namespace MyDrawing.presentationModel
             Notify("IsDrawTerminatorButtonChecked");
             Notify("IsDrawDescisionButtonChecked");
             Notify("IsDrawProcessButtonChecked");
+            Notify("IsDrawLineButtonChecked");
             Notify("IsPointButtonnChecked");
         }
 
@@ -96,6 +115,14 @@ namespace MyDrawing.presentationModel
         public void HandleMouseMoved(double x, double y)
         {
             currnetState.MouseMove(x, y);
+        }
+
+        public void EditSelectedContent(string content)
+        {
+            if (this.model.selectedShape == null)
+                return;
+            this.model.selectedShape.Content = content;
+            this.model.NotifiyModelChange();
         }
 
         public void LabelShapeContentChange(string content)
@@ -204,7 +231,7 @@ namespace MyDrawing.presentationModel
 
         public string CanvasCousor
         {
-            get { return this.currnetState == this.drawState ? "Cross" : "Default"; }
+            get { return this.currnetState == this.pointState ? "Default" : "Cross"; }
         }
 
         // state
@@ -214,7 +241,7 @@ namespace MyDrawing.presentationModel
         }
         public bool IsDrawButtonChecked
         {
-            get { return this.currnetState == this.drawState; }
+            get { return this.currnetState == this.drawState || this.currnetState == this.drawLineState; }
         }
 
         // draw shape
@@ -233,6 +260,20 @@ namespace MyDrawing.presentationModel
         public bool IsDrawProcessButtonChecked
         {
             get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Process; }
+        }
+        // draw line
+        public bool IsDrawLineButtonChecked
+        {
+            get { return this.currnetState == this.drawLineState; }
+        }
+        // redo undo
+        public bool IsRedoButtonEnabled
+        {
+            get { return false; }
+        }
+        public bool IsUndoButtonEnabled
+        {
+            get { return false; }
         }
 
         // data input

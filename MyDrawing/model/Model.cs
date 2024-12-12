@@ -17,6 +17,12 @@ namespace MyDrawing
         public Shape.Type notCompleteShapeType;
         public Shape notCompleteShape = null;
         public Shape selectedShape = null;
+        public Shape hoverShape = null;
+
+        // 連線s
+        readonly private List<Line> lines = new List<Line>();
+        public Line notCompleteLine = null;
+
 
         static public string[] GetShapeTypesName()
         {
@@ -51,6 +57,21 @@ namespace MyDrawing
             notCompleteShape?.DrawShape(graphics);
             selectedShape?.DrawContentBorder(graphics);
             selectedShape?.DrawBorder(graphics);
+
+            foreach (Line line in lines)
+                line.Draw(graphics);
+            notCompleteLine?.Draw(graphics);
+
+            hoverShape?.DrawConnectPoint(graphics);
+        }
+
+        public void AddLineFromNotComplete()
+        {
+            if (this.notCompleteLine == null)
+                return;
+            this.lines.Add(notCompleteLine);
+            this.notCompleteLine = null;
+            NotifiyModelChange();
         }
 
         public void AddShapeFromNotComplete()

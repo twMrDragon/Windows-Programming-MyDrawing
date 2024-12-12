@@ -49,6 +49,12 @@
     <Compile Include="controls\DoubleBufferedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="controls\EditContentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="controls\EditContentForm.Designer.cs">
+      <DependentUpon>EditContentForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="controls\ToolStripBindableButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -65,6 +71,7 @@
     <Compile Include="presentationModel\PresentationModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="shape\Line.cs" />
     <Compile Include="shape\ShapeFactory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -76,10 +83,14 @@
     <Compile Include="shape\Shape.cs" />
     <Compile Include="shape\Start.cs" />
     <Compile Include="shape\Terminator.cs" />
+    <Compile Include="state\DrawLineState.cs" />
     <Compile Include="state\DrawState.cs" />
     <Compile Include="state\IState.cs" />
     <Compile Include="state\PointState.cs" />
     <Compile Include="utils\Utils.cs" />
+    <EmbeddedResource Include="controls\EditContentForm.resx">
+      <DependentUpon>EditContentForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,6 +126,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\cursor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="command\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

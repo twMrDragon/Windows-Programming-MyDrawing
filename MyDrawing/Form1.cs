@@ -54,7 +54,10 @@ namespace MyDrawing
             this.toolStripButtonTerminator.DataBindings.Add("Checked", presentationModel, "IsDrawTerminatorButtonChecked");
             this.toolStripButtonDescision.DataBindings.Add("Checked", presentationModel, "IsDrawDescisionButtonChecked");
             this.toolStripButtonProcess.DataBindings.Add("Checked", presentationModel, "IsDrawProcessButtonChecked");
+            this.toolStripButtonLine.DataBindings.Add("Checked", presentationModel, "IsDrawLineButtonChecked");
             this.toolStripButtonPoint.DataBindings.Add("Checked", presentationModel, "IsPointButtonnChecked");
+            this.toolStripButtonRedo.DataBindings.Add("Enabled", presentationModel, "IsRedoButtonEnabled");
+            this.toolStripButtonUndo.DataBindings.Add("Enabled", presentationModel, "IsUndoButtonEnabled");
 
             // canvas
             Binding binding = new Binding("Cursor", presentationModel, "CanvasCousor");
@@ -134,6 +137,10 @@ namespace MyDrawing
             {
                 this.presentationModel.SetToDrawState(Shape.Type.Descision);
             };
+            this.toolStripButtonLine.Click += (s, e) =>
+            {
+                this.presentationModel.SetToDrawLineState();
+            };
             this.toolStripButtonPoint.Click += (s, e) =>
             {
                 this.presentationModel.SetToPointState();
@@ -150,6 +157,20 @@ namespace MyDrawing
             this.canvas.MouseDown += CanvasMouseDown;
             this.canvas.MouseUp += CanvasMouseUp;
             this.canvas.MouseMove += CanvasMouseMove;
+            this.canvas.MouseDoubleClick += CanvasMouseDoubleClick;
+        }
+
+        private void CanvasMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (presentationModel.IsContentDoubleClick(e.X, e.Y))
+            {
+                EditContentForm form = new EditContentForm(model.selectedShape.Content);
+                DialogResult result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    presentationModel.EditSelectedContent(form.TextBoxContent);
+                }
+            }
         }
 
         private void CanvasMouseMove(object sender, MouseEventArgs e)
@@ -171,7 +192,6 @@ namespace MyDrawing
         {
             model.Draw(new FormGraphicAdapter(e.Graphics));
         }
-
         private void BtnAddShapeClick(object sender, EventArgs e)
         {
             Shape.Type shapeType = (Shape.Type)Enum.Parse(typeof(Shape.Type), comboBoxShapeType.Text);
@@ -222,9 +242,8 @@ namespace MyDrawing
             // canvas
             this.canvas.Invalidate();
             // datagridview
-            // 如過正在畫圖就不更新 dataGridView，因為資料沒變
-            if (presentationModel.IsDrawButtonChecked)
-                return;
+            // 如果資料沒變就不更新 dataGridView
+
             UpdateDataGridView();
         }
     }
