@@ -66,8 +66,8 @@
             this.toolStripButtonDescision = new MyDrawing.controls.ToolStripBindableButton();
             this.toolStripButtonLine = new MyDrawing.controls.ToolStripBindableButton();
             this.toolStripButtonPoint = new MyDrawing.controls.ToolStripBindableButton();
-            this.toolStripButtonRedo = new MyDrawing.controls.ToolStripBindableButton();
             this.toolStripButtonUndo = new MyDrawing.controls.ToolStripBindableButton();
+            this.toolStripButtonRedo = new MyDrawing.controls.ToolStripBindableButton();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxDataDisplay.SuspendLayout();
@@ -382,8 +382,8 @@
             this.toolStripButtonDescision,
             this.toolStripButtonLine,
             this.toolStripButtonPoint,
-            this.toolStripButtonRedo,
-            this.toolStripButtonUndo});
+            this.toolStripButtonUndo,
+            this.toolStripButtonRedo});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1316, 25);
@@ -450,25 +450,25 @@
             this.toolStripButtonPoint.Text = "toolStripButtonPoint";
             this.toolStripButtonPoint.ToolTipText = "Point";
             // 
-            // toolStripButtonRedo
-            // 
-            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRedo.Image = global::MyDrawing.Properties.Resources.undo;
-            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
-            this.toolStripButtonRedo.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonRedo.Text = "toolStripButtonRedo";
-            this.toolStripButtonRedo.ToolTipText = "Redo";
-            // 
             // toolStripButtonUndo
             // 
             this.toolStripButtonUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonUndo.Image = global::MyDrawing.Properties.Resources.redo;
+            this.toolStripButtonUndo.Image = global::MyDrawing.Properties.Resources.undo;
             this.toolStripButtonUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonUndo.Name = "toolStripButtonUndo";
             this.toolStripButtonUndo.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonUndo.Text = "toolStripButtonUndo";
             this.toolStripButtonUndo.ToolTipText = "Undo";
+            // 
+            // toolStripButtonRedo
+            // 
+            this.toolStripButtonRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRedo.Image = global::MyDrawing.Properties.Resources.redo;
+            this.toolStripButtonRedo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRedo.Name = "toolStripButtonRedo";
+            this.toolStripButtonRedo.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonRedo.Text = "toolStripButtonRedo";
+            this.toolStripButtonRedo.ToolTipText = "Redo";
             // 
             // Form1
             // 

@@ -1,4 +1,6 @@
-﻿using MyDrawing.shape;
+﻿using MyDrawing.command;
+using MyDrawing.presentationModel;
+using MyDrawing.shape;
 using System.Collections.Generic;
 
 namespace MyDrawing.state
@@ -6,41 +8,43 @@ namespace MyDrawing.state
     public class DrawLineState : IState
     {
         readonly private Model model;
+        readonly private PresentationModel presentationModel;
         private bool isPressed = false;
         private List<Shape.ConnectPoint> connectPoints = new List<Shape.ConnectPoint>() { Shape.ConnectPoint.Top, Shape.ConnectPoint.Right, Shape.ConnectPoint.Bottom, Shape.ConnectPoint.Left };
 
-        public DrawLineState(Model model)
+        public DrawLineState(Model model, PresentationModel presentationModel)
         {
             this.model = model;
+            this.presentationModel = presentationModel;
         }
+
         public void MouseDown(double x, double y)
         {
+            if (!(x > 0 && y > 0))
+                return;
+
+            isPressed = true;
+
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
-                bool flag = false;
+                bool inConnectPointFlag = false;
                 foreach (Shape.ConnectPoint connectPoint in connectPoints)
                 {
                     if (shapes[i].IsPointInTopConnectPoint(x, y, connectPoint))
                     {
-                        flag = true;
-                        this.model.notCompleteLine = new Line();
-                        this.model.notCompleteLine.SetStartConnectPoint(shapes[i], connectPoint);
-                        break;
+                        inConnectPointFlag = true;
+                        this.model.NotCompleteLine = new Line();
+                        this.model.NotCompleteLine.SetStartConnectPoint(shapes[i], connectPoint);
+                        return;
                     }
                 }
-                if (flag)
-                {
-                    this.model.NotifiyModelChange();
-                    break;
-                }
             }
-            isPressed = true;
         }
 
         public void MouseMove(double x, double y)
         {
-            this.model.hoverShape = null;
+            this.model.HoverShape = null;
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
@@ -51,49 +55,51 @@ namespace MyDrawing.state
                     shapes[i].IsPointInTopConnectPoint(x, y, Shape.ConnectPoint.Bottom) ||
                     shapes[i].IsPointInTopConnectPoint(x, y, Shape.ConnectPoint.Left))
                 {
-                    this.model.hoverShape = shapes[i];
+                    this.model.HoverShape = shapes[i];
                     break;
                 }
             }
-            if (isPressed && this.model.notCompleteLine != null)
-            {
-                this.model.notCompleteLine.EndX = x;
-                this.model.notCompleteLine.EndY = y;
-            }
-            this.model.NotifiyModelChange();
+
+            if (!isPressed)
+                return;
+            if (this.model.NotCompleteLine == null)
+                return;
+
+            this.model.NotCompleteLine.EndX = (int)x;
+            this.model.NotCompleteLine.EndY = (int)y;
+
         }
 
         public void MouseUp(double x, double y)
         {
-            if (!isPressed || this.model.notCompleteLine == null)
+            if (!isPressed)
                 return;
+            isPressed = false;
+
+            if (this.model.NotCompleteLine == null)
+                return;
+
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
-                bool flag = false;
                 foreach (Shape.ConnectPoint connectPoint in connectPoints)
                 {
                     if (shapes[i].IsPointInTopConnectPoint(x, y, connectPoint))
                     {
-                        flag = true;
-
                         // 同一個形狀同一個連接點
-                        bool sameShapeFlag = this.model.notCompleteLine.StartShape == this.model.notCompleteLine.EndShape;
-                        bool sameConnectPointFlag = this.model.notCompleteLine.StartShapeConnectPoint == this.model.notCompleteLine.EndShapeConnectPoint;
+                        bool sameShapeFlag = this.model.NotCompleteLine.StartShape == shapes[i];
+                        bool sameConnectPointFlag = this.model.NotCompleteLine.StartShapeConnectPoint == connectPoint;
                         if (sameShapeFlag && sameConnectPointFlag)
                             break;
 
-                        this.model.notCompleteLine.SetEndConnectPoint(shapes[i], connectPoint);
-                        this.model.AddLineFromNotComplete();
-                        break;
+                        this.model.NotCompleteLine.SetEndConnectPoint(shapes[i], connectPoint);
+                        this.presentationModel.Execute(new DarwLineCommand(this.model, this.model.NotCompleteLine));
+                        this.model.NotCompleteLine = null;
+                        return;
                     }
                 }
-                if (flag)
-                    break;
             }
-            this.model.notCompleteLine = null;
-            this.model.NotifiyModelChange();
-            isPressed = false;
+            this.model.NotCompleteLine = null;
         }
     }
 }

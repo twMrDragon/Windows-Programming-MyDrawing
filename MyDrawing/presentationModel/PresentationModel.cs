@@ -1,4 +1,5 @@
-﻿using MyDrawing.shape;
+﻿using MyDrawing.command;
+using MyDrawing.shape;
 using MyDrawing.state;
 using System;
 using System.ComponentModel;
@@ -9,7 +10,10 @@ namespace MyDrawing.presentationModel
     {
         readonly private Model model;
 
-        // Observer
+        // command pattern
+        private CommandManager commandManager = new CommandManager();
+
+        // Observer pattern
         public delegate void ModelChangedEventHandler();
         public event ModelChangedEventHandler ModelChanged;
 
@@ -32,24 +36,24 @@ namespace MyDrawing.presentationModel
         readonly public IState drawState;
         readonly public IState drawLineState;
 
+        public PresentationModel(Model model)
+        {
+            this.model = model;
+            this.pointState = new PointState(this.model, this);
+            this.drawState = new DrawState(this.model, this);
+            this.drawLineState = new DrawLineState(this.model, this);
+        }
+
         public bool IsContentDoubleClick(double x, double y)
         {
             if (this.currnetState != pointState)
                 return false;
-            if (model.selectedShape == null)
+            if (model.SelectedShape == null)
                 return false;
-            return model.selectedShape.IsPointInContentControlPoint(x, y);
+            return model.SelectedShape.IsPointInContentControlPoint(x, y);
         }
 
-        public PresentationModel(Model model)
-        {
-            this.model = model;
-            this.pointState = new PointState(this.model);
-            this.drawState = new DrawState(this.model, this);
-            this.drawLineState = new DrawLineState(this.model);
-        }
-
-        public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
+        public void AddShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
         {
             Shape shape = ShapeFactory.CreateShape(shapeType);
             shape.Content = content;
@@ -59,15 +63,39 @@ namespace MyDrawing.presentationModel
             shape.Y = y;
             shape.Width = width;
             shape.Height = height;
-            this.model.AddShape(shape);
+            this.commandManager.Execute(new AddCommand(this.model, shape));
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void RemoveShapeAt(int index)
+        {
+            this.commandManager.Execute(new DeleteCommand(this.model, index));
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void Execute(ICommand command)
+        {
+            commandManager.Execute(command);
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void Undo()
+        {
+            this.commandManager.Undo();
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void Redo()
+        {
+            this.commandManager.Redo();
+            NotifyUndoRedoToolStripButton();
         }
 
         public void SetToDrawState(Shape.Type shapeType)
         {
             this.currnetState = this.drawState;
             this.model.notCompleteShapeType = shapeType;
-            this.model.selectedShape = null;
-            this.model.NotifiyModelChange();
+            this.model.SelectedShape = null;
             NotifyToolStripButton();
             NotifyCanvasCursor();
         }
@@ -75,7 +103,7 @@ namespace MyDrawing.presentationModel
         public void SetToDrawLineState()
         {
             this.currnetState = this.drawLineState;
-            this.model.selectedShape = null;
+            this.model.SelectedShape = null;
             NotifyToolStripButton();
             NotifyCanvasCursor();
         }
@@ -90,6 +118,12 @@ namespace MyDrawing.presentationModel
         private void NotifyCanvasCursor()
         {
             Notify("CanvasCousor");
+        }
+
+        private void NotifyUndoRedoToolStripButton()
+        {
+            Notify("IsUndoButtonEnabled");
+            Notify("IsRedoButtonEnabled");
         }
 
         private void NotifyToolStripButton()
@@ -117,12 +151,12 @@ namespace MyDrawing.presentationModel
             currnetState.MouseMove(x, y);
         }
 
-        public void EditSelectedContent(string content)
+        public void ModitySelectedContent(string content)
         {
-            if (this.model.selectedShape == null)
+            if (this.model.SelectedShape == null)
                 return;
-            this.model.selectedShape.Content = content;
-            this.model.NotifiyModelChange();
+            this.commandManager.Execute(new TextChangeCommand(this.model.SelectedShape, content));
+            NotifyUndoRedoToolStripButton();
         }
 
         public void LabelShapeContentChange(string content)
@@ -223,28 +257,28 @@ namespace MyDrawing.presentationModel
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+        /// <summary>
+        /// 屬性
+        /// </summary>
 
+        // 當前狀態 (用在 unit test)
         public IState CurrentState
         {
             get { return this.currnetState; }
         }
 
+        // 鼠標圖案
         public string CanvasCousor
         {
             get { return this.currnetState == this.pointState ? "Default" : "Cross"; }
         }
 
-        // state
+        // point 按鈕相關
         public bool IsPointButtonnChecked
         {
             get { return this.currnetState == this.pointState; }
         }
-        public bool IsDrawButtonChecked
-        {
-            get { return this.currnetState == this.drawState || this.currnetState == this.drawLineState; }
-        }
-
-        // draw shape
+        // 各種繪圖按鈕相關
         public bool IsDrawStartButtonChecked
         {
             get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Start; }
@@ -261,22 +295,21 @@ namespace MyDrawing.presentationModel
         {
             get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Process; }
         }
-        // draw line
         public bool IsDrawLineButtonChecked
         {
             get { return this.currnetState == this.drawLineState; }
         }
-        // redo undo
+        // redo undo 按鈕相關
         public bool IsRedoButtonEnabled
         {
-            get { return false; }
+            get { return this.commandManager.IsRedoEnabled; }
         }
         public bool IsUndoButtonEnabled
         {
-            get { return false; }
+            get { return this.commandManager.IsUndoEnabled; }
         }
 
-        // data input
+        // 使用者輸入資料相關
         public bool IsBtnAddEnabled
         {
             get { return this.isBtnAddEnabled; }

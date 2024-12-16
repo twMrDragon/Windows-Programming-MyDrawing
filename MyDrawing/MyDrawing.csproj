@@ -46,6 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="command\AddCommand.cs" />
+    <Compile Include="command\CommandManager.cs" />
+    <Compile Include="command\DarwLineCommand.cs" />
+    <Compile Include="command\DeleteCommand.cs" />
+    <Compile Include="command\DrawShapeCommand.cs" />
+    <Compile Include="command\ICommand.cs" />
+    <Compile Include="command\MoveCommand.cs" />
+    <Compile Include="command\TextChangeCommand.cs" />
+    <Compile Include="command\TextMoveCommand.cs" />
     <Compile Include="controls\DoubleBufferedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -136,8 +145,6 @@
   <ItemGroup>
     <None Include="Resources\redo.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="command\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

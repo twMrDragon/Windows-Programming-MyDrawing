@@ -6,6 +6,10 @@ namespace MyDrawing.shape
 {
     public abstract class Shape
     {
+        // Observer pattern
+        public delegate void PropertyChangedEventHandler();
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public enum Type
         {
             Start,
@@ -22,18 +26,119 @@ namespace MyDrawing.shape
             Left
         }
 
-        public string ShapeName { get; set; }
+        private string shapeName;
+        private string content;
+        private int x;
+        private int y;
+        private int width;
+        private int height;
+        private int contentRelativelyX;
+        private int contentRelativelyY;
 
-        public string Content { get; set; }
+        public string ShapeName
+        {
+            get => shapeName;
+            set
+            {
+                if (shapeName != value)
+                {
+                    shapeName = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
+        public string Content
+        {
+            get => content;
+            set
+            {
+                if (content != value)
+                {
+                    content = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+
+        public int X
+        {
+            get => x;
+            set
+            {
+                if (x != value)
+                {
+                    x = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public int Y
+        {
+            get => y;
+            set
+            {
+                if (y != value)
+                {
+                    y = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public int Width
+        {
+            get => width;
+            set
+            {
+                if (width != value)
+                {
+                    width = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public int Height
+        {
+            get => height;
+            set
+            {
+                if (height != value)
+                {
+                    height = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+
         // 相對於圖案左上角
-        public int ContentRelativelyX { get; set; }
-        public int ContentRelativelyY { get; set; }
+        public int ContentRelativelyX
+        {
+            get => contentRelativelyX;
+            set
+            {
+                if (contentRelativelyX != value)
+                {
+                    contentRelativelyX = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public int ContentRelativelyY
+        {
+            get => contentRelativelyY;
+            set
+            {
+                if (contentRelativelyY != value)
+                {
+                    contentRelativelyY = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
 
+        /// <summary>
+        /// method
+        /// </summary>
         public abstract void DrawShape(IGraphics graphics);
         public abstract bool IsPointIn(double x, double y);
 
@@ -124,7 +229,7 @@ namespace MyDrawing.shape
             graphics.FillEllipse(X - radius, Y + Height / 2 - radius, diameter, diameter);
         }
 
-        public double GetPointX(ConnectPoint connectPoint)
+        public int GetPointX(ConnectPoint connectPoint)
         {
             switch (connectPoint)
             {
@@ -140,7 +245,7 @@ namespace MyDrawing.shape
                     return X;
             }
         }
-        public double GetPointY(ConnectPoint connectPoint)
+        public int GetPointY(ConnectPoint connectPoint)
         {
             switch (connectPoint)
             {

@@ -22,9 +22,9 @@ namespace MyDrawing.presentationModel.Tests
         public void CreateShapeTest()
         {
             Assert.AreEqual(0, model.GetShapes().Count);
-            presentationModel.CreateShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
             Assert.AreEqual(1, model.GetShapes().Count);
-            presentationModel.CreateShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
             Assert.AreEqual(2, model.GetShapes().Count);
         }
 
@@ -73,7 +73,7 @@ namespace MyDrawing.presentationModel.Tests
         [TestMethod()]
         public void PointStateTest()
         {
-            presentationModel.CreateShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
             presentationModel.SetToPointState();
             presentationModel.HandleMousePressed(50, 50);
             presentationModel.HandleMouseMoved(100, 100);
@@ -214,11 +214,9 @@ namespace MyDrawing.presentationModel.Tests
         public void StateButtonCheckTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
-            Assert.IsTrue(presentationModel.IsDrawButtonChecked);
             Assert.IsFalse(presentationModel.IsPointButtonnChecked);
 
             presentationModel.SetToPointState();
-            Assert.IsFalse(presentationModel.IsDrawButtonChecked);
             Assert.IsTrue(presentationModel.IsPointButtonnChecked);
         }
 

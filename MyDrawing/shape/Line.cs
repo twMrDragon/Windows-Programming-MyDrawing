@@ -4,23 +4,100 @@ namespace MyDrawing.shape
 {
     public class Line
     {
-        public Shape StartShape { get; set; }
-        public Shape EndShape { get; set; }
+        // Observer pattern
+        public delegate void PropertyChangedEventHandler();
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public double StartX { get; set; }
-        public double StartY { get; set; }
-        public double EndX { get; set; }
-        public double EndY { get; set; }
+        private Shape startShape;
+        private Shape endShape;
+        int startX;
+        int startY;
+        int endX;
+        int endY;
+
+        public Shape StartShape
+        {
+            get => startShape;
+            set
+            {
+                if (startShape != value)
+                {
+                    startShape = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public Shape EndShape
+        {
+            get => endShape;
+            set
+            {
+                if (endShape != value)
+                {
+                    endShape = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+
+        public int StartX
+        {
+            get => startX;
+            set
+            {
+                if (startX != value)
+                {
+                    startX = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public int StartY
+        {
+            get => startY;
+            set
+            {
+                if (startY != value)
+                {
+                    startY = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public int EndX
+        {
+            get => endX;
+            set
+            {
+                if (endX != value)
+                {
+                    endX = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public int EndY
+        {
+            get => endY;
+            set
+            {
+                if (endY != value)
+                {
+                    endY = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
 
         public Shape.ConnectPoint StartShapeConnectPoint { get; set; }
         public Shape.ConnectPoint EndShapeConnectPoint { get; set; }
 
         public void Draw(IGraphics graphics)
         {
-            double startX = StartShape != null ? StartShape.GetPointX(StartShapeConnectPoint) : StartX;
-            double startY = StartShape != null ? StartShape.GetPointY(StartShapeConnectPoint) : StartY;
-            double endX = EndShape != null ? EndShape.GetPointX(EndShapeConnectPoint) : EndX;
-            double endY = EndShape != null ? EndShape.GetPointY(EndShapeConnectPoint) : EndY;
+            int startX = StartShape != null ? StartShape.GetPointX(StartShapeConnectPoint) : StartX;
+            int startY = StartShape != null ? StartShape.GetPointY(StartShapeConnectPoint) : StartY;
+            int endX = EndShape != null ? EndShape.GetPointX(EndShapeConnectPoint) : EndX;
+            int endY = EndShape != null ? EndShape.GetPointY(EndShapeConnectPoint) : EndY;
 
             graphics.SetColor("#000000");
             graphics.DrawLine(startX, startY, endX, endY);
