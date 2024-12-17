@@ -10,10 +10,12 @@ namespace MyDrawing.shape
 
         private Shape startShape;
         private Shape endShape;
-        int startX;
-        int startY;
-        int endX;
-        int endY;
+        private int startX;
+        private int startY;
+        private int endX;
+        private int endY;
+        private Shape.ConnectPoint startShapeConnectPoint;
+        private Shape.ConnectPoint endShapeConnectPoint;
 
         public Shape StartShape
         {
@@ -89,8 +91,30 @@ namespace MyDrawing.shape
             }
         }
 
-        public Shape.ConnectPoint StartShapeConnectPoint { get; set; }
-        public Shape.ConnectPoint EndShapeConnectPoint { get; set; }
+        public Shape.ConnectPoint StartShapeConnectPoint
+        {
+            get => startShapeConnectPoint;
+            set
+            {
+                if (startShapeConnectPoint != value)
+                {
+                    startShapeConnectPoint = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
+        public Shape.ConnectPoint EndShapeConnectPoint
+        {
+            get => endShapeConnectPoint;
+            set
+            {
+                if (endShapeConnectPoint != value)
+                {
+                    endShapeConnectPoint = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
 
         public void Draw(IGraphics graphics)
         {

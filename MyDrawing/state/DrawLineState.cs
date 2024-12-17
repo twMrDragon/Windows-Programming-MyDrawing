@@ -31,7 +31,7 @@ namespace MyDrawing.state
                 bool inConnectPointFlag = false;
                 foreach (Shape.ConnectPoint connectPoint in connectPoints)
                 {
-                    if (shapes[i].IsPointInTopConnectPoint(x, y, connectPoint))
+                    if (shapes[i].IsPointInConnectPoint(x, y, connectPoint))
                     {
                         inConnectPointFlag = true;
                         this.model.NotCompleteLine = new Line();
@@ -50,10 +50,10 @@ namespace MyDrawing.state
             {
                 // 經過形狀
                 if (shapes[i].IsPointIn(x, y) ||
-                    shapes[i].IsPointInTopConnectPoint(x, y, Shape.ConnectPoint.Top) ||
-                    shapes[i].IsPointInTopConnectPoint(x, y, Shape.ConnectPoint.Right) ||
-                    shapes[i].IsPointInTopConnectPoint(x, y, Shape.ConnectPoint.Bottom) ||
-                    shapes[i].IsPointInTopConnectPoint(x, y, Shape.ConnectPoint.Left))
+                    shapes[i].IsPointInConnectPoint(x, y, Shape.ConnectPoint.Top) ||
+                    shapes[i].IsPointInConnectPoint(x, y, Shape.ConnectPoint.Right) ||
+                    shapes[i].IsPointInConnectPoint(x, y, Shape.ConnectPoint.Bottom) ||
+                    shapes[i].IsPointInConnectPoint(x, y, Shape.ConnectPoint.Left))
                 {
                     this.model.HoverShape = shapes[i];
                     break;
@@ -84,7 +84,7 @@ namespace MyDrawing.state
             {
                 foreach (Shape.ConnectPoint connectPoint in connectPoints)
                 {
-                    if (shapes[i].IsPointInTopConnectPoint(x, y, connectPoint))
+                    if (shapes[i].IsPointInConnectPoint(x, y, connectPoint))
                     {
                         // 同一個形狀同一個連接點
                         bool sameShapeFlag = this.model.NotCompleteLine.StartShape == shapes[i];

@@ -155,7 +155,7 @@ namespace MyDrawing.shape
             return graphicsPath.IsVisible((float)x, (float)y);
         }
 
-        public bool IsPointInTopConnectPoint(double x, double y, ConnectPoint connectPoint)
+        public bool IsPointInConnectPoint(double x, double y, ConnectPoint connectPoint)
         {
             GraphicsPath graphics = new GraphicsPath();
             int radius = 6;
@@ -242,7 +242,7 @@ namespace MyDrawing.shape
                 case ConnectPoint.Left:
                     return X;
                 default:
-                    return X;
+                    return X + Width / 2;
             }
         }
         public int GetPointY(ConnectPoint connectPoint)
