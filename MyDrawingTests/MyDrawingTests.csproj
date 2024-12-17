@@ -58,6 +58,13 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="command\AddCommandTests.cs" />
+    <Compile Include="command\CommandManagerTests.cs" />
+    <Compile Include="command\DeleteCommandTests.cs" />
+    <Compile Include="command\DrawCommandTests.cs" />
+    <Compile Include="command\MoveCommandTests.cs" />
+    <Compile Include="command\TextChangeCommandTests.cs" />
+    <Compile Include="command\TextMoveCommandTests.cs" />
     <Compile Include="controls\DoubleBufferedPanelTests.cs" />
     <Compile Include="model\ModelTests.cs" />
     <Compile Include="presentationModel\PresentationModelTests.cs" />
@@ -69,6 +76,7 @@
     <Compile Include="shape\ShapeTests.cs" />
     <Compile Include="shape\StartTests.cs" />
     <Compile Include="shape\TerminatorTests.cs" />
+    <Compile Include="state\DrawLineStateTests.cs" />
     <Compile Include="state\DrawStateTests.cs" />
     <Compile Include="state\PointStateTests.cs" />
   </ItemGroup>

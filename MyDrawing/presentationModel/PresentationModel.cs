@@ -11,7 +11,7 @@ namespace MyDrawing.presentationModel
         readonly private Model model;
 
         // command pattern
-        private CommandManager commandManager = new CommandManager();
+        public CommandManager commandManager = new CommandManager();
 
         // Observer pattern
         public delegate void ModelChangedEventHandler();

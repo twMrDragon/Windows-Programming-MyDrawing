@@ -48,9 +48,8 @@
   <ItemGroup>
     <Compile Include="command\AddCommand.cs" />
     <Compile Include="command\CommandManager.cs" />
-    <Compile Include="command\DarwLineCommand.cs" />
     <Compile Include="command\DeleteCommand.cs" />
-    <Compile Include="command\DrawShapeCommand.cs" />
+    <Compile Include="command\DrawCommand.cs" />
     <Compile Include="command\ICommand.cs" />
     <Compile Include="command\MoveCommand.cs" />
     <Compile Include="command\TextChangeCommand.cs" />

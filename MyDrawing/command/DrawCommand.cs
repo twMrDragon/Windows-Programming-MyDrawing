@@ -2,13 +2,13 @@
 
 namespace MyDrawing.command
 {
-    public class DrawShapeCommand : ICommand
+    public class DrawCommand : ICommand
     {
         Model model;
         Shape shape;
         int index;
 
-        public DrawShapeCommand(Model model, Shape shape)
+        public DrawCommand(Model model, Shape shape)
         {
             this.model = model;
             this.shape = shape;

@@ -18,7 +18,7 @@ namespace MyDrawing.shape.Tests
         public void DrawTest()
         {
             MockGraphicAdapter adapter = new MockGraphicAdapter();
-            line.Draw(adapter);
+            line.DrawShape(adapter);
             Assert.AreEqual("SetColor", adapter.Command[0]);
             Assert.AreEqual("DrawLine", adapter.Command[1]);
         }
@@ -73,6 +73,39 @@ namespace MyDrawing.shape.Tests
             Assert.IsTrue(flag);
             line.EndShapeConnectPoint = Shape.ConnectPoint.Right;
             Assert.IsFalse(flag);
+        }
+
+        [TestMethod()]
+        public void IsPointInTest()
+        {
+            line.StartX = 0;
+            line.StartY = 0;
+            line.EndX = 100;
+            line.EndY = 100;
+            Assert.IsFalse(line.IsPointIn(0, 0));
+            Assert.IsFalse(line.IsPointIn(50, 50));
+            Assert.IsFalse(line.IsPointIn(100, 100));
+        }
+
+        [TestMethod()]
+        public void XYWidhtHeightTest()
+        {
+            line.StartX = 0;
+            line.StartY = 0;
+            line.EndX = 200;
+            line.EndY = 100;
+            Assert.AreEqual(0, line.X);
+            Assert.AreEqual(0, line.Y);
+            Assert.AreEqual(200, line.Width);
+            Assert.AreEqual(100, line.Height);
+            line.StartX = 200;
+            line.StartY = 100;
+            line.EndX = 0;
+            line.EndY = 0;
+            Assert.AreEqual(0, line.X);
+            Assert.AreEqual(0, line.Y);
+            Assert.AreEqual(200, line.Width);
+            Assert.AreEqual(100, line.Height);
         }
     }
 }

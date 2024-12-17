@@ -56,8 +56,11 @@ namespace MyDrawing.Tests
             model.AddShape(process);
             model.AddShape(descision);
 
+            model.SelectedShape = terminator;
+
             Assert.AreEqual(terminator, model.GetShapes()[1]);
             model.RemoveShapeAt(1);
+            Assert.AreEqual(null, model.SelectedShape);
             Assert.AreEqual(process, model.GetShapes()[1]);
             model.RemoveShapeAt(1);
             Assert.AreEqual(descision, model.GetShapes()[1]);
@@ -133,6 +136,21 @@ namespace MyDrawing.Tests
             };
             model.NotifiyModelChange();
             Assert.IsTrue(flag);
+        }
+
+        [TestMethod()]
+        public void InsertShapeTest()
+        {
+            Start start = new Start();
+            Terminator terminator = new Terminator();
+            Process process = new Process();
+
+            model.AddShape(start);
+            Assert.AreEqual(start, model.GetShapes()[0]);
+            model.InsertShape(0, terminator);
+            Assert.AreEqual(terminator, model.GetShapes()[0]);
+            model.InsertShape(2, process);
+            Assert.AreEqual(process, model.GetShapes()[2]);
         }
     }
 }

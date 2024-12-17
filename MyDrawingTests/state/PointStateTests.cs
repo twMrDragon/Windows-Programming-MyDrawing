@@ -9,7 +9,7 @@ namespace MyDrawing.state.Tests
     {
         Model model;
         PresentationModel presentationModel;
-        IState pointState;
+        PointState pointState;
 
         [TestInitialize]
         public void SetUp()
@@ -73,6 +73,21 @@ namespace MyDrawing.state.Tests
         }
 
         [TestMethod]
+        public void PointStateSelectedAndMoveShapeToStart()
+        {
+            Assert.AreEqual(2, presentationModel.commandManager.UndoCount);
+            pointState.MouseDown(50, 50);
+            pointState.MouseMove(100, 200);
+            Assert.AreEqual(50, model.SelectedShape.X);
+            Assert.AreEqual(150, model.SelectedShape.Y);
+
+            pointState.MouseUp(50, 50);
+            Assert.AreEqual(0, model.SelectedShape.X);
+            Assert.AreEqual(0, model.SelectedShape.Y);
+            Assert.AreEqual(2, presentationModel.commandManager.UndoCount);
+        }
+
+        [TestMethod]
         public void PointStateSelectedAndMoveContent()
         {
             pointState.MouseDown(50, 50);
@@ -87,6 +102,21 @@ namespace MyDrawing.state.Tests
         }
 
         [TestMethod]
+        public void PointStateSelectedAndMoveContentToShape()
+        {
+            Assert.AreEqual(2, presentationModel.commandManager.UndoCount);
+            pointState.MouseDown(50, 50);
+            pointState.MouseDown(50, 42);
+            pointState.MouseMove(100, 200);
+            Assert.AreEqual(100, model.SelectedShape.ContentRelativelyX);
+            Assert.AreEqual(208, model.SelectedShape.ContentRelativelyY);
+            pointState.MouseUp(50, 42);
+            Assert.AreEqual(50, model.SelectedShape.ContentRelativelyX);
+            Assert.AreEqual(50, model.SelectedShape.ContentRelativelyY);
+            Assert.AreEqual(2, presentationModel.commandManager.UndoCount);
+        }
+
+        [TestMethod]
         public void PointStateOnlyMouseMove()
         {
             pointState.MouseMove(100, 200);
@@ -98,6 +128,18 @@ namespace MyDrawing.state.Tests
         {
             pointState.MouseUp(100, 200);
             Assert.AreEqual(null, model.SelectedShape);
+        }
+
+        [TestMethod()]
+        public void IsContentDoubleClickTest()
+        {
+            Assert.IsFalse(pointState.IsContentDoubleClick());
+            pointState.MouseDown(50, 50);
+            Assert.IsFalse(pointState.IsContentDoubleClick());
+            pointState.MouseDown(50, 42);
+            Assert.IsFalse(pointState.IsContentDoubleClick());
+            pointState.MouseDown(50, 42);
+            Assert.IsTrue(pointState.IsContentDoubleClick());
         }
     }
 }

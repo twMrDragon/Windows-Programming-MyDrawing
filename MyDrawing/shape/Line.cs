@@ -1,12 +1,15 @@
 ﻿using MyDrawing.graphics;
+using System;
+using System.Drawing.Drawing2D;
 
 namespace MyDrawing.shape
 {
-    public class Line
+    public class Line : Shape
     {
-        // Observer pattern
-        public delegate void PropertyChangedEventHandler();
-        public event PropertyChangedEventHandler PropertyChanged;
+        public Line()
+        {
+            this.ShapeName = "Line";
+        }
 
         private Shape startShape;
         private Shape endShape;
@@ -25,7 +28,7 @@ namespace MyDrawing.shape
                 if (startShape != value)
                 {
                     startShape = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -37,7 +40,7 @@ namespace MyDrawing.shape
                 if (endShape != value)
                 {
                     endShape = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -50,7 +53,7 @@ namespace MyDrawing.shape
                 if (startX != value)
                 {
                     startX = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -62,7 +65,7 @@ namespace MyDrawing.shape
                 if (startY != value)
                 {
                     startY = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -74,7 +77,7 @@ namespace MyDrawing.shape
                 if (endX != value)
                 {
                     endX = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -86,8 +89,47 @@ namespace MyDrawing.shape
                 if (endY != value)
                 {
                     endY = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
+            }
+        }
+        public override int X
+        {
+            get
+            {
+                int startX = StartShape != null ? StartShape.GetPointX(StartShapeConnectPoint) : StartX;
+                int endX = EndShape != null ? EndShape.GetPointX(EndShapeConnectPoint) : EndX;
+                return Math.Min(startX, endX);
+            }
+        }
+
+        public override int Y
+        {
+            get
+            {
+                int startY = StartShape != null ? StartShape.GetPointY(StartShapeConnectPoint) : StartY;
+                int endY = EndShape != null ? EndShape.GetPointY(EndShapeConnectPoint) : EndY;
+                return Math.Min(startY, endY);
+            }
+        }
+
+        public override int Width
+        {
+            get
+            {
+                int startX = StartShape != null ? StartShape.GetPointX(StartShapeConnectPoint) : StartX;
+                int endX = EndShape != null ? EndShape.GetPointX(EndShapeConnectPoint) : EndX;
+                return Math.Abs(startX - endX);
+            }
+        }
+
+        public override int Height
+        {
+            get
+            {
+                int startY = StartShape != null ? StartShape.GetPointY(StartShapeConnectPoint) : StartY;
+                int endY = EndShape != null ? EndShape.GetPointY(EndShapeConnectPoint) : EndY;
+                return Math.Abs(startY - endY);
             }
         }
 
@@ -99,7 +141,7 @@ namespace MyDrawing.shape
                 if (startShapeConnectPoint != value)
                 {
                     startShapeConnectPoint = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -111,20 +153,9 @@ namespace MyDrawing.shape
                 if (endShapeConnectPoint != value)
                 {
                     endShapeConnectPoint = value;
-                    PropertyChanged?.Invoke();
+                    OnPropertyChanged();
                 }
             }
-        }
-
-        public void Draw(IGraphics graphics)
-        {
-            int startX = StartShape != null ? StartShape.GetPointX(StartShapeConnectPoint) : StartX;
-            int startY = StartShape != null ? StartShape.GetPointY(StartShapeConnectPoint) : StartY;
-            int endX = EndShape != null ? EndShape.GetPointX(EndShapeConnectPoint) : EndX;
-            int endY = EndShape != null ? EndShape.GetPointY(EndShapeConnectPoint) : EndY;
-
-            graphics.SetColor("#000000");
-            graphics.DrawLine(startX, startY, endX, endY);
         }
 
         public void SetStartConnectPoint(Shape startShape, Shape.ConnectPoint connectPoint)
@@ -138,6 +169,28 @@ namespace MyDrawing.shape
         {
             this.EndShape = endShape;
             this.EndShapeConnectPoint = connectPoint;
+        }
+
+        public override void DrawShape(IGraphics graphics)
+        {
+            int startX = StartShape != null ? StartShape.GetPointX(StartShapeConnectPoint) : StartX;
+            int startY = StartShape != null ? StartShape.GetPointY(StartShapeConnectPoint) : StartY;
+            int endX = EndShape != null ? EndShape.GetPointX(EndShapeConnectPoint) : EndX;
+            int endY = EndShape != null ? EndShape.GetPointY(EndShapeConnectPoint) : EndY;
+
+            graphics.SetColor("#000000");
+            graphics.DrawLine(startX, startY, endX, endY);
+        }
+
+        public override bool IsPointIn(double x, double y)
+        {
+            GraphicsPath graphicsPath = new GraphicsPath();
+            int startX = StartShape != null ? StartShape.GetPointX(StartShapeConnectPoint) : StartX;
+            int startY = StartShape != null ? StartShape.GetPointY(StartShapeConnectPoint) : StartY;
+            int endX = EndShape != null ? EndShape.GetPointX(EndShapeConnectPoint) : EndX;
+            int endY = EndShape != null ? EndShape.GetPointY(EndShapeConnectPoint) : EndY;
+            graphicsPath.AddLine(startX, startY, endX, endY);
+            return graphicsPath.IsVisible((int)x, (int)y);
         }
     }
 }

@@ -53,7 +53,7 @@ namespace MyDrawing.state
             this.secondY = y;
             FixNotCompletedShape();
             this.model.NotCompleteShape.Content = Utils.GenerateRandomString();
-            this.presentationModel.Execute(new DrawShapeCommand(this.model, this.model.NotCompleteShape));
+            this.presentationModel.Execute(new DrawCommand(this.model, this.model.NotCompleteShape));
             this.model.SelectedShape = this.model.NotCompleteShape;
             this.model.NotCompleteShape = null;
             this.presentationModel.SetToPointState();

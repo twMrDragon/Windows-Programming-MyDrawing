@@ -10,6 +10,11 @@ namespace MyDrawing.shape
         public delegate void PropertyChangedEventHandler();
         public event PropertyChangedEventHandler PropertyChanged;
 
+        protected void OnPropertyChanged()
+        {
+            PropertyChanged?.Invoke();
+        }
+
         public enum Type
         {
             Start,
@@ -61,7 +66,7 @@ namespace MyDrawing.shape
             }
         }
 
-        public int X
+        public virtual int X
         {
             get => x;
             set
@@ -73,7 +78,7 @@ namespace MyDrawing.shape
                 }
             }
         }
-        public int Y
+        public virtual int Y
         {
             get => y;
             set
@@ -85,7 +90,7 @@ namespace MyDrawing.shape
                 }
             }
         }
-        public int Width
+        public virtual int Width
         {
             get => width;
             set
@@ -97,7 +102,7 @@ namespace MyDrawing.shape
                 }
             }
         }
-        public int Height
+        public virtual int Height
         {
             get => height;
             set

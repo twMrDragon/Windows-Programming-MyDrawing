@@ -33,6 +33,22 @@ namespace MyDrawing.command
             cmd.Execute();
         }
 
+        public int UndoCount
+        {
+            get
+            {
+                return this.undo.Count;
+            }
+        }
+
+        public int RedoCount
+        {
+            get
+            {
+                return this.redo.Count;
+            }
+        }
+
         public bool IsRedoEnabled
         {
             get

@@ -7,7 +7,7 @@ namespace MyDrawing.state.Tests
     [TestClass()]
     public class DrawStateTests
     {
-        IState drawState;
+        DrawState drawState;
         PresentationModel presentationModel;
         Model model;
 

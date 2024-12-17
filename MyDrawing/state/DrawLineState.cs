@@ -28,12 +28,10 @@ namespace MyDrawing.state
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
-                bool inConnectPointFlag = false;
                 foreach (Shape.ConnectPoint connectPoint in connectPoints)
                 {
                     if (shapes[i].IsPointInConnectPoint(x, y, connectPoint))
                     {
-                        inConnectPointFlag = true;
                         this.model.NotCompleteLine = new Line();
                         this.model.NotCompleteLine.SetStartConnectPoint(shapes[i], connectPoint);
                         return;
@@ -93,7 +91,7 @@ namespace MyDrawing.state
                             break;
 
                         this.model.NotCompleteLine.SetEndConnectPoint(shapes[i], connectPoint);
-                        this.presentationModel.Execute(new DarwLineCommand(this.model, this.model.NotCompleteLine));
+                        this.presentationModel.Execute(new DrawCommand(this.model, this.model.NotCompleteLine));
                         this.model.NotCompleteLine = null;
                         return;
                     }

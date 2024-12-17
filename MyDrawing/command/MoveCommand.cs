@@ -27,6 +27,7 @@ namespace MyDrawing.command
 
         public void Execute()
         {
+            // 因為是在 mouseup 才建立，所以第一次不要動
             if (firstTimeFlag)
             {
                 firstTimeFlag = false;

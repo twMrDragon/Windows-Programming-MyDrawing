@@ -49,8 +49,7 @@ namespace MyDrawing
             }
         }
 
-        // 連線s
-        readonly private List<Line> lines = new List<Line>();
+        // 連線
         private Line notCompleteLine = null;
         public Line NotCompleteLine
         {
@@ -96,25 +95,6 @@ namespace MyDrawing
             NotifiyModelChange();
         }
 
-        public IList<Line> GetLines()
-        {
-            return lines.AsReadOnly();
-        }
-
-        public void AddLine(Line line)
-        {
-            if (line == null)
-                return;
-            this.lines.Add(line);
-            NotifiyModelChange();
-        }
-
-        public void RemoveLineFromEnd()
-        {
-            this.lines.RemoveAt(this.lines.Count - 1);
-            NotifiyModelChange();
-        }
-
         public void Draw(IGraphics graphics)
         {
             graphics.ClearAll();
@@ -126,10 +106,7 @@ namespace MyDrawing
             notCompleteShape?.DrawShape(graphics);
             selectedShape?.DrawContentBorder(graphics);
             selectedShape?.DrawBorder(graphics);
-
-            foreach (Line line in lines)
-                line.Draw(graphics);
-            notCompleteLine?.Draw(graphics);
+            notCompleteLine?.DrawShape(graphics);
 
             hoverShape?.DrawConnectPoint(graphics);
         }
