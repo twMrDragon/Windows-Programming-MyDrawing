@@ -32,9 +32,9 @@ namespace MyDrawing.presentationModel
 
         // state
         private IState currnetState;
-        readonly private PointState pointState;
-        readonly private DrawState drawState;
-        readonly private DrawLineState drawLineState;
+        readonly public PointState pointState;
+        readonly public DrawState drawState;
+        readonly public DrawLineState drawLineState;
 
         public PresentationModel(Model model)
         {

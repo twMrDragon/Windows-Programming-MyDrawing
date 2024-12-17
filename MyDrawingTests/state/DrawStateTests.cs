@@ -22,7 +22,7 @@ namespace MyDrawing.state.Tests
         [TestMethod()]
         public void DrawStateDrawLeftTopToRightBottom()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 左上畫到右下
             drawState.MouseDown(1, 2);
@@ -40,7 +40,7 @@ namespace MyDrawing.state.Tests
         [TestMethod()]
         public void DrawStateDrawLeftBottomToRightTop()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 左下畫到右上
             drawState.MouseDown(1, 101);
@@ -58,7 +58,7 @@ namespace MyDrawing.state.Tests
         [TestMethod()]
         public void DrawStateDrawRightBottomToLeftTop()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 右下畫到左上
             drawState.MouseDown(100, 101);
@@ -76,7 +76,7 @@ namespace MyDrawing.state.Tests
         [TestMethod()]
         public void DrawStateDrawRightTopToLeftBottom()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 右上畫到左下
             drawState.MouseDown(100, 2);

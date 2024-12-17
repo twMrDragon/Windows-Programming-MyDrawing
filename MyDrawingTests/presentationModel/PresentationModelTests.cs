@@ -32,19 +32,19 @@ namespace MyDrawing.presentationModel.Tests
         public void SetToDrawStateTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
-            Assert.AreEqual(Shape.Type.Start, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Start, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
 
             presentationModel.SetToDrawState(Shape.Type.Process);
-            Assert.AreEqual(Shape.Type.Process, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Process, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
 
             presentationModel.SetToDrawState(Shape.Type.Terminator);
-            Assert.AreEqual(Shape.Type.Terminator, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Terminator, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
 
             presentationModel.SetToDrawState(Shape.Type.Descision);
-            Assert.AreEqual(Shape.Type.Descision, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Descision, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
         }
 
