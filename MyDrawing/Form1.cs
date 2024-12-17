@@ -170,9 +170,9 @@ namespace MyDrawing
 
         private void CanvasMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (presentationModel.IsContentDoubleClick(e.X, e.Y))
+            if (presentationModel.IsContentDoubleClick())
             {
-                EditContentForm form = new EditContentForm(model.SelectedShape.Content);
+                ModifyContentForm form = new ModifyContentForm(model.SelectedShape.Content);
                 DialogResult result = form.ShowDialog();
                 if (result == DialogResult.OK)
                 {
@@ -213,7 +213,7 @@ namespace MyDrawing
         // 重新刷新 dataGridView
         private void UpdateDataGridView()
         {
-            // 用改資料的方式增加效能
+            // 用改資料的方式減少效能消耗
             IList<Shape> shapes = model.GetShapes();
             int diff = Math.Abs(dataGridViewShapes.Rows.Count - shapes.Count);
             if (dataGridViewShapes.Rows.Count < shapes.Count)
@@ -225,14 +225,11 @@ namespace MyDrawing
             for (int i = 0; i < shapes.Count; i++)
             {
                 Shape shape = shapes[i];
-                dataGridViewShapes.Rows[i].Cells[1].Value = "刪除";
-                dataGridViewShapes.Rows[i].Cells[1].Value = i + 1;
-                dataGridViewShapes.Rows[i].Cells[2].Value = shape.ShapeName;
-                dataGridViewShapes.Rows[i].Cells[3].Value = shape.Content;
-                dataGridViewShapes.Rows[i].Cells[4].Value = shape.X;
-                dataGridViewShapes.Rows[i].Cells[5].Value = shape.Y;
-                dataGridViewShapes.Rows[i].Cells[6].Value = shape.Height;
-                dataGridViewShapes.Rows[i].Cells[7].Value = shape.Width;
+                object[] value = { "刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width };
+                for (int j = 0; j < value.Length; j++)
+                    // 只更新資料有變的 cell
+                    if (!object.Equals(dataGridViewShapes.Rows[i].Cells[j].Value, value[j]))
+                        dataGridViewShapes.Rows[i].Cells[j].Value = value[j];
             }
         }
 
@@ -250,8 +247,6 @@ namespace MyDrawing
             // canvas
             this.canvas.Invalidate();
             // datagridview
-            // 如果資料沒變就不更新 dataGridView
-
             UpdateDataGridView();
         }
     }

@@ -2,7 +2,7 @@
 
 namespace MyDrawing.controls
 {
-    public partial class EditContentForm : Form
+    public partial class ModifyContentForm : Form
     {
         private string originText;
 
@@ -11,13 +11,12 @@ namespace MyDrawing.controls
             get { return textContent.Text; }
         }
 
-        public EditContentForm(string originText)
+        public ModifyContentForm(string originText)
         {
             this.originText = originText;
             InitializeComponent();
             InitButtons();
             InitTextBox();
-
         }
 
         private void InitTextBox()

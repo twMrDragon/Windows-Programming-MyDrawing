@@ -16,7 +16,6 @@ namespace MyDrawing
 
         // 圖形s
         readonly private List<Shape> shapes = new List<Shape>();
-        public Shape.Type notCompleteShapeType;
         private Shape notCompleteShape = null;
         public Shape NotCompleteShape
         {

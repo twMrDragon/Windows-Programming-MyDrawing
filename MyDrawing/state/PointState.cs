@@ -13,8 +13,8 @@ namespace MyDrawing.state
         bool isPressed = false;
         double startX = 0, startY = 0;
         double pointX = 0, pointY = 0;
-        bool isPressContent = false;
-        Shape lastSelectShape = null;
+        readonly bool[] lastIsPressContent = { false, false };
+        readonly Shape[] lastSelectShape = { null, null };
         MoveCommand moveCommand;
         TextMoveCommand textMoveCommand;
 
@@ -31,12 +31,14 @@ namespace MyDrawing.state
             isPressed = true;
 
             this.model.SelectedShape = null;
+            lastSelectShape[0] = lastSelectShape[1];
+            lastIsPressContent[0] = lastIsPressContent[1];
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
                 // 點擊已選形狀的文字的控制點
-                isPressContent = (this.lastSelectShape == shapes[i]) && (shapes[i].IsPointInContentControlPoint(x, y));
-                if (isPressContent)
+                lastIsPressContent[1] = (this.lastSelectShape[1] == shapes[i]) && (shapes[i].IsPointInContentControlPoint(x, y));
+                if (lastIsPressContent[1])
                 {
                     this.model.SelectedShape = shapes[i];
                     textMoveCommand = new TextMoveCommand(this.model.SelectedShape);
@@ -53,7 +55,7 @@ namespace MyDrawing.state
                     break;
                 }
             }
-            lastSelectShape = this.model.SelectedShape;
+            lastSelectShape[1] = this.model.SelectedShape;
             startX = x;
             startY = y;
             pointX = x;
@@ -68,7 +70,7 @@ namespace MyDrawing.state
                 return;
             double dX = x - pointX;
             double dY = y - pointY;
-            if (this.isPressContent)
+            if (this.lastIsPressContent[1])
             {
                 this.model.SelectedShape.ContentRelativelyX += (int)dX;
                 this.model.SelectedShape.ContentRelativelyY += (int)dY;
@@ -89,7 +91,7 @@ namespace MyDrawing.state
             isPressed = false;
             if (this.model.SelectedShape == null)
                 return;
-            if (this.isPressContent)
+            if (this.lastIsPressContent[1])
             {
                 this.model.SelectedShape.ContentRelativelyX += (int)(x - pointX);
                 this.model.SelectedShape.ContentRelativelyY += (int)(y - pointY);
@@ -109,6 +111,13 @@ namespace MyDrawing.state
                 this.presentationModel.Execute(moveCommand);
                 moveCommand = null;
             }
+        }
+
+        public bool IsContentDoubleClick()
+        {
+            bool sameShapeFlag = (this.model.SelectedShape == lastSelectShape[1]) && (lastSelectShape[0] == lastSelectShape[1]);
+            bool contentClickFlag = this.lastIsPressContent[1] && this.lastIsPressContent[0];
+            return sameShapeFlag && contentClickFlag;
         }
     }
 }

@@ -58,11 +58,11 @@
     <Compile Include="controls\DoubleBufferedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="controls\EditContentForm.cs">
+    <Compile Include="controls\ModifyContentForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="controls\EditContentForm.Designer.cs">
-      <DependentUpon>EditContentForm.cs</DependentUpon>
+    <Compile Include="controls\ModifyContentForm.Designer.cs">
+      <DependentUpon>ModifyContentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="controls\ToolStripBindableButton.cs">
       <SubType>Component</SubType>
@@ -97,8 +97,8 @@
     <Compile Include="state\IState.cs" />
     <Compile Include="state\PointState.cs" />
     <Compile Include="utils\Utils.cs" />
-    <EmbeddedResource Include="controls\EditContentForm.resx">
-      <DependentUpon>EditContentForm.cs</DependentUpon>
+    <EmbeddedResource Include="controls\ModifyContentForm.resx">
+      <DependentUpon>ModifyContentForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

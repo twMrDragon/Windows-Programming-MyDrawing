@@ -32,9 +32,9 @@ namespace MyDrawing.presentationModel
 
         // state
         private IState currnetState;
-        readonly public IState pointState;
-        readonly public IState drawState;
-        readonly public IState drawLineState;
+        readonly private PointState pointState;
+        readonly private DrawState drawState;
+        readonly private DrawLineState drawLineState;
 
         public PresentationModel(Model model)
         {
@@ -44,13 +44,13 @@ namespace MyDrawing.presentationModel
             this.drawLineState = new DrawLineState(this.model, this);
         }
 
-        public bool IsContentDoubleClick(double x, double y)
+        public bool IsContentDoubleClick()
         {
             if (this.currnetState != pointState)
                 return false;
             if (model.SelectedShape == null)
                 return false;
-            return model.SelectedShape.IsPointInContentControlPoint(x, y);
+            return this.pointState.IsContentDoubleClick();
         }
 
         public void AddShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
@@ -94,7 +94,7 @@ namespace MyDrawing.presentationModel
         public void SetToDrawState(Shape.Type shapeType)
         {
             this.currnetState = this.drawState;
-            this.model.notCompleteShapeType = shapeType;
+            this.drawState.notCompleteShapeType = shapeType;
             this.model.SelectedShape = null;
             NotifyToolStripButton();
             NotifyCanvasCursor();
@@ -281,19 +281,19 @@ namespace MyDrawing.presentationModel
         // 各種繪圖按鈕相關
         public bool IsDrawStartButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Start; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Start; }
         }
         public bool IsDrawTerminatorButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Terminator; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Terminator; }
         }
         public bool IsDrawDescisionButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Descision; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Descision; }
         }
         public bool IsDrawProcessButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Process; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Process; }
         }
         public bool IsDrawLineButtonChecked
         {

@@ -1,6 +1,6 @@
 ﻿namespace MyDrawing.controls
 {
-    partial class EditContentForm
+    partial class ModifyContentForm
     {
         /// <summary>
         /// Required designer variable.

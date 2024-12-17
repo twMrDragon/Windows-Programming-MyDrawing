@@ -1,11 +1,13 @@
 ﻿using MyDrawing.command;
 using MyDrawing.presentationModel;
+using MyDrawing.shape;
 using MyDrawing.utils;
 
 namespace MyDrawing.state
 {
     public class DrawState : IState
     {
+        public Shape.Type notCompleteShapeType;
         readonly Model model;
         readonly PresentationModel presentationModel;
 
@@ -29,7 +31,7 @@ namespace MyDrawing.state
             isPressed = true;
             firstX = x;
             firstY = y;
-            this.model.NotCompleteShape = ShapeFactory.CreateShape(this.model.notCompleteShapeType);
+            this.model.NotCompleteShape = ShapeFactory.CreateShape(this.notCompleteShapeType);
         }
 
         public void MouseMove(double x, double y)
