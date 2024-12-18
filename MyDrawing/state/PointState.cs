@@ -30,9 +30,10 @@ namespace MyDrawing.state
                 return;
             isPressed = true;
 
-            this.model.SelectedShape = null;
+            lastSelectShape[1] = this.model.SelectedShape;
             lastSelectShape[0] = lastSelectShape[1];
             lastIsPressContent[0] = lastIsPressContent[1];
+            this.model.SelectedShape = null;
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {

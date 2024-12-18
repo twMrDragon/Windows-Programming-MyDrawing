@@ -36,7 +36,7 @@ namespace MyDrawing
 
             presentationModel.SetToPointState();
 
-            Test();
+            //Test();
         }
 
         private void InitDataBinding()
@@ -172,11 +172,12 @@ namespace MyDrawing
         {
             if (presentationModel.IsContentDoubleClick())
             {
-                ModifyContentForm form = new ModifyContentForm(model.SelectedShape.Content);
+                presentationModel.OriginalContent = model.SelectedShape.Content;
+                ModifyContentForm form = new ModifyContentForm(presentationModel);
                 DialogResult result = form.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    presentationModel.ModitySelectedContent(form.TextBoxContent);
+                    presentationModel.ModitySelectedContent(presentationModel.NewContent);
                 }
             }
         }

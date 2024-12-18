@@ -384,5 +384,18 @@ namespace MyDrawing.presentationModel.Tests
             presentationModel.ModitySelectedContent("modify2");
             Assert.AreEqual("modify2", selectShape.Content);
         }
+
+        [TestMethod()]
+        public void IsModifyContentConfirmButtonEnableTest()
+        {
+            presentationModel.OriginalContent = "Original";
+            Assert.AreEqual("Original", presentationModel.OriginalContent);
+            presentationModel.NewContent = "Original";
+            Assert.AreEqual("Original", presentationModel.NewContent);
+            Assert.IsFalse(presentationModel.IsModifyContentConfirmButtonEnable);
+            presentationModel.NewContent = "test";
+            Assert.AreEqual("test", presentationModel.NewContent);
+            Assert.IsTrue(presentationModel.IsModifyContentConfirmButtonEnable);
+        }
     }
 }

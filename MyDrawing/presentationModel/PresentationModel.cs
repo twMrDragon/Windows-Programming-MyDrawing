@@ -29,6 +29,9 @@ namespace MyDrawing.presentationModel
         private string labelShapeYColor = "#FF0000";
         private string labelShapeWidthColor = "#FF0000";
         private string labelShapeHeightColor = "#FF0000";
+        // modify content form
+        private string originalContent;
+        private string newContent;
 
         // state
         private IState currnetState;
@@ -42,6 +45,26 @@ namespace MyDrawing.presentationModel
             this.pointState = new PointState(this.model, this);
             this.drawState = new DrawState(this.model, this);
             this.drawLineState = new DrawLineState(this.model, this);
+        }
+
+        public string OriginalContent
+        {
+            get { return this.originalContent; }
+            set
+            {
+                this.originalContent = value;
+                Notify(nameof(IsModifyContentConfirmButtonEnable));
+            }
+        }
+
+        public string NewContent
+        {
+            get { return this.newContent; }
+            set
+            {
+                this.newContent = value;
+                Notify(nameof(IsModifyContentConfirmButtonEnable));
+            }
         }
 
         public bool IsContentDoubleClick()
@@ -260,6 +283,12 @@ namespace MyDrawing.presentationModel
         /// <summary>
         /// 屬性
         /// </summary>
+
+        // 確認修改文字按鈕
+        public bool IsModifyContentConfirmButtonEnable
+        {
+            get { return this.originalContent != this.newContent; }
+        }
 
         // 當前狀態 (用在 unit test)
         public IState CurrentState

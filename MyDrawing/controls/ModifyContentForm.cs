@@ -1,19 +1,15 @@
-﻿using System.Windows.Forms;
+﻿using MyDrawing.presentationModel;
+using System.Windows.Forms;
 
 namespace MyDrawing.controls
 {
     public partial class ModifyContentForm : Form
     {
-        private string originText;
+        private PresentationModel presentationModel;
 
-        public string TextBoxContent
+        public ModifyContentForm(PresentationModel presentationModel)
         {
-            get { return textContent.Text; }
-        }
-
-        public ModifyContentForm(string originText)
-        {
-            this.originText = originText;
+            this.presentationModel = presentationModel;
             InitializeComponent();
             InitButtons();
             InitTextBox();
@@ -23,13 +19,14 @@ namespace MyDrawing.controls
         {
             this.textContent.TextChanged += (s, e) =>
             {
-                this.btnConfirm.Enabled = textContent.Text != originText;
+                presentationModel.NewContent = this.textContent.Text;
             };
-            this.textContent.Text = originText;
+            this.textContent.Text = presentationModel.OriginalContent;
         }
 
         private void InitButtons()
         {
+            btnConfirm.DataBindings.Add("Enabled", presentationModel, nameof(presentationModel.IsModifyContentConfirmButtonEnable));
             btnConfirm.DialogResult = DialogResult.OK;
             btnCancel.DialogResult = DialogResult.Cancel;
         }
