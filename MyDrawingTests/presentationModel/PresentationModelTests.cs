@@ -22,9 +22,9 @@ namespace MyDrawing.presentationModel.Tests
         public void CreateShapeTest()
         {
             Assert.AreEqual(0, model.GetShapes().Count);
-            presentationModel.CreateShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
             Assert.AreEqual(1, model.GetShapes().Count);
-            presentationModel.CreateShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
             Assert.AreEqual(2, model.GetShapes().Count);
         }
 
@@ -32,19 +32,19 @@ namespace MyDrawing.presentationModel.Tests
         public void SetToDrawStateTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
-            Assert.AreEqual(Shape.Type.Start, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Start, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
 
             presentationModel.SetToDrawState(Shape.Type.Process);
-            Assert.AreEqual(Shape.Type.Process, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Process, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
 
             presentationModel.SetToDrawState(Shape.Type.Terminator);
-            Assert.AreEqual(Shape.Type.Terminator, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Terminator, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
 
             presentationModel.SetToDrawState(Shape.Type.Descision);
-            Assert.AreEqual(Shape.Type.Descision, model.notCompleteShapeType);
+            Assert.AreEqual(Shape.Type.Descision, presentationModel.drawState.notCompleteShapeType);
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
         }
 
@@ -53,6 +53,13 @@ namespace MyDrawing.presentationModel.Tests
         {
             presentationModel.SetToPointState();
             Assert.AreEqual(presentationModel.pointState, presentationModel.CurrentState);
+        }
+
+        [TestMethod()]
+        public void SetToDrawLineStateTest()
+        {
+            presentationModel.SetToDrawLineState();
+            Assert.AreEqual(presentationModel.drawLineState, presentationModel.CurrentState);
         }
 
         [TestMethod()]
@@ -73,7 +80,7 @@ namespace MyDrawing.presentationModel.Tests
         [TestMethod()]
         public void PointStateTest()
         {
-            presentationModel.CreateShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
             presentationModel.SetToPointState();
             presentationModel.HandleMousePressed(50, 50);
             presentationModel.HandleMouseMoved(100, 100);
@@ -214,12 +221,13 @@ namespace MyDrawing.presentationModel.Tests
         public void StateButtonCheckTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
-            Assert.IsTrue(presentationModel.IsDrawButtonChecked);
             Assert.IsFalse(presentationModel.IsPointButtonnChecked);
 
             presentationModel.SetToPointState();
-            Assert.IsFalse(presentationModel.IsDrawButtonChecked);
             Assert.IsTrue(presentationModel.IsPointButtonnChecked);
+
+            presentationModel.SetToDrawLineState();
+            Assert.IsTrue(presentationModel.IsDrawLineButtonChecked);
         }
 
         [TestMethod()]
@@ -270,11 +278,31 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsFalse(presentationModel.IsDrawDescisionButtonChecked);
         }
 
-        bool flag = false;
+        [TestMethod()]
+        public void UndoRedoButtonCheckTest()
+        {
+            Assert.IsFalse(presentationModel.IsUndoButtonEnabled);
+            Assert.IsFalse(presentationModel.IsRedoButtonEnabled);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            Assert.IsTrue(presentationModel.IsUndoButtonEnabled);
+            Assert.IsFalse(presentationModel.IsRedoButtonEnabled);
+            presentationModel.Undo();
+            Assert.IsTrue(presentationModel.IsUndoButtonEnabled);
+            Assert.IsTrue(presentationModel.IsRedoButtonEnabled);
+            presentationModel.Undo();
+            Assert.IsFalse(presentationModel.IsUndoButtonEnabled);
+            Assert.IsTrue(presentationModel.IsRedoButtonEnabled);
+            presentationModel.Redo();
+            presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
+            Assert.IsTrue(presentationModel.IsUndoButtonEnabled);
+            Assert.IsFalse(presentationModel.IsRedoButtonEnabled);
+        }
 
         [TestMethod()]
         public void NotifiyModelChangeTest()
         {
+            bool flag = false;
             Assert.IsFalse(flag);
 
             presentationModel.NotifiyModelChange();
@@ -296,6 +324,78 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsFalse(button.Checked);
             presentationModel.SetToDrawState(Shape.Type.Start);
             Assert.IsTrue(button.Checked);
+        }
+
+        [TestMethod()]
+        public void IsContentDoubleClickTest()
+        {
+            Assert.IsFalse(presentationModel.IsContentDoubleClick());
+            presentationModel.SetToPointState();
+            Assert.IsFalse(presentationModel.IsContentDoubleClick());
+            presentationModel.AddShape(Shape.Type.Start, "Start content", 0, 0, 100, 100);
+            Assert.IsFalse(presentationModel.IsContentDoubleClick());
+            presentationModel.pointState.MouseDown(50, 42);
+            presentationModel.pointState.MouseDown(50, 42);
+            presentationModel.pointState.MouseDown(50, 42);
+            Assert.IsTrue(presentationModel.IsContentDoubleClick());
+        }
+
+        [TestMethod()]
+        public void RemoveShapeAtTest()
+        {
+            presentationModel.AddShape(Shape.Type.Start, "Start content", 0, 0, 100, 100);
+            Assert.AreEqual(1, this.model.GetShapes().Count);
+            Assert.AreEqual(1, this.presentationModel.commandManager.UndoCount);
+            presentationModel.RemoveShapeAt(0);
+            Assert.AreEqual(0, this.model.GetShapes().Count);
+            Assert.AreEqual(2, this.presentationModel.commandManager.UndoCount);
+        }
+        [TestMethod]
+        public void UndoTest()
+        {
+            presentationModel.AddShape(Shape.Type.Start, "Start content", 0, 0, 100, 100);
+            Assert.AreEqual(1, this.presentationModel.commandManager.UndoCount);
+            Assert.AreEqual(0, this.presentationModel.commandManager.RedoCount);
+            presentationModel.Undo();
+            Assert.AreEqual(0, this.presentationModel.commandManager.UndoCount);
+            Assert.AreEqual(1, this.presentationModel.commandManager.RedoCount);
+        }
+
+        [TestMethod]
+        public void RedoTest()
+        {
+            presentationModel.AddShape(Shape.Type.Start, "Start content", 0, 0, 100, 100);
+            Assert.AreEqual(1, this.presentationModel.commandManager.UndoCount);
+            Assert.AreEqual(0, this.presentationModel.commandManager.RedoCount);
+            presentationModel.Undo();
+            presentationModel.Redo();
+            Assert.AreEqual(1, this.presentationModel.commandManager.UndoCount);
+            Assert.AreEqual(0, this.presentationModel.commandManager.RedoCount);
+        }
+
+        [TestMethod()]
+        public void ModitySelectedContentTest()
+        {
+            presentationModel.ModitySelectedContent("modify1");
+            presentationModel.AddShape(Shape.Type.Start, "Start content", 0, 0, 100, 100);
+            var selectShape = model.GetShapes()[0];
+            model.SelectedShape = selectShape;
+            Assert.AreEqual("Start content", selectShape.Content);
+            presentationModel.ModitySelectedContent("modify2");
+            Assert.AreEqual("modify2", selectShape.Content);
+        }
+
+        [TestMethod()]
+        public void IsModifyContentConfirmButtonEnableTest()
+        {
+            presentationModel.OriginalContent = "Original";
+            Assert.AreEqual("Original", presentationModel.OriginalContent);
+            presentationModel.NewContent = "Original";
+            Assert.AreEqual("Original", presentationModel.NewContent);
+            Assert.IsFalse(presentationModel.IsModifyContentConfirmButtonEnable);
+            presentationModel.NewContent = "test";
+            Assert.AreEqual("test", presentationModel.NewContent);
+            Assert.IsTrue(presentationModel.IsModifyContentConfirmButtonEnable);
         }
     }
 }

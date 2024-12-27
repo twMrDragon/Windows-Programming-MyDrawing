@@ -36,7 +36,7 @@ namespace MyDrawing
 
             presentationModel.SetToPointState();
 
-            Test();
+            //Test();
         }
 
         private void InitDataBinding()
@@ -54,7 +54,10 @@ namespace MyDrawing
             this.toolStripButtonTerminator.DataBindings.Add("Checked", presentationModel, "IsDrawTerminatorButtonChecked");
             this.toolStripButtonDescision.DataBindings.Add("Checked", presentationModel, "IsDrawDescisionButtonChecked");
             this.toolStripButtonProcess.DataBindings.Add("Checked", presentationModel, "IsDrawProcessButtonChecked");
+            this.toolStripButtonLine.DataBindings.Add("Checked", presentationModel, "IsDrawLineButtonChecked");
             this.toolStripButtonPoint.DataBindings.Add("Checked", presentationModel, "IsPointButtonnChecked");
+            this.toolStripButtonUndo.DataBindings.Add("Enabled", presentationModel, "IsUndoButtonEnabled");
+            this.toolStripButtonRedo.DataBindings.Add("Enabled", presentationModel, "IsRedoButtonEnabled");
 
             // canvas
             Binding binding = new Binding("Cursor", presentationModel, "CanvasCousor");
@@ -103,10 +106,10 @@ namespace MyDrawing
 
         private void Test()
         {
-            this.presentationModel.CreateShape(Shape.Type.Start, "Start text", 40, 50, 50, 50);
-            this.presentationModel.CreateShape(Shape.Type.Terminator, "Terminator text", 400, 400, 180, 90);
-            this.presentationModel.CreateShape(Shape.Type.Process, "Process text", 500, 150, 100, 50);
-            this.presentationModel.CreateShape(Shape.Type.Descision, "Descision text", 90, 200, 100, 100);
+            this.presentationModel.AddShape(Shape.Type.Start, "Start text", 40, 50, 50, 50);
+            this.presentationModel.AddShape(Shape.Type.Terminator, "Terminator text", 400, 400, 180, 90);
+            this.presentationModel.AddShape(Shape.Type.Process, "Process text", 500, 150, 100, 50);
+            this.presentationModel.AddShape(Shape.Type.Descision, "Descision text", 90, 200, 100, 100);
         }
 
         private void InitComboBox()
@@ -134,9 +137,21 @@ namespace MyDrawing
             {
                 this.presentationModel.SetToDrawState(Shape.Type.Descision);
             };
+            this.toolStripButtonLine.Click += (s, e) =>
+            {
+                this.presentationModel.SetToDrawLineState();
+            };
             this.toolStripButtonPoint.Click += (s, e) =>
             {
                 this.presentationModel.SetToPointState();
+            };
+            this.toolStripButtonUndo.Click += (s, e) =>
+            {
+                this.presentationModel.Undo();
+            };
+            this.toolStripButtonRedo.Click += (s, e) =>
+            {
+                this.presentationModel.Redo();
             };
         }
 
@@ -150,6 +165,21 @@ namespace MyDrawing
             this.canvas.MouseDown += CanvasMouseDown;
             this.canvas.MouseUp += CanvasMouseUp;
             this.canvas.MouseMove += CanvasMouseMove;
+            this.canvas.MouseDoubleClick += CanvasMouseDoubleClick;
+        }
+
+        private void CanvasMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (presentationModel.IsContentDoubleClick())
+            {
+                presentationModel.OriginalContent = model.SelectedShape.Content;
+                ModifyContentForm form = new ModifyContentForm(presentationModel);
+                DialogResult result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    presentationModel.ModitySelectedContent(presentationModel.NewContent);
+                }
+            }
         }
 
         private void CanvasMouseMove(object sender, MouseEventArgs e)
@@ -171,7 +201,6 @@ namespace MyDrawing
         {
             model.Draw(new FormGraphicAdapter(e.Graphics));
         }
-
         private void BtnAddShapeClick(object sender, EventArgs e)
         {
             Shape.Type shapeType = (Shape.Type)Enum.Parse(typeof(Shape.Type), comboBoxShapeType.Text);
@@ -179,13 +208,13 @@ namespace MyDrawing
             int y = int.Parse(textBoxShapeY.Text);
             int width = int.Parse(textBoxShapeWidth.Text);
             int height = int.Parse(textBoxShapeHeight.Text);
-            this.presentationModel.CreateShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
+            this.presentationModel.AddShape(shapeType, textBoxShapeContent.Text, x, y, width, height);
         }
 
         // 重新刷新 dataGridView
         private void UpdateDataGridView()
         {
-            // 用改資料的方式增加效能
+            // 用改資料的方式減少效能消耗
             IList<Shape> shapes = model.GetShapes();
             int diff = Math.Abs(dataGridViewShapes.Rows.Count - shapes.Count);
             if (dataGridViewShapes.Rows.Count < shapes.Count)
@@ -197,14 +226,11 @@ namespace MyDrawing
             for (int i = 0; i < shapes.Count; i++)
             {
                 Shape shape = shapes[i];
-                dataGridViewShapes.Rows[i].Cells[1].Value = "刪除";
-                dataGridViewShapes.Rows[i].Cells[1].Value = i + 1;
-                dataGridViewShapes.Rows[i].Cells[2].Value = shape.ShapeName;
-                dataGridViewShapes.Rows[i].Cells[3].Value = shape.Content;
-                dataGridViewShapes.Rows[i].Cells[4].Value = shape.X;
-                dataGridViewShapes.Rows[i].Cells[5].Value = shape.Y;
-                dataGridViewShapes.Rows[i].Cells[6].Value = shape.Height;
-                dataGridViewShapes.Rows[i].Cells[7].Value = shape.Width;
+                object[] value = { "刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width };
+                for (int j = 0; j < value.Length; j++)
+                    // 只更新資料有變的 cell
+                    if (!object.Equals(dataGridViewShapes.Rows[i].Cells[j].Value, value[j]))
+                        dataGridViewShapes.Rows[i].Cells[j].Value = value[j];
             }
         }
 
@@ -213,7 +239,7 @@ namespace MyDrawing
         {
             // 當刪除按鈕欄被點擊時
             if (e.ColumnIndex == 0)
-                model.RemoveShapeAt(e.RowIndex);
+                presentationModel.RemoveShapeAt(e.RowIndex);
         }
 
         // 被告知要更新畫布和 dataGridView
@@ -222,9 +248,6 @@ namespace MyDrawing
             // canvas
             this.canvas.Invalidate();
             // datagridview
-            // 如過正在畫圖就不更新 dataGridView，因為資料沒變
-            if (presentationModel.IsDrawButtonChecked)
-                return;
             UpdateDataGridView();
         }
     }

@@ -1,4 +1,5 @@
-﻿using MyDrawing.shape;
+﻿using MyDrawing.command;
+using MyDrawing.shape;
 using MyDrawing.state;
 using System;
 using System.ComponentModel;
@@ -9,7 +10,10 @@ namespace MyDrawing.presentationModel
     {
         readonly private Model model;
 
-        // Observer
+        // command pattern
+        public CommandManager commandManager = new CommandManager();
+
+        // Observer pattern
         public delegate void ModelChangedEventHandler();
         public event ModelChangedEventHandler ModelChanged;
 
@@ -25,21 +29,54 @@ namespace MyDrawing.presentationModel
         private string labelShapeYColor = "#FF0000";
         private string labelShapeWidthColor = "#FF0000";
         private string labelShapeHeightColor = "#FF0000";
+        // modify content form
+        private string originalContent;
+        private string newContent;
 
         // state
         private IState currnetState;
-        readonly public IState pointState;
-        readonly public IState drawState;
-
+        readonly public PointState pointState;
+        readonly public DrawState drawState;
+        readonly public DrawLineState drawLineState;
 
         public PresentationModel(Model model)
         {
             this.model = model;
-            this.pointState = new PointState(this.model);
+            this.pointState = new PointState(this.model, this);
             this.drawState = new DrawState(this.model, this);
+            this.drawLineState = new DrawLineState(this.model, this);
         }
 
-        public void CreateShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
+        public string OriginalContent
+        {
+            get { return this.originalContent; }
+            set
+            {
+                this.originalContent = value;
+                Notify(nameof(IsModifyContentConfirmButtonEnable));
+            }
+        }
+
+        public string NewContent
+        {
+            get { return this.newContent; }
+            set
+            {
+                this.newContent = value;
+                Notify(nameof(IsModifyContentConfirmButtonEnable));
+            }
+        }
+
+        public bool IsContentDoubleClick()
+        {
+            if (this.currnetState != pointState)
+                return false;
+            if (model.SelectedShape == null)
+                return false;
+            return this.pointState.IsContentDoubleClick();
+        }
+
+        public void AddShape(Shape.Type shapeType, string content, int x, int y, int width, int height)
         {
             Shape shape = ShapeFactory.CreateShape(shapeType);
             shape.Content = content;
@@ -49,15 +86,47 @@ namespace MyDrawing.presentationModel
             shape.Y = y;
             shape.Width = width;
             shape.Height = height;
-            this.model.AddShape(shape);
+            this.commandManager.Execute(new AddCommand(this.model, shape));
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void RemoveShapeAt(int index)
+        {
+            this.commandManager.Execute(new DeleteCommand(this.model, index));
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void Execute(ICommand command)
+        {
+            commandManager.Execute(command);
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void Undo()
+        {
+            this.commandManager.Undo();
+            NotifyUndoRedoToolStripButton();
+        }
+
+        public void Redo()
+        {
+            this.commandManager.Redo();
+            NotifyUndoRedoToolStripButton();
         }
 
         public void SetToDrawState(Shape.Type shapeType)
         {
             this.currnetState = this.drawState;
-            this.model.notCompleteShapeType = shapeType;
-            this.model.selectedShape = null;
-            this.model.NotifiyModelChange();
+            this.drawState.notCompleteShapeType = shapeType;
+            this.model.SelectedShape = null;
+            NotifyToolStripButton();
+            NotifyCanvasCursor();
+        }
+
+        public void SetToDrawLineState()
+        {
+            this.currnetState = this.drawLineState;
+            this.model.SelectedShape = null;
             NotifyToolStripButton();
             NotifyCanvasCursor();
         }
@@ -74,12 +143,19 @@ namespace MyDrawing.presentationModel
             Notify("CanvasCousor");
         }
 
+        private void NotifyUndoRedoToolStripButton()
+        {
+            Notify("IsUndoButtonEnabled");
+            Notify("IsRedoButtonEnabled");
+        }
+
         private void NotifyToolStripButton()
         {
             Notify("IsDrawStartButtonChecked");
             Notify("IsDrawTerminatorButtonChecked");
             Notify("IsDrawDescisionButtonChecked");
             Notify("IsDrawProcessButtonChecked");
+            Notify("IsDrawLineButtonChecked");
             Notify("IsPointButtonnChecked");
         }
 
@@ -96,6 +172,14 @@ namespace MyDrawing.presentationModel
         public void HandleMouseMoved(double x, double y)
         {
             currnetState.MouseMove(x, y);
+        }
+
+        public void ModitySelectedContent(string content)
+        {
+            if (this.model.SelectedShape == null)
+                return;
+            this.commandManager.Execute(new TextChangeCommand(this.model.SelectedShape, content));
+            NotifyUndoRedoToolStripButton();
         }
 
         public void LabelShapeContentChange(string content)
@@ -196,46 +280,65 @@ namespace MyDrawing.presentationModel
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+        /// <summary>
+        /// 屬性
+        /// </summary>
 
+        // 確認修改文字按鈕
+        public bool IsModifyContentConfirmButtonEnable
+        {
+            get { return this.originalContent != this.newContent; }
+        }
+
+        // 當前狀態 (用在 unit test)
         public IState CurrentState
         {
             get { return this.currnetState; }
         }
 
+        // 鼠標圖案
         public string CanvasCousor
         {
-            get { return this.currnetState == this.drawState ? "Cross" : "Default"; }
+            get { return this.currnetState == this.pointState ? "Default" : "Cross"; }
         }
 
-        // state
+        // point 按鈕相關
         public bool IsPointButtonnChecked
         {
             get { return this.currnetState == this.pointState; }
         }
-        public bool IsDrawButtonChecked
-        {
-            get { return this.currnetState == this.drawState; }
-        }
-
-        // draw shape
+        // 各種繪圖按鈕相關
         public bool IsDrawStartButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Start; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Start; }
         }
         public bool IsDrawTerminatorButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Terminator; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Terminator; }
         }
         public bool IsDrawDescisionButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Descision; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Descision; }
         }
         public bool IsDrawProcessButtonChecked
         {
-            get { return this.currnetState == this.drawState && this.model.notCompleteShapeType == Shape.Type.Process; }
+            get { return this.currnetState == this.drawState && this.drawState.notCompleteShapeType == Shape.Type.Process; }
+        }
+        public bool IsDrawLineButtonChecked
+        {
+            get { return this.currnetState == this.drawLineState; }
+        }
+        // redo undo 按鈕相關
+        public bool IsRedoButtonEnabled
+        {
+            get { return this.commandManager.IsRedoEnabled; }
+        }
+        public bool IsUndoButtonEnabled
+        {
+            get { return this.commandManager.IsUndoEnabled; }
         }
 
-        // data input
+        // 使用者輸入資料相關
         public bool IsBtnAddEnabled
         {
             get { return this.isBtnAddEnabled; }

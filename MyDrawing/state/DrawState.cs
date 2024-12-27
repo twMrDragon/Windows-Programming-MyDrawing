@@ -1,10 +1,13 @@
-﻿using MyDrawing.presentationModel;
+﻿using MyDrawing.command;
+using MyDrawing.presentationModel;
+using MyDrawing.shape;
 using MyDrawing.utils;
 
 namespace MyDrawing.state
 {
     public class DrawState : IState
     {
+        public Shape.Type notCompleteShapeType;
         readonly Model model;
         readonly PresentationModel presentationModel;
 
@@ -24,11 +27,11 @@ namespace MyDrawing.state
         {
             if (!(x > 0 && y > 0))
                 return;
+
             isPressed = true;
             firstX = x;
             firstY = y;
-            this.model.notCompleteShape = ShapeFactory.CreateShape(this.model.notCompleteShapeType);
-            this.model.NotifiyModelChange();
+            this.model.NotCompleteShape = ShapeFactory.CreateShape(this.notCompleteShapeType);
         }
 
         public void MouseMove(double x, double y)
@@ -38,7 +41,6 @@ namespace MyDrawing.state
             this.secondX = x;
             this.secondY = y;
             FixNotCompletedShape();
-            this.model.NotifiyModelChange();
         }
 
         public void MouseUp(double x, double y)
@@ -46,15 +48,15 @@ namespace MyDrawing.state
             if (!isPressed)
                 return;
             isPressed = false;
+
             this.secondX = x;
             this.secondY = y;
-            this.model.notCompleteShape.Content = Utils.GenerateRandomString();
             FixNotCompletedShape();
-            this.model.AddShapeFromNotComplete();
-            this.model.selectedShape = this.model.notCompleteShape;
-            this.model.notCompleteShape = null;
+            this.model.NotCompleteShape.Content = Utils.GenerateRandomString();
+            this.presentationModel.Execute(new DrawCommand(this.model, this.model.NotCompleteShape));
+            this.model.SelectedShape = this.model.NotCompleteShape;
+            this.model.NotCompleteShape = null;
             this.presentationModel.SetToPointState();
-            this.model.NotifiyModelChange();
         }
 
         private void FixNotCompletedShape()
@@ -63,12 +65,12 @@ namespace MyDrawing.state
             double largerX = firstX < secondX ? secondX : firstX;
             double smallerY = firstY < secondY ? firstY : secondY;
             double largerY = firstY < secondY ? secondY : firstY;
-            this.model.notCompleteShape.X = (int)smallerX;
-            this.model.notCompleteShape.Y = (int)smallerY;
-            this.model.notCompleteShape.Width = (int)(largerX - smallerX);
-            this.model.notCompleteShape.Height = (int)(largerY - smallerY);
-            this.model.notCompleteShape.ContentRelativelyX = this.model.notCompleteShape.Width / 2;
-            this.model.notCompleteShape.ContentRelativelyY = this.model.notCompleteShape.Height / 2;
+            this.model.NotCompleteShape.X = (int)smallerX;
+            this.model.NotCompleteShape.Y = (int)smallerY;
+            this.model.NotCompleteShape.Width = (int)(largerX - smallerX);
+            this.model.NotCompleteShape.Height = (int)(largerY - smallerY);
+            this.model.NotCompleteShape.ContentRelativelyX = this.model.NotCompleteShape.Width / 2;
+            this.model.NotCompleteShape.ContentRelativelyY = this.model.NotCompleteShape.Height / 2;
         }
     }
 }

@@ -46,8 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="command\AddCommand.cs" />
+    <Compile Include="command\CommandManager.cs" />
+    <Compile Include="command\DeleteCommand.cs" />
+    <Compile Include="command\DrawCommand.cs" />
+    <Compile Include="command\ICommand.cs" />
+    <Compile Include="command\MoveCommand.cs" />
+    <Compile Include="command\TextChangeCommand.cs" />
+    <Compile Include="command\TextMoveCommand.cs" />
     <Compile Include="controls\DoubleBufferedPanel.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="controls\ModifyContentForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="controls\ModifyContentForm.Designer.cs">
+      <DependentUpon>ModifyContentForm.cs</DependentUpon>
     </Compile>
     <Compile Include="controls\ToolStripBindableButton.cs">
       <SubType>Component</SubType>
@@ -65,6 +79,7 @@
     <Compile Include="presentationModel\PresentationModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="shape\Line.cs" />
     <Compile Include="shape\ShapeFactory.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -76,10 +91,14 @@
     <Compile Include="shape\Shape.cs" />
     <Compile Include="shape\Start.cs" />
     <Compile Include="shape\Terminator.cs" />
+    <Compile Include="state\DrawLineState.cs" />
     <Compile Include="state\DrawState.cs" />
     <Compile Include="state\IState.cs" />
     <Compile Include="state\PointState.cs" />
     <Compile Include="utils\Utils.cs" />
+    <EmbeddedResource Include="controls\ModifyContentForm.resx">
+      <DependentUpon>ModifyContentForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -116,5 +135,15 @@
   <ItemGroup>
     <None Include="Resources\cursor.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redo.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

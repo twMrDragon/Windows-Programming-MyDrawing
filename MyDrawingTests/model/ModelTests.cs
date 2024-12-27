@@ -56,8 +56,11 @@ namespace MyDrawing.Tests
             model.AddShape(process);
             model.AddShape(descision);
 
+            model.SelectedShape = terminator;
+
             Assert.AreEqual(terminator, model.GetShapes()[1]);
             model.RemoveShapeAt(1);
+            Assert.AreEqual(null, model.SelectedShape);
             Assert.AreEqual(process, model.GetShapes()[1]);
             model.RemoveShapeAt(1);
             Assert.AreEqual(descision, model.GetShapes()[1]);
@@ -84,7 +87,7 @@ namespace MyDrawing.Tests
             Assert.AreEqual(0, adapter.Command.Count);
 
             adapter.ClearAll();
-            model.notCompleteShape = new Start();
+            model.NotCompleteShape = new Start();
             model.Draw(adapter);
             Assert.AreNotEqual(0, adapter.Command.Count);
         }
@@ -98,7 +101,7 @@ namespace MyDrawing.Tests
 
             adapter.ClearAll();
             // 這不可能發生，因為 model 中的 shapes 是空的，但是 selectedShpae 不為 null
-            model.selectedShape = new Start();
+            model.SelectedShape = new Start();
             model.Draw(adapter);
             Assert.AreNotEqual(0, adapter.Command.Count);
         }
@@ -107,12 +110,12 @@ namespace MyDrawing.Tests
         public void AddShapeFromNotCompleteTest()
         {
             Start start = new Start();
-            Assert.AreEqual(null, model.notCompleteShape);
-            model.AddShapeFromNotComplete();
+            Assert.AreEqual(null, model.NotCompleteShape);
+            model.AddShape(model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
 
-            model.notCompleteShape = start;
-            model.AddShapeFromNotComplete();
+            model.NotCompleteShape = start;
+            model.AddShape(model.NotCompleteShape);
             Assert.AreEqual(1, model.GetShapes().Count);
             Assert.AreEqual(start, model.GetShapes().Last());
         }
@@ -133,6 +136,21 @@ namespace MyDrawing.Tests
             };
             model.NotifiyModelChange();
             Assert.IsTrue(flag);
+        }
+
+        [TestMethod()]
+        public void InsertShapeTest()
+        {
+            Start start = new Start();
+            Terminator terminator = new Terminator();
+            Process process = new Process();
+
+            model.AddShape(start);
+            Assert.AreEqual(start, model.GetShapes()[0]);
+            model.InsertShape(0, terminator);
+            Assert.AreEqual(terminator, model.GetShapes()[0]);
+            model.InsertShape(2, process);
+            Assert.AreEqual(process, model.GetShapes()[2]);
         }
     }
 }

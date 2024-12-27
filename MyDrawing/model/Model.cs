@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace MyDrawing
 {
+    /// <summary>
+    /// 成員大部分只放會顯示在介面上的物件
+    /// </summary>
     public class Model
     {
         // Observer pattern
@@ -13,10 +16,53 @@ namespace MyDrawing
 
         // 圖形s
         readonly private List<Shape> shapes = new List<Shape>();
+        private Shape notCompleteShape = null;
+        public Shape NotCompleteShape
+        {
+            get => notCompleteShape;
+            set
+            {
+                notCompleteShape = value;
+                if (notCompleteShape != null)
+                    notCompleteShape.PropertyChanged += () => { NotifiyModelChange(); };
+                NotifiyModelChange();
+            }
+        }
+        private Shape selectedShape = null;
+        public Shape SelectedShape
+        {
+            get => selectedShape;
+            set
+            {
+                selectedShape = value;
+                NotifiyModelChange();
+            }
+        }
+        private Shape hoverShape = null;
+        public Shape HoverShape
+        {
+            get => hoverShape;
+            set
+            {
+                hoverShape = value;
+                NotifiyModelChange();
+            }
+        }
 
-        public Shape.Type notCompleteShapeType;
-        public Shape notCompleteShape = null;
-        public Shape selectedShape = null;
+        // 連線
+        private Line notCompleteLine = null;
+        public Line NotCompleteLine
+        {
+            get => notCompleteLine;
+            set
+            {
+                notCompleteLine = value;
+                if (notCompleteLine != null)
+                    notCompleteLine.PropertyChanged += () => { NotifiyModelChange(); };
+                NotifiyModelChange();
+            }
+        }
+
 
         static public string[] GetShapeTypesName()
         {
@@ -27,16 +73,25 @@ namespace MyDrawing
         {
             return shapes.AsReadOnly();
         }
-
         public void AddShape(Shape shape)
         {
+            if (shape == null)
+                return;
             this.shapes.Add(shape);
+            shape.PropertyChanged += () => { NotifiyModelChange(); };
             NotifiyModelChange();
         }
         public void RemoveShapeAt(int index)
         {
+            if (shapes[index] == selectedShape)
+                selectedShape = null;
             shapes.RemoveAt(index);
-            selectedShape = null;
+            NotifiyModelChange();
+        }
+        public void InsertShape(int index, Shape shape)
+        {
+            this.shapes.Insert(index, shape);
+            shape.PropertyChanged += () => { NotifiyModelChange(); };
             NotifiyModelChange();
         }
 
@@ -51,14 +106,9 @@ namespace MyDrawing
             notCompleteShape?.DrawShape(graphics);
             selectedShape?.DrawContentBorder(graphics);
             selectedShape?.DrawBorder(graphics);
-        }
+            notCompleteLine?.DrawShape(graphics);
 
-        public void AddShapeFromNotComplete()
-        {
-            if (this.notCompleteShape == null)
-                return;
-            this.shapes.Add(notCompleteShape);
-            NotifiyModelChange();
+            hoverShape?.DrawConnectPoint(graphics);
         }
 
         public void NotifiyModelChange()

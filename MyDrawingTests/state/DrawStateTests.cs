@@ -7,7 +7,7 @@ namespace MyDrawing.state.Tests
     [TestClass()]
     public class DrawStateTests
     {
-        IState drawState;
+        DrawState drawState;
         PresentationModel presentationModel;
         Model model;
 
@@ -22,11 +22,11 @@ namespace MyDrawing.state.Tests
         [TestMethod()]
         public void DrawStateDrawLeftTopToRightBottom()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 左上畫到右下
             drawState.MouseDown(1, 2);
-            Assert.AreNotEqual(null, model.notCompleteShape);
+            Assert.AreNotEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
 
             drawState.MouseMove(50, 51);
@@ -34,17 +34,17 @@ namespace MyDrawing.state.Tests
 
             drawState.MouseUp(100, 101);
             Assert.AreNotEqual(0, model.GetShapes().Count);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
         }
 
         [TestMethod()]
         public void DrawStateDrawLeftBottomToRightTop()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 左下畫到右上
             drawState.MouseDown(1, 101);
-            Assert.AreNotEqual(null, model.notCompleteShape);
+            Assert.AreNotEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
 
             drawState.MouseMove(50, 51);
@@ -52,17 +52,17 @@ namespace MyDrawing.state.Tests
 
             drawState.MouseUp(100, 2);
             Assert.AreNotEqual(0, model.GetShapes().Count);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
         }
 
         [TestMethod()]
         public void DrawStateDrawRightBottomToLeftTop()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 右下畫到左上
             drawState.MouseDown(100, 101);
-            Assert.AreNotEqual(null, model.notCompleteShape);
+            Assert.AreNotEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
 
             drawState.MouseMove(50, 51);
@@ -70,17 +70,17 @@ namespace MyDrawing.state.Tests
 
             drawState.MouseUp(1, 2);
             Assert.AreNotEqual(0, model.GetShapes().Count);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
         }
 
         [TestMethod()]
         public void DrawStateDrawRightTopToLeftBottom()
         {
-            model.notCompleteShapeType = Shape.Type.Start;
+            presentationModel.drawState.notCompleteShapeType = Shape.Type.Start;
 
             // 右上畫到左下
             drawState.MouseDown(100, 2);
-            Assert.AreNotEqual(null, model.notCompleteShape);
+            Assert.AreNotEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
 
             drawState.MouseMove(50, 51);
@@ -88,18 +88,18 @@ namespace MyDrawing.state.Tests
 
             drawState.MouseUp(1, 101);
             Assert.AreNotEqual(0, model.GetShapes().Count);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
         }
 
         [TestMethod()]
         public void DrawStateOnlyMouseDownLeastOrEqualThan0()
         {
             drawState.MouseDown(0, -1);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
 
             drawState.MouseDown(-2, -3);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
         }
 
@@ -107,7 +107,7 @@ namespace MyDrawing.state.Tests
         public void DrawStateOnlyMouseMove()
         {
             drawState.MouseMove(1, 2);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
         }
 
@@ -115,7 +115,7 @@ namespace MyDrawing.state.Tests
         public void DrawStateOnlyMouseUp()
         {
             drawState.MouseUp(1, 2);
-            Assert.AreEqual(null, model.notCompleteShape);
+            Assert.AreEqual(null, model.NotCompleteShape);
             Assert.AreEqual(0, model.GetShapes().Count);
         }
     }
