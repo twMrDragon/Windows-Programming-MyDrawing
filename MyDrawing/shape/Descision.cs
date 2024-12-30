@@ -8,6 +8,7 @@ namespace MyDrawing.shape
         public Descision()
         {
             this.ShapeName = "Descision";
+            this.ShapeType = Shape.Type.Descision;
         }
         public override void DrawShape(IGraphics graphics)
         {

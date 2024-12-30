@@ -18,7 +18,7 @@ namespace MyDrawing.presentationModel.Tests
             presentationModel = new PresentationModel(model);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void CreateShapeTest()
         {
             Assert.AreEqual(0, model.GetShapes().Count);
@@ -28,7 +28,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual(2, model.GetShapes().Count);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SetToDrawStateTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
@@ -48,21 +48,21 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual(presentationModel.drawState, presentationModel.CurrentState);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SetToPointStateTest()
         {
             presentationModel.SetToPointState();
             Assert.AreEqual(presentationModel.pointState, presentationModel.CurrentState);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void SetToDrawLineStateTest()
         {
             presentationModel.SetToDrawLineState();
             Assert.AreEqual(presentationModel.drawLineState, presentationModel.CurrentState);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void DrawStateTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
@@ -77,7 +77,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual(199, shape.Height);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void PointStateTest()
         {
             presentationModel.AddShape(Shape.Type.Start, "Content", 0, 10, 200, 100);
@@ -92,7 +92,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual(100, shape.Height);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LabelShapeContentChangeTest()
         {
             presentationModel.LabelShapeContentChange("");
@@ -102,7 +102,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual("#000000", presentationModel.LabelShapeContentColor);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LabelShapeXChangeTest()
         {
             presentationModel.LabelShapeXChange("");
@@ -124,7 +124,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual("#000000", presentationModel.LabelShapeXColor);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LabelShapeYChangeTest()
         {
             presentationModel.LabelShapeYChange("");
@@ -146,7 +146,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual("#000000", presentationModel.LabelShapeYColor);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LabelShapeWidthChangeTest()
         {
             presentationModel.LabelShapeWidthChange("");
@@ -168,7 +168,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual("#000000", presentationModel.LabelShapeWidthColor);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void LabelShapeHeightChangeTest()
         {
             presentationModel.LabelShapeHeightChange("");
@@ -190,7 +190,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual("#000000", presentationModel.LabelShapeHeightColor);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void IsBtnAddEnabledTest()
         {
             presentationModel.LabelShapeContentChange("");
@@ -207,7 +207,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsFalse(presentationModel.IsBtnAddEnabled);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void CanvasCousorTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
@@ -217,7 +217,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual("Default", presentationModel.CanvasCousor);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void StateButtonCheckTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
@@ -230,7 +230,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsTrue(presentationModel.IsDrawLineButtonChecked);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void DrawStateShapeButtonCheckTest()
         {
             presentationModel.SetToDrawState(Shape.Type.Start);
@@ -278,7 +278,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsFalse(presentationModel.IsDrawDescisionButtonChecked);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void UndoRedoButtonCheckTest()
         {
             Assert.IsFalse(presentationModel.IsUndoButtonEnabled);
@@ -299,7 +299,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsFalse(presentationModel.IsRedoButtonEnabled);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void NotifiyModelChangeTest()
         {
             bool flag = false;
@@ -316,7 +316,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsTrue(flag);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void DataBindingNotifyTest()
         {
             ToolStripBindableButton button = new ToolStripBindableButton();
@@ -326,7 +326,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsTrue(button.Checked);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void IsContentDoubleClickTest()
         {
             Assert.IsFalse(presentationModel.IsContentDoubleClick());
@@ -340,8 +340,8 @@ namespace MyDrawing.presentationModel.Tests
             Assert.IsTrue(presentationModel.IsContentDoubleClick());
         }
 
-        [TestMethod()]
-        public void RemoveShapeAtTest()
+        [TestMethod]
+        public void RemoveShapeAtWithSingleShapeTest()
         {
             presentationModel.AddShape(Shape.Type.Start, "Start content", 0, 0, 100, 100);
             Assert.AreEqual(1, this.model.GetShapes().Count);
@@ -350,6 +350,24 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual(0, this.model.GetShapes().Count);
             Assert.AreEqual(2, this.presentationModel.commandManager.UndoCount);
         }
+
+        [TestMethod]
+        public void RemoveShapeAtWithLineTest()
+        {
+            presentationModel.AddShape(Shape.Type.Start, "Start content", 0, 0, 100, 100);
+            presentationModel.AddShape(Shape.Type.Start, "Start content", 200, 200, 100, 100);
+            Line line = new Line();
+            line.StartShape = model.GetShapes()[0];
+            line.StartShapeConnectPoint = Shape.ConnectPoint.Top;
+            line.EndShape = model.GetShapes()[1];
+            line.EndShapeConnectPoint = Shape.ConnectPoint.Top;
+            this.model.AddShape(line);
+
+            Assert.AreEqual(3, this.model.GetShapes().Count);
+            presentationModel.RemoveShapeAt(1);
+            Assert.AreEqual(1, this.model.GetShapes().Count);
+        }
+
         [TestMethod]
         public void UndoTest()
         {
@@ -373,7 +391,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual(0, this.presentationModel.commandManager.RedoCount);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void ModitySelectedContentTest()
         {
             presentationModel.ModitySelectedContent("modify1");
@@ -385,7 +403,7 @@ namespace MyDrawing.presentationModel.Tests
             Assert.AreEqual("modify2", selectShape.Content);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void IsModifyContentConfirmButtonEnableTest()
         {
             presentationModel.OriginalContent = "Original";

@@ -9,6 +9,7 @@ namespace MyDrawing.shape
         public Line()
         {
             this.ShapeName = "Line";
+            this.ShapeType = Shape.Type.Line;
         }
 
         private Shape startShape;

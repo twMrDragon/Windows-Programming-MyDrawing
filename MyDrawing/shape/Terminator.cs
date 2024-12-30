@@ -9,6 +9,7 @@ namespace MyDrawing.shape
         public Terminator()
         {
             this.ShapeName = "Terminator";
+            this.ShapeType = Shape.Type.Terminator;
         }
         public override void DrawShape(IGraphics graphics)
         {

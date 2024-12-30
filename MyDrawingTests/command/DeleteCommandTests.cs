@@ -12,7 +12,7 @@ namespace MyDrawing.command.Tests
             Model model = new Model();
             model.AddShape(new Start());
             Assert.AreEqual(1, model.GetShapes().Count);
-            DeleteCommand command = new DeleteCommand(model, 0);
+            DeleteCommand command = new DeleteCommand(model, new[] { 0 });
             command.Execute();
             Assert.AreEqual(0, model.GetShapes().Count);
             command.UnExecute();

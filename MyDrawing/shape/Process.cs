@@ -8,6 +8,7 @@ namespace MyDrawing.shape
         public Process()
         {
             this.ShapeName = "Process";
+            this.ShapeType = Shape.Type.Process;
         }
 
         public override void DrawShape(IGraphics graphics)

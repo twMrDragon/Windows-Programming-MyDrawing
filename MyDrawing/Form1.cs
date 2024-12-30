@@ -36,7 +36,7 @@ namespace MyDrawing
 
             presentationModel.SetToPointState();
 
-            //Test();
+            Test();
         }
 
         private void InitDataBinding()

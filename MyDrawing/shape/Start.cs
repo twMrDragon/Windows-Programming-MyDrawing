@@ -9,6 +9,7 @@ namespace MyDrawing.shape
         public Start()
         {
             this.ShapeName = "Start";
+            this.ShapeType = Shape.Type.Start;
         }
         public override void DrawShape(IGraphics graphics)
         {

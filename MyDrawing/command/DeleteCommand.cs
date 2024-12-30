@@ -1,27 +1,36 @@
 ﻿using MyDrawing.shape;
+using System;
 
 namespace MyDrawing.command
 {
     public class DeleteCommand : ICommand
     {
         Model model;
-        Shape shape;
-        int index;
-        public DeleteCommand(Model model, int index)
+        Shape[] shape;
+        int[] indexes;
+        public DeleteCommand(Model model, int[] indexes)
         {
             this.model = model;
-            this.index = index;
+            Array.Sort(indexes);
+            this.indexes = indexes;
         }
 
         public void Execute()
         {
-            this.shape = this.model.GetShapes()[index];
-            this.model.RemoveShapeAt(index);
+            shape = new Shape[indexes.Length];
+            for (int i = indexes.Length - 1; i >= 0; i--)
+            {
+                shape[i] = model.GetShapes()[indexes[i]];
+                this.model.RemoveShapeAt(indexes[i]);
+            }
         }
 
         public void UnExecute()
         {
-            this.model.InsertShape(this.index, this.shape);
+            for (int i = 0; i < indexes.Length; i++)
+            {
+                this.model.InsertShape(indexes[i], shape[i]);
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 using MyDrawing.shape;
 using MyDrawing.state;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace MyDrawing.presentationModel
@@ -92,7 +93,20 @@ namespace MyDrawing.presentationModel
 
         public void RemoveShapeAt(int index)
         {
-            this.commandManager.Execute(new DeleteCommand(this.model, index));
+            IList<Shape> shapes = model.GetShapes();
+            Shape mainRemoveShape = shapes[index];
+            List<int> removeIndexes = new List<int> { index };
+            for (int i = 0; i < shapes.Count; i++)
+            {
+                if (shapes[i].ShapeType == Shape.Type.Line)
+                {
+                    Line line = (Line)shapes[i];
+                    if (line.StartShape == mainRemoveShape || line.EndShape == mainRemoveShape)
+                        removeIndexes.Add(i);
+                }
+            }
+
+            this.commandManager.Execute(new DeleteCommand(this.model, removeIndexes.ToArray()));
             NotifyUndoRedoToolStripButton();
         }
 

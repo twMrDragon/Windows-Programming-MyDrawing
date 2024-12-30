@@ -20,7 +20,8 @@ namespace MyDrawing.shape
             Start,
             Terminator,
             Process,
-            Descision
+            Descision,
+            Line
         }
 
         public enum ConnectPoint
@@ -39,6 +40,20 @@ namespace MyDrawing.shape
         private int height;
         private int contentRelativelyX;
         private int contentRelativelyY;
+        private Shape.Type shapeType;
+
+        public Shape.Type ShapeType
+        {
+            get => shapeType;
+            set
+            {
+                if (shapeType != value)
+                {
+                    shapeType = value;
+                    PropertyChanged?.Invoke();
+                }
+            }
+        }
 
         public string ShapeName
         {

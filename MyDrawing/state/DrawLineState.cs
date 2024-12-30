@@ -46,6 +46,8 @@ namespace MyDrawing.state
             IList<Shape> shapes = this.model.GetShapes();
             for (int i = shapes.Count - 1; i >= 0; i--)
             {
+                if (shapes[i].ShapeType == Shape.Type.Line)
+                    continue;
                 // 經過形狀
                 if (shapes[i].IsPointIn(x, y) ||
                     shapes[i].IsPointInConnectPoint(x, y, Shape.ConnectPoint.Top) ||

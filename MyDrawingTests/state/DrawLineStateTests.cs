@@ -54,15 +54,15 @@ namespace MyDrawing.state.Tests
         public void DrawLineStateMouseDownNotAtConnectPoint()
         {
             drawLineState.MouseDown(200, 100);
-            Assert.AreEqual(null, model.NotCompleteLine);
+            Assert.IsNull(model.NotCompleteLine);
             drawLineState.MouseMove(100, 50);
-            Assert.AreEqual(null, model.NotCompleteLine);
+            Assert.IsNull(model.NotCompleteLine);
             drawLineState.MouseMove(250, 150);
-            Assert.AreEqual(null, model.NotCompleteLine);
+            Assert.IsNull(model.NotCompleteLine);
             drawLineState.MouseMove(400, 350);
-            Assert.AreEqual(null, model.NotCompleteLine);
+            Assert.IsNull(model.NotCompleteLine);
             drawLineState.MouseUp(400, 300);
-            Assert.AreEqual(null, model.NotCompleteLine);
+            Assert.IsNull(model.NotCompleteLine);
             Assert.AreEqual(2, model.GetShapes().Count);
         }
 
@@ -94,6 +94,28 @@ namespace MyDrawing.state.Tests
             drawLineState.MouseMove(250, 150);
             drawLineState.MouseUp(200, 50);
             Assert.AreEqual(2, model.GetShapes().Count);
+        }
+
+        [TestMethod]
+        public void DrawLineStatePassLine()
+        {
+            Line line = new Line();
+            line.StartShape = model.GetShapes()[0];
+            line.StartShape = model.GetShapes()[1];
+            line.StartShapeConnectPoint = Shape.ConnectPoint.Bottom;
+            line.EndShapeConnectPoint = Shape.ConnectPoint.Top;
+            model.AddShape(line);
+            Assert.IsNull(model.HoverShape);
+            drawLineState.MouseDown(100, 100);
+            drawLineState.MouseMove(100, 100);
+            Assert.IsNotNull(model.HoverShape);
+            // 線的左連接點
+            drawLineState.MouseMove(250, 200);
+            Assert.IsNull(model.HoverShape);
+            drawLineState.MouseMove(400, 300);
+            Assert.IsNotNull(model.HoverShape);
+            drawLineState.MouseUp(400, 300);
+            Assert.AreEqual(4, model.GetShapes().Count);
         }
     }
 }
