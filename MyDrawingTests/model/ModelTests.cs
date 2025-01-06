@@ -3,7 +3,7 @@ using MyDrawing.graphics;
 using MyDrawing.shape;
 using System.Linq;
 
-namespace MyDrawing.Tests
+namespace MyDrawing.model.Tests
 {
     [TestClass()]
     public class ModelTests
