@@ -22,9 +22,11 @@ namespace MyDrawing.ui.Tests
         }
 
         [TestMethod]
-        public void TestTest()
+        public void TestStriptButtonClick()
         {
-
+            robor.ClickButton("toolStripButton1");
+            robor.AssertEnable("toolStripButton1", true);
+            //robor.ClickButton("toolStripButtonTerminator");
         }
 
         [TestCleanup()]
