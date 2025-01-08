@@ -116,6 +116,28 @@ namespace MyDrawingTests.ui.Tests
             _driver.FindElementByName($"{columnName} 資料列 {rowIndex}").Click();
         }
 
+        //test
+        public void MouseAction(string name, int startX, int startY, int endX, int endY)
+        {
+            WindowsElement element = _driver.FindElementByAccessibilityId(name);
+            var action = new OpenQA.Selenium.Interactions.Actions(_driver);
+            action.MoveToElement(element, startX, startY)
+                .ClickAndHold()
+                .MoveByOffset(endX - startX, endY - startY)
+                .Release()
+                .Perform();
+        }
+
+        // test
+        public void AssertChecked(string name, bool expected)
+        {
+            WindowsElement element = _driver.FindElementByName(name);
+            string stateValue = element.GetAttribute("LegacyState");
+            int state = int.Parse(stateValue);
+            const int STATE_CHECKED = 0x4;
+            Assert.AreEqual(expected, (state & STATE_CHECKED) == STATE_CHECKED);
+        }
+
         // test
         public void AssertEnable(string name, bool state)
         {

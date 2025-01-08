@@ -397,7 +397,7 @@
             this.toolStripButtonStart.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStart.Name = "toolStripButtonStart";
             this.toolStripButtonStart.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonStart.Text = "toolStripButton1";
+            this.toolStripButtonStart.Text = "toolStripButtonStart";
             this.toolStripButtonStart.ToolTipText = "Start";
             // 
             // toolStripButtonTerminator
@@ -407,7 +407,7 @@
             this.toolStripButtonTerminator.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonTerminator.Name = "toolStripButtonTerminator";
             this.toolStripButtonTerminator.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonTerminator.Text = "toolStripButton2";
+            this.toolStripButtonTerminator.Text = "toolStripButtonTerminator";
             this.toolStripButtonTerminator.ToolTipText = "Terminator";
             // 
             // toolStripButtonProcess
@@ -417,7 +417,7 @@
             this.toolStripButtonProcess.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonProcess.Name = "toolStripButtonProcess";
             this.toolStripButtonProcess.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonProcess.Text = "toolStripButton3";
+            this.toolStripButtonProcess.Text = "toolStripButtonProcess";
             this.toolStripButtonProcess.ToolTipText = "Process";
             // 
             // toolStripButtonDescision
@@ -427,7 +427,7 @@
             this.toolStripButtonDescision.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDescision.Name = "toolStripButtonDescision";
             this.toolStripButtonDescision.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonDescision.Text = "toolStripButton4";
+            this.toolStripButtonDescision.Text = "toolStripButtonDescision";
             this.toolStripButtonDescision.ToolTipText = "Decision";
             // 
             // toolStripButtonLine
@@ -437,7 +437,7 @@
             this.toolStripButtonLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLine.Name = "toolStripButtonLine";
             this.toolStripButtonLine.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonLine.Text = "toolStripButton4";
+            this.toolStripButtonLine.Text = "toolStripButtonLine";
             this.toolStripButtonLine.ToolTipText = "Line";
             // 
             // toolStripButtonPoint

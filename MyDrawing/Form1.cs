@@ -158,6 +158,7 @@ namespace MyDrawing
         private void InitCanvas()
         {
             this.Controls.Add(canvas);
+            canvas.Name = "MyCanvas";
             canvas.BringToFront();
             canvas.Dock = DockStyle.Fill;
 
