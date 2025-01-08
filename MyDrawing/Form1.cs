@@ -5,6 +5,7 @@ using MyDrawing.shape;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MyDrawing
@@ -36,7 +37,7 @@ namespace MyDrawing
 
             presentationModel.SetToPointState();
 
-            Test();
+            //Test();
         }
 
         private void InitDataBinding()
@@ -115,7 +116,9 @@ namespace MyDrawing
         private void InitComboBox()
         {
             // 所有圖形元素名稱
-            comboBoxShapeType.Items.AddRange(Model.GetShapeTypesName());
+            var shapeTypes = Model.GetShapeTypesName();
+            var item = Enumerable.Range(0, 4).Select(i => shapeTypes[i]).ToArray();
+            comboBoxShapeType.Items.AddRange(item);
             comboBoxShapeType.SelectedIndex = 0;
         }
 
@@ -227,7 +230,7 @@ namespace MyDrawing
             for (int i = 0; i < shapes.Count; i++)
             {
                 Shape shape = shapes[i];
-                object[] value = { "刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width };
+                object[] value = { "刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width, shape.ContentRelativelyX, shape.ContentRelativelyY };
                 for (int j = 0; j < value.Length; j++)
                     // 只更新資料有變的 cell
                     if (!object.Equals(dataGridViewShapes.Rows[i].Cells[j].Value, value[j]))

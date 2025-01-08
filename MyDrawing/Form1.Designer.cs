@@ -37,14 +37,6 @@
             this.btnPage1 = new System.Windows.Forms.Button();
             this.groupBoxDataDisplay = new System.Windows.Forms.GroupBox();
             this.dataGridViewShapes = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxShapeWidth = new System.Windows.Forms.TextBox();
@@ -60,6 +52,16 @@
             this.labelShapeContent = new System.Windows.Forms.Label();
             this.btnAddShape = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.Column1 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ContextXForTest = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ContextYForTest = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStripButtonStart = new MyDrawing.controls.ToolStripBindableButton();
             this.toolStripButtonTerminator = new MyDrawing.controls.ToolStripBindableButton();
             this.toolStripButtonProcess = new MyDrawing.controls.ToolStripBindableButton();
@@ -155,7 +157,9 @@
             this.Column5,
             this.Column6,
             this.Column7,
-            this.Column8});
+            this.Column8,
+            this.ContextXForTest,
+            this.ContextYForTest});
             this.dataGridViewShapes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewShapes.Location = new System.Drawing.Point(3, 69);
             this.dataGridViewShapes.Name = "dataGridViewShapes";
@@ -165,58 +169,6 @@
             this.dataGridViewShapes.Size = new System.Drawing.Size(415, 527);
             this.dataGridViewShapes.TabIndex = 1;
             this.dataGridViewShapes.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewShapesCellContentClick);
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "刪除";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.Column1.Text = "刪除";
-            this.Column1.UseColumnTextForButtonValue = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "ID";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "形狀";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "文字";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "X";
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            // 
-            // Column6
-            // 
-            this.Column6.HeaderText = "Y";
-            this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
-            // 
-            // Column7
-            // 
-            this.Column7.HeaderText = "H";
-            this.Column7.Name = "Column7";
-            this.Column7.ReadOnly = true;
-            // 
-            // Column8
-            // 
-            this.Column8.HeaderText = "W";
-            this.Column8.Name = "Column8";
-            this.Column8.ReadOnly = true;
             // 
             // panel2
             // 
@@ -390,6 +342,70 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "刪除";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column1.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Column1.Text = "刪除";
+            this.Column1.UseColumnTextForButtonValue = true;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "ID";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "形狀";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "文字";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "X";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            // 
+            // Column6
+            // 
+            this.Column6.HeaderText = "Y";
+            this.Column6.Name = "Column6";
+            this.Column6.ReadOnly = true;
+            // 
+            // Column7
+            // 
+            this.Column7.HeaderText = "H";
+            this.Column7.Name = "Column7";
+            this.Column7.ReadOnly = true;
+            // 
+            // Column8
+            // 
+            this.Column8.HeaderText = "W";
+            this.Column8.Name = "Column8";
+            this.Column8.ReadOnly = true;
+            // 
+            // ContextXForTest
+            // 
+            this.ContextXForTest.HeaderText = "ContextXForTest";
+            this.ContextXForTest.Name = "ContextXForTest";
+            this.ContextXForTest.ReadOnly = true;
+            // 
+            // ContextYForTest
+            // 
+            this.ContextYForTest.HeaderText = "ContextYForTest";
+            this.ContextYForTest.Name = "ContextYForTest";
+            this.ContextYForTest.ReadOnly = true;
+            // 
             // toolStripButtonStart
             // 
             this.toolStripButtonStart.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -539,6 +555,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ContextXForTest;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ContextYForTest;
     }
 }
 
