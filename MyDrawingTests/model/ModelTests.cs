@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyDrawing.graphics;
 using MyDrawing.shape;
+using Newtonsoft.Json.Linq;
 using System.Linq;
 
 namespace MyDrawing.model.Tests
@@ -175,8 +176,8 @@ namespace MyDrawing.model.Tests
             };
             model.AddShape(start);
             model.AddShape(line);
-            string json = model.GenerateShapesDataOfJson();
-            string expected = @"[
+            var json = JArray.Parse(model.GenerateShapesDataOfJson());
+            var expected = JArray.Parse(@"[
   {
     ""shapeType"": ""Start"",
     ""content"": ""Start text"",
@@ -194,8 +195,9 @@ namespace MyDrawing.model.Tests
     ""startShapeConnectPoint"": ""Top"",
     ""endShapeConnectPoint"": ""Bottom""
   }
-]";
-            Assert.AreEqual(expected, json);
+]");
+
+            Assert.IsTrue(JToken.DeepEquals(expected, json));
         }
 
         [TestMethod()]
