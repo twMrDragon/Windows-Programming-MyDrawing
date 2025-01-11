@@ -124,6 +124,21 @@ namespace MyDrawingTests.ui.Tests
             item.Click();
         }
 
+        public WindowsElement GetElement(string name)
+        {
+            return _driver.FindElementByName(name);
+        }
+
+        public void SendTextToEdit(string value)
+        {
+            WindowsElement element = _driver.FindElementByClassName("Edit");
+            Clipboard.SetText(value);
+            element.Click();
+            element.SendKeys(OpenQA.Selenium.Keys.Control + "a");
+            element.SendKeys(OpenQA.Selenium.Keys.Control + "v");
+
+        }
+
         public void SendText(string name, string value)
         {
             WindowsElement element = _driver.FindElementByAccessibilityId(name);
@@ -156,6 +171,13 @@ namespace MyDrawingTests.ui.Tests
              .Perform();
         }
 
+        public void AssertName(string id, string expected)
+        {
+            WindowsElement element = _driver.FindElementByAccessibilityId(id);
+            string name = element.GetAttribute("Name");
+            Assert.AreEqual(expected, name);
+        }
+
         // test
         public void AssertChecked(string name, bool expected)
         {
@@ -181,19 +203,20 @@ namespace MyDrawingTests.ui.Tests
         }
 
         // test
-        public void AssertDataGridViewRowShape(string name, int rowIndex, string shapeName, int x, int y, int width, int height)
+        public void AssertDataGridViewRowShape(string name, int rowIndex, string content, int x, int y, int width, int height, int d = 0)
         {
             var dataGridView = _driver.FindElementByAccessibilityId(name);
             var rowDatas = dataGridView.FindElementByName($"資料列 {rowIndex}").FindElementsByXPath("//*");
-            Assert.AreEqual(shapeName, rowDatas[3].Text);
+            if (content != null)
+                Assert.AreEqual(content, rowDatas[3].Text);
             int value = int.Parse(rowDatas[5].Text);
-            Assert.IsTrue(x >= value - 1 && x <= value + 1);
+            Assert.IsTrue(x >= value - d && x <= value + d);
             value = int.Parse(rowDatas[6].Text);
-            Assert.IsTrue(y >= value - 1 && y <= value + 1);
+            Assert.IsTrue(y >= value - d && y <= value + d);
             value = int.Parse(rowDatas[7].Text);
-            Assert.IsTrue(height >= value - 1 && height <= value + 1);
+            Assert.IsTrue(height >= value - d && height <= value + d);
             value = int.Parse(rowDatas[8].Text);
-            Assert.IsTrue(width >= value - 1 && width <= value + 1);
+            Assert.IsTrue(width >= value - d && width <= value + d);
         }
 
         // test
@@ -204,13 +227,13 @@ namespace MyDrawingTests.ui.Tests
             Assert.AreEqual(data, rowDatas[columnIndex + 1].Text);
         }
 
-        public void AssertDataGridViewCellDataNumber(string name, int rowIndex, int columnIndex, int data)
+        public void AssertDataGridViewCellDataNumber(string name, int rowIndex, int columnIndex, int data, int d = 0)
         {
             var dataGridView = _driver.FindElementByAccessibilityId(name);
             var rowDatas = dataGridView.FindElementByName($"資料列 {rowIndex}").FindElementsByXPath("//*");
             int value = int.Parse(rowDatas[columnIndex + 1].Text);
             int expected = int.Parse(data.ToString());
-            Assert.IsTrue(expected >= value - 1 && expected <= value + 1);
+            Assert.IsTrue(expected >= value - d && expected <= value + d);
         }
         // test
         public void AssertDataGridViewRowDataBy(string name, int rowIndex, string[] data)

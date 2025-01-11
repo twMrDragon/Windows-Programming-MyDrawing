@@ -48,5 +48,18 @@ namespace MyDrawing.command.Tests
             Assert.IsTrue(commandManager.IsUndoEnabled);
             Assert.IsFalse(commandManager.IsRedoEnabled);
         }
+
+        [TestMethod()]
+        public void ClearTest()
+        {
+            commandManager.Execute(new AddCommand(model, new Start()));
+            commandManager.Execute(new AddCommand(model, new Start()));
+            commandManager.Execute(new AddCommand(model, new Start()));
+            Assert.AreEqual(3, commandManager.UndoCount);
+            Assert.AreEqual(0, commandManager.RedoCount);
+            commandManager.Clear();
+            Assert.AreEqual(0, commandManager.UndoCount);
+            Assert.AreEqual(0, commandManager.RedoCount);
+        }
     }
 }

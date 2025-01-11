@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyDrawing
@@ -22,6 +23,7 @@ namespace MyDrawing
             this.model = model;
             this.model.ModelChanged += HandleModelChange;
             this.presentationModel = new PresentationModel(this.model);
+            this.presentationModel.ModelChanged += PresentationModelModelChanged;
 
             // origin init controls
             InitializeComponent();
@@ -38,6 +40,18 @@ namespace MyDrawing
             presentationModel.SetToPointState();
 
             //Test();
+        }
+
+        private void PresentationModelModelChanged()
+        {
+            this.Invoke(new Action(() =>
+            {
+                if (presentationModel.IsAutoSaving)
+                    this.Text = "MyDrawing (Auto saving...)";
+                else
+                    this.Text = "MyDrawing";
+                this.toolStripButtonSave.Enabled = presentationModel.IsSaveButtonEnabled;
+            }));
         }
 
         private void InitDataBinding()
@@ -59,6 +73,8 @@ namespace MyDrawing
             this.toolStripButtonPoint.DataBindings.Add("Checked", presentationModel, "IsPointButtonnChecked");
             this.toolStripButtonUndo.DataBindings.Add("Enabled", presentationModel, "IsUndoButtonEnabled");
             this.toolStripButtonRedo.DataBindings.Add("Enabled", presentationModel, "IsRedoButtonEnabled");
+
+            this.toolStripButtonSave.DataBindings.Add("Enabled", presentationModel, "IsSaveButtonEnabled");
 
             // canvas
             Binding binding = new Binding("Cursor", presentationModel, "CanvasCousor");
@@ -156,6 +172,57 @@ namespace MyDrawing
             {
                 this.presentationModel.Redo();
             };
+
+            this.toolStripButtonSave.Click += ToolStripButtonSaveClick;
+            this.toolStripButtonLoad.Click += ToolStripButtonLoadClick;
+        }
+
+        private void ToolStripButtonLoadClick(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                Filter = "My Drawing Files (*.mydrawing)|*.mydrawing",
+                DefaultExt = "mydrawing",
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    presentationModel.LoadShape(dialog.FileName);
+                }
+                catch
+                {
+                    MessageBox.Show("讀取失敗");
+                }
+            }
+        }
+
+        private async void ToolStripButtonSaveClick(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog()
+            {
+                Filter = "My Drawing Files (*.mydrawing)|*.mydrawing",
+                DefaultExt = "mydrawing",
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                Task.Run(() =>
+                {
+                    SaveShapeWithTry(dialog.FileName);
+                });
+            }
+        }
+
+        private async Task SaveShapeWithTry(string filename)
+        {
+            try
+            {
+                await Task.Run(() => presentationModel.SaveShape(filename));
+            }
+            catch
+            {
+                MessageBox.Show("保存失敗");
+            }
         }
 
         private void InitCanvas()
@@ -226,7 +293,7 @@ namespace MyDrawing
                     dataGridViewShapes.Rows.Add();
             else if (dataGridViewShapes.Rows.Count > shapes.Count)
                 for (int i = 0; i < diff; i++)
-                    dataGridViewShapes.Rows.RemoveAt(0);
+                    dataGridViewShapes.Rows.RemoveAt(dataGridViewShapes.Rows.Count - 1);
             for (int i = 0; i < shapes.Count; i++)
             {
                 Shape shape = shapes[i];

@@ -33,6 +33,12 @@ namespace MyDrawing.command
             cmd.Execute();
         }
 
+        public void Clear()
+        {
+            undo.Clear();
+            redo.Clear();
+        }
+
         public int UndoCount
         {
             get
