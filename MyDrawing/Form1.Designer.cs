@@ -45,6 +45,8 @@
             this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ContextXForTest = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ContextYForTest = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel2 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.textBoxShapeWidth = new System.Windows.Forms.TextBox();
@@ -68,6 +70,8 @@
             this.toolStripButtonPoint = new MyDrawing.controls.ToolStripBindableButton();
             this.toolStripButtonUndo = new MyDrawing.controls.ToolStripBindableButton();
             this.toolStripButtonRedo = new MyDrawing.controls.ToolStripBindableButton();
+            this.toolStripButtonSave = new MyDrawing.controls.ToolStripBindableButton();
+            this.toolStripButtonLoad = new MyDrawing.controls.ToolStripBindableButton();
             this.menuStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.groupBoxDataDisplay.SuspendLayout();
@@ -155,7 +159,9 @@
             this.Column5,
             this.Column6,
             this.Column7,
-            this.Column8});
+            this.Column8,
+            this.ContextXForTest,
+            this.ContextYForTest});
             this.dataGridViewShapes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewShapes.Location = new System.Drawing.Point(3, 69);
             this.dataGridViewShapes.Name = "dataGridViewShapes";
@@ -217,6 +223,18 @@
             this.Column8.HeaderText = "W";
             this.Column8.Name = "Column8";
             this.Column8.ReadOnly = true;
+            // 
+            // ContextXForTest
+            // 
+            this.ContextXForTest.HeaderText = "ContextXForTest";
+            this.ContextXForTest.Name = "ContextXForTest";
+            this.ContextXForTest.ReadOnly = true;
+            // 
+            // ContextYForTest
+            // 
+            this.ContextYForTest.HeaderText = "ContextYForTest";
+            this.ContextYForTest.Name = "ContextYForTest";
+            this.ContextYForTest.ReadOnly = true;
             // 
             // panel2
             // 
@@ -383,7 +401,9 @@
             this.toolStripButtonLine,
             this.toolStripButtonPoint,
             this.toolStripButtonUndo,
-            this.toolStripButtonRedo});
+            this.toolStripButtonRedo,
+            this.toolStripButtonSave,
+            this.toolStripButtonLoad});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1316, 25);
@@ -397,7 +417,7 @@
             this.toolStripButtonStart.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonStart.Name = "toolStripButtonStart";
             this.toolStripButtonStart.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonStart.Text = "toolStripButton1";
+            this.toolStripButtonStart.Text = "toolStripButtonStart";
             this.toolStripButtonStart.ToolTipText = "Start";
             // 
             // toolStripButtonTerminator
@@ -407,7 +427,7 @@
             this.toolStripButtonTerminator.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonTerminator.Name = "toolStripButtonTerminator";
             this.toolStripButtonTerminator.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonTerminator.Text = "toolStripButton2";
+            this.toolStripButtonTerminator.Text = "toolStripButtonTerminator";
             this.toolStripButtonTerminator.ToolTipText = "Terminator";
             // 
             // toolStripButtonProcess
@@ -417,7 +437,7 @@
             this.toolStripButtonProcess.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonProcess.Name = "toolStripButtonProcess";
             this.toolStripButtonProcess.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonProcess.Text = "toolStripButton3";
+            this.toolStripButtonProcess.Text = "toolStripButtonProcess";
             this.toolStripButtonProcess.ToolTipText = "Process";
             // 
             // toolStripButtonDescision
@@ -427,7 +447,7 @@
             this.toolStripButtonDescision.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDescision.Name = "toolStripButtonDescision";
             this.toolStripButtonDescision.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonDescision.Text = "toolStripButton4";
+            this.toolStripButtonDescision.Text = "toolStripButtonDescision";
             this.toolStripButtonDescision.ToolTipText = "Decision";
             // 
             // toolStripButtonLine
@@ -437,7 +457,7 @@
             this.toolStripButtonLine.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLine.Name = "toolStripButtonLine";
             this.toolStripButtonLine.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButtonLine.Text = "toolStripButton4";
+            this.toolStripButtonLine.Text = "toolStripButtonLine";
             this.toolStripButtonLine.ToolTipText = "Line";
             // 
             // toolStripButtonPoint
@@ -469,6 +489,26 @@
             this.toolStripButtonRedo.Size = new System.Drawing.Size(23, 22);
             this.toolStripButtonRedo.Text = "toolStripButtonRedo";
             this.toolStripButtonRedo.ToolTipText = "Redo";
+            // 
+            // toolStripButtonSave
+            // 
+            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSave.Image = global::MyDrawing.Properties.Resources.save;
+            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSave.Name = "toolStripButtonSave";
+            this.toolStripButtonSave.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonSave.Text = "toolStripButtonSave";
+            this.toolStripButtonSave.ToolTipText = "Save";
+            // 
+            // toolStripButtonLoad
+            // 
+            this.toolStripButtonLoad.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonLoad.Image = global::MyDrawing.Properties.Resources.load;
+            this.toolStripButtonLoad.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLoad.Name = "toolStripButtonLoad";
+            this.toolStripButtonLoad.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButtonLoad.Text = "toolStripButtonLoad";
+            this.toolStripButtonLoad.ToolTipText = "Load";
             // 
             // Form1
             // 
@@ -531,6 +571,8 @@
         private controls.ToolStripBindableButton toolStripButtonPoint;
         private controls.ToolStripBindableButton toolStripButtonRedo;
         private controls.ToolStripBindableButton toolStripButtonUndo;
+        private controls.ToolStripBindableButton toolStripButtonSave;
+        private controls.ToolStripBindableButton toolStripButtonLoad;
         private System.Windows.Forms.DataGridViewButtonColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
@@ -539,6 +581,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column8;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ContextXForTest;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ContextYForTest;
     }
 }
 

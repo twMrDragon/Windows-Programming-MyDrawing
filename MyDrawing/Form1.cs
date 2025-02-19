@@ -5,6 +5,8 @@ using MyDrawing.shape;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyDrawing
@@ -21,6 +23,7 @@ namespace MyDrawing
             this.model = model;
             this.model.ModelChanged += HandleModelChange;
             this.presentationModel = new PresentationModel(this.model);
+            this.presentationModel.ModelChanged += PresentationModelModelChanged;
 
             // origin init controls
             InitializeComponent();
@@ -36,7 +39,19 @@ namespace MyDrawing
 
             presentationModel.SetToPointState();
 
-            Test();
+            //Test();
+        }
+
+        private void PresentationModelModelChanged()
+        {
+            this.Invoke(new Action(() =>
+            {
+                if (presentationModel.IsAutoSaving)
+                    this.Text = "MyDrawing (Auto saving...)";
+                else
+                    this.Text = "MyDrawing";
+                this.toolStripButtonSave.Enabled = presentationModel.IsSaveButtonEnabled;
+            }));
         }
 
         private void InitDataBinding()
@@ -58,6 +73,8 @@ namespace MyDrawing
             this.toolStripButtonPoint.DataBindings.Add("Checked", presentationModel, "IsPointButtonnChecked");
             this.toolStripButtonUndo.DataBindings.Add("Enabled", presentationModel, "IsUndoButtonEnabled");
             this.toolStripButtonRedo.DataBindings.Add("Enabled", presentationModel, "IsRedoButtonEnabled");
+
+            this.toolStripButtonSave.DataBindings.Add("Enabled", presentationModel, "IsSaveButtonEnabled");
 
             // canvas
             Binding binding = new Binding("Cursor", presentationModel, "CanvasCousor");
@@ -115,7 +132,9 @@ namespace MyDrawing
         private void InitComboBox()
         {
             // 所有圖形元素名稱
-            comboBoxShapeType.Items.AddRange(Model.GetShapeTypesName());
+            var shapeTypes = Model.GetShapeTypesName();
+            var item = Enumerable.Range(0, 4).Select(i => shapeTypes[i]).ToArray();
+            comboBoxShapeType.Items.AddRange(item);
             comboBoxShapeType.SelectedIndex = 0;
         }
 
@@ -153,11 +172,63 @@ namespace MyDrawing
             {
                 this.presentationModel.Redo();
             };
+
+            this.toolStripButtonSave.Click += ToolStripButtonSaveClick;
+            this.toolStripButtonLoad.Click += ToolStripButtonLoadClick;
+        }
+
+        private void ToolStripButtonLoadClick(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                Filter = "My Drawing Files (*.mydrawing)|*.mydrawing",
+                DefaultExt = "mydrawing",
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    presentationModel.LoadShape(dialog.FileName);
+                }
+                catch
+                {
+                    MessageBox.Show("讀取失敗");
+                }
+            }
+        }
+
+        private async void ToolStripButtonSaveClick(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog()
+            {
+                Filter = "My Drawing Files (*.mydrawing)|*.mydrawing",
+                DefaultExt = "mydrawing",
+            };
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                Task.Run(() =>
+                {
+                    SaveShapeWithTry(dialog.FileName);
+                });
+            }
+        }
+
+        private async Task SaveShapeWithTry(string filename)
+        {
+            try
+            {
+                await Task.Run(() => presentationModel.SaveShape(filename));
+            }
+            catch
+            {
+                MessageBox.Show("保存失敗");
+            }
         }
 
         private void InitCanvas()
         {
             this.Controls.Add(canvas);
+            canvas.Name = "MyCanvas";
             canvas.BringToFront();
             canvas.Dock = DockStyle.Fill;
 
@@ -222,11 +293,11 @@ namespace MyDrawing
                     dataGridViewShapes.Rows.Add();
             else if (dataGridViewShapes.Rows.Count > shapes.Count)
                 for (int i = 0; i < diff; i++)
-                    dataGridViewShapes.Rows.RemoveAt(0);
+                    dataGridViewShapes.Rows.RemoveAt(dataGridViewShapes.Rows.Count - 1);
             for (int i = 0; i < shapes.Count; i++)
             {
                 Shape shape = shapes[i];
-                object[] value = { "刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width };
+                object[] value = { "刪除", i + 1, shape.ShapeName, shape.Content, shape.X, shape.Y, shape.Height, shape.Width, shape.ContentRelativelyX, shape.ContentRelativelyY };
                 for (int j = 0; j < value.Length; j++)
                     // 只更新資料有變的 cell
                     if (!object.Equals(dataGridViewShapes.Rows[i].Cells[j].Value, value[j]))

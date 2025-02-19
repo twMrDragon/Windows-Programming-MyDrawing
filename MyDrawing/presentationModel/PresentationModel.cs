@@ -4,6 +4,9 @@ using MyDrawing.state;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyDrawing.presentationModel
 {
@@ -40,12 +43,30 @@ namespace MyDrawing.presentationModel
         readonly public DrawState drawState;
         readonly public DrawLineState drawLineState;
 
+        // save
+        private bool isSaveButtonEnabled = true;
+        private System.Timers.Timer timer;
+        private bool isAutoSaving = false;
+        private bool isModelChangeForAutoSaving = true;
+        private const string backupFolder = "drawing_backup";
+        private const int maxBackupCount = 5;
+
         public PresentationModel(Model model)
         {
             this.model = model;
             this.pointState = new PointState(this.model, this);
             this.drawState = new DrawState(this.model, this);
             this.drawLineState = new DrawLineState(this.model, this);
+            SetAutoSaveTimer();
+            SetModelChangeForAutoSaving();
+        }
+
+        private void SetModelChangeForAutoSaving()
+        {
+            this.model.ModelChanged += () =>
+            {
+                this.isModelChangeForAutoSaving = true;
+            };
         }
 
         public string OriginalContent
@@ -100,7 +121,7 @@ namespace MyDrawing.presentationModel
             {
                 if (shapes[i].ShapeType == Shape.Type.Line)
                 {
-                    Line line = (Line)shapes[i];
+                    Line line = shapes[i] as Line;
                     if (line.StartShape == mainRemoveShape || line.EndShape == mainRemoveShape)
                         removeIndexes.Add(i);
                 }
@@ -294,6 +315,76 @@ namespace MyDrawing.presentationModel
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public async Task SaveShape(string filename)
+        {
+            this.isSaveButtonEnabled = false;
+            NotifiyModelChange();
+
+            string json = model.GenerateShapesDataOfJson();
+            File.WriteAllText(filename, json);
+            await Task.Delay(3000);
+
+            this.isSaveButtonEnabled = true;
+            NotifiyModelChange();
+        }
+
+        public void LoadShape(string fileName)
+        {
+            string json = File.ReadAllText(fileName);
+            commandManager.Clear();
+            model.ParseShapesDataFromJson(json);
+            NotifyUndoRedoToolStripButton();
+        }
+
+        private void SetAutoSaveTimer()
+        {
+            timer = new System.Timers.Timer(30000);
+            timer.Elapsed += (s, e) =>
+            {
+                if (!isModelChangeForAutoSaving)
+                    return;
+                isModelChangeForAutoSaving = false;
+                string backupFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, backupFolder);
+                AutoSave(backupFolderPath);
+            };
+            timer.AutoReset = true;
+            timer.Start();
+        }
+
+        public async Task AutoSave(string backupFolderPath)
+        {
+            // 是否正在保存的 flag
+            this.isAutoSaving = true;
+            NotifiyModelChange();
+            try
+            {
+                // 檢查檔案夾是否存在
+                if (!Directory.Exists(backupFolderPath))
+                    Directory.CreateDirectory(backupFolderPath);
+                // 產生檔案名稱和路徑
+                string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+                string backupFileName = $"{timestamp}_bak.mydrawing";
+                string backupFilePath = Path.Combine(backupFolderPath, backupFileName);
+                // 保存
+                string json = model.GenerateShapesDataOfJson();
+                File.WriteAllText(backupFilePath, json);
+                // 刪除最舊的檔案如果數量大於閥值
+                var backupFiles = Directory.GetFiles(backupFolderPath)
+                                        .OrderByDescending(f => new FileInfo(f).CreationTime)
+                                        .ToList();
+                if (backupFiles.Count > maxBackupCount)
+                    foreach (var file in backupFiles.Skip(maxBackupCount))
+                        File.Delete(file);
+            }
+            catch
+            {
+                // 保存失敗
+            }
+            await Task.Delay(3000);
+            this.isAutoSaving = false;
+            NotifiyModelChange();
+        }
         /// <summary>
         /// 屬性
         /// </summary>
@@ -350,6 +441,15 @@ namespace MyDrawing.presentationModel
         public bool IsUndoButtonEnabled
         {
             get { return this.commandManager.IsUndoEnabled; }
+        }
+        // save 按鈕相關
+        public bool IsSaveButtonEnabled
+        {
+            get { return this.isSaveButtonEnabled; }
+        }
+        public bool IsAutoSaving
+        {
+            get { return isAutoSaving; }
         }
 
         // 使用者輸入資料相關

@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyDrawing.shape;
 
-namespace MyDrawing.Tests
+namespace MyDrawing.shape.Tests
 {
     [TestClass()]
     public class ShapeFactoryTests

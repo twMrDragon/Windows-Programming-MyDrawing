@@ -1,7 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyDrawing.controls;
 using MyDrawing.shape;
+using System;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MyDrawing.presentationModel.Tests
 {
@@ -11,11 +15,17 @@ namespace MyDrawing.presentationModel.Tests
         PresentationModel presentationModel;
         Model model;
 
+        string targetAppPath;
+
+
         [TestInitialize]
         public void SetUp()
         {
             model = new Model();
             presentationModel = new PresentationModel(model);
+            string projectName = "MyDrawingTests";
+            string solutionPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..\\..\\..\\"));
+            targetAppPath = Path.Combine(solutionPath, projectName, "bin", "Debug", "MyDrawing.exe");
         }
 
         [TestMethod]
@@ -414,6 +424,101 @@ namespace MyDrawing.presentationModel.Tests
             presentationModel.NewContent = "test";
             Assert.AreEqual("test", presentationModel.NewContent);
             Assert.IsTrue(presentationModel.IsModifyContentConfirmButtonEnable);
+        }
+
+        [TestMethod]
+        public async Task IsSaveButtonEnabledTest()
+        {
+            string filename = "test.mydrawing";
+            presentationModel.SaveShape(filename);
+            Assert.IsFalse(presentationModel.IsSaveButtonEnabled);
+            await Task.Delay(5000);
+            Assert.IsTrue(presentationModel.IsSaveButtonEnabled);
+            File.Delete(filename);
+        }
+
+        [TestMethod]
+        public async Task SaveShapeSuccessTest()
+        {
+            string filename = "test.mydrawing";
+            await presentationModel.SaveShape(filename);
+            File.Exists(filename);
+            File.Delete(filename);
+        }
+
+        [TestMethod]
+        public void SaveShapeFailTest()
+        {
+            var exception = Assert.ThrowsExceptionAsync<Exception>(() => presentationModel.SaveShape(""));
+        }
+
+        [TestMethod]
+        public async Task LoadShapeSuccessTest()
+        {
+            Start start = new Start();
+            start.Content = "Start test";
+            model.AddShape(start);
+            Assert.AreEqual(1, model.GetShapes().Count);
+
+            string filename = "test.mydrawing";
+            await presentationModel.SaveShape(filename);
+            model.RemoveShapeAt(0);
+            Assert.AreEqual(0, model.GetShapes().Count);
+            presentationModel.LoadShape(filename);
+            Assert.AreEqual(1, model.GetShapes().Count);
+            Assert.AreEqual(start.Content, model.GetShapes()[0].Content);
+            File.Delete(filename);
+        }
+
+        [TestMethod]
+        public void LoadShapeFailTest()
+        {
+            var exception = Assert.ThrowsException<ArgumentException>(() => presentationModel.LoadShape(""));
+        }
+
+        [TestMethod]
+        public async Task AutoSaveTest()
+        {
+            string backupFolderPath = Path.Combine(Path.GetDirectoryName(targetAppPath), "drawing_backup");
+            DeleteAutoSaveTestFile(backupFolderPath);
+            await presentationModel.AutoSave(backupFolderPath);
+            Thread.Sleep(1000);
+            Assert.AreEqual(1, Directory.GetFiles(backupFolderPath).Length);
+            await presentationModel.AutoSave(backupFolderPath);
+            Thread.Sleep(1000);
+            Assert.AreEqual(2, Directory.GetFiles(backupFolderPath).Length);
+            await presentationModel.AutoSave(backupFolderPath);
+            Thread.Sleep(1000);
+            Assert.AreEqual(3, Directory.GetFiles(backupFolderPath).Length);
+            await presentationModel.AutoSave(backupFolderPath);
+            Thread.Sleep(1000);
+            Assert.AreEqual(4, Directory.GetFiles(backupFolderPath).Length);
+            await presentationModel.AutoSave(backupFolderPath);
+            Thread.Sleep(1000);
+            Assert.AreEqual(5, Directory.GetFiles(backupFolderPath).Length);
+            await presentationModel.AutoSave(backupFolderPath);
+            Thread.Sleep(1000);
+            Assert.AreEqual(5, Directory.GetFiles(backupFolderPath).Length);
+            DeleteAutoSaveTestFile(backupFolderPath);
+        }
+
+        public void DeleteAutoSaveTestFile(string backupFolderPath)
+        {
+            if (Directory.Exists(backupFolderPath))
+                Directory.Delete(backupFolderPath, true);
+        }
+
+        [TestMethod]
+        public void IsAutoSavingTest()
+        {
+            string backupFolderPath = Path.Combine(Path.GetDirectoryName(targetAppPath), "drawing_backup");
+
+            presentationModel.AutoSave(backupFolderPath);
+            Assert.IsTrue(presentationModel.IsAutoSaving);
+            Thread.Sleep(5000);
+            Assert.IsFalse(presentationModel.IsAutoSaving);
+
+            DeleteAutoSaveTestFile(backupFolderPath);
         }
     }
 }
